@@ -40,14 +40,14 @@ footer{text-align:center;color:#8a94a6;font-size:12px;padding:25px}
 </head>
 <body>
 <header><div class="nav"><div class="brand">Victorian<span>Helper</span></div><div class="nav-note">A calmer way to shape your words</div></div></header>
-<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>Review grammar and punctuation, spot common spelling issues, and build a longer draft with clearer explanation and stronger links between ideas.</p></section>
+<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>Review grammar and punctuation, spot common spelling issues, and build richer writing from almost any topic, not just a fixed list of keywords.</p></section>
 <main>
 <section class="panel">
 <h2>Your draft</h2><p class="sub">Paste or type your writing below. Your text is processed in this browser.</p>
 <textarea id="writing" placeholder="Start writing here…"></textarea>
 <div class="meta"><span id="count">0 words</span><span>Private to this page</span></div>
 <div class="actions"><button class="primary" id="check">Check grammar & punctuation</button><button class="primary" id="expand">Expand & enrich writing</button><button class="secondary" id="clear">Clear draft</button></div>
-<p class="note">This uses built-in language patterns, not an online AI model. It adds explanatory sentences based on your draft, so check that every addition is accurate.</p>
+<p class="note">The local preview works without an AI connection. A secure AI service can be connected for much more natural expansion across different topics.</p>
 </section>
 <div class="side">
 <section class="panel"><h2>Grammar & punctuation review</h2><p class="sub">Checks across spelling, sentence structure and punctuation.</p><div class="result" id="feedback" aria-live="polite">Your review will appear here. Select “Check grammar & punctuation” to begin.</div></section>
@@ -59,6 +59,20 @@ footer{text-align:center;color:#8a94a6;font-size:12px;padding:25px}
 <script>
 const box=document.getElementById('writing'),count=document.getElementById('count'),feedback=document.getElementById('feedback'),better=document.getElementById('better'),use=document.getElementById('use');
 let expandedText='';
+const AI_EXPAND_ENDPOINT = ''; // Adult/teacher: add the deployed Worker URL here after setup.
+
+async function expandWithAI(text){
+ const response = await fetch(AI_EXPAND_ENDPOINT,{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({text})
+ });
+ let data={};
+ try{data=await response.json();}catch(error){throw new Error('The AI service returned an unreadable response.');}
+ if(!response.ok) throw new Error(data.error || 'The AI service could not expand this writing.');
+ if(typeof data.expandedText!=='string' || !data.expandedText.trim()) throw new Error('The AI service returned an empty result.');
+ return data.expandedText.trim();
+}
 function words(){const t=box.value.trim();count.textContent=(t?t.split(/\s+/).length:0)+' words';}
 box.addEventListener('input',words);
 function addFinding(list,category,message){list.push({category,message});}
@@ -235,13 +249,36 @@ document.getElementById('check').onclick=()=>{
  if(!text){feedback.textContent='Add some writing to your draft first.';return;}
  renderFindings(review(text));
 };
-document.getElementById('expand').onclick=()=>{
+document.getElementById('expand').onclick=async()=>{
  const text=box.value.trim();
  if(!text){better.textContent='Add some writing to your draft first.';use.hidden=true;return;}
- const result=expand(text);
- expandedText=result.draft;
- better.replaceChildren(result.html);
- use.hidden=false;
+ const button=document.getElementById('expand');
+ button.disabled=true;
+ button.textContent='Expanding…';
+ better.textContent='Working on a more developed version…';
+ use.hidden=true;
+ try{
+  if(AI_EXPAND_ENDPOINT){
+   expandedText=await expandWithAI(text);
+   const draft=document.createElement('p');
+   draft.textContent=expandedText;
+   better.replaceChildren(draft);
+  }else{
+   const result=expand(text);
+   expandedText=result.draft;
+   better.replaceChildren(result.html);
+   const note=document.createElement('p');
+   note.className='note';
+   note.textContent='This is the local preview, not the AI version. The secure AI service has not been connected yet.';
+   better.appendChild(note);
+  }
+  use.hidden=false;
+ }catch(error){
+  better.textContent=error.message || 'Something went wrong. Please try again.';
+ }finally{
+  button.disabled=false;
+  button.textContent='Expand & enrich writing';
+ }
 };
 use.onclick=()=>{if(expandedText){box.value=expandedText;words();box.focus();}};
 document.getElementById('clear').onclick=()=>{box.value='';words();feedback.textContent='Your review will appear here. Select “Check grammar & punctuation” to begin.';better.textContent='Your expanded writing will appear here after you select “Expand & enrich writing”.';expandedText='';use.hidden=true;};
