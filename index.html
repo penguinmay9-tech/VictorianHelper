@@ -146,7 +146,7 @@ function explainSentence(sentence, paragraph){
   return {kind:'result',text:'This shows the connection between the two parts: '+cause.charAt(0).toLowerCase()+cause.slice(1)+' leads to '+effect.charAt(0).toLowerCase()+effect.slice(1)+'. Making that link clear helps the reader understand why the outcome follows.'};
  }
  const lower=s.toLowerCase();
- if(/\b(for example|for instance|such as|an example|evidence|research|study|statistics|data)\b/i.test(s)){
+ if(/\b(for example|for instance|such as|example|description|result|outcome|evidence|research|study|statistics|data)\b/i.test(s)){
   const context=(paragraph||'').toLowerCase();
   if(/school gardens?/.test(context) && /grow vegetables?/.test(context) && /learn about nature|natural world/.test(context))
    return {kind:'example',text:'This example supports the claim about school gardens by showing how practical activity can be connected to learning about the natural world. Growing vegetables gives students something real to observe, while the link to nature explains why the activity has educational value.'};
@@ -164,8 +164,15 @@ function explainSentence(sentence, paragraph){
   return {kind:'emotion',text:'This reaction gives the moment more meaning because it shows how the situation affects the person. It also helps the reader understand why the moment may influence what happens next.'};
  if(/\b(said|asked|replied|whispered|shouted|answered|argued|muttered|exclaimed)\b/i.test(s))
   return {kind:'dialogue',text:'The words can reveal the speaker’s attitude as well as the information being shared. The other person’s response, where relevant, can show how the exchange changes the situation.'};
- if(/\b(ran|walked|rushed|turned|opened|closed|grabbed|reached|looked|stared|moved|entered|left|climbed|jumped)\b/i.test(s))
+ if(/\b(ran|walked|rushed|turned|opened|closed|grabbed|reached|looked|stared|moved|entered|left|climbed|jumped)\b/i.test(s)){
+  const pace=s.match(/\b(slowly|quickly|suddenly|carefully|quietly|hesitantly)\b/i);
+  const direction=s.match(/\b(towards|into|out of|through|across|along|away from)\s+(?:the\s+)?[a-z]+/i);
+  if(pace && direction){
+   const adjectives={slowly:'slow',quickly:'quick',suddenly:'sudden',carefully:'careful',quietly:'quiet',hesitantly:'hesitant'};
+   return {kind:'action',text:'The '+adjectives[pace[0].toLowerCase()]+' movement '+direction[0]+' gives the reader a clearer sense of how the action unfolds and draws attention to the character’s approach.'};
+  }
   return {kind:'action',text:'This action moves the moment forward. Explaining its immediate effect helps the reader understand why it matters, rather than seeing it as an isolated event.'};
+ }
  if(/\b(rain|storm|wind|sunlight|snow|fog|weather|thunder|cold|heat|dark|bright|forest|street|room|house|school|classroom|garden|beach|city|village|castle|field)\b/i.test(s))
   return {kind:'setting',text:'This detail helps establish the setting and shape the atmosphere. Connecting the surroundings to what the people notice, feel or do makes the description more meaningful.'};
  if(/\b(unlike|whereas|however|although|while|in contrast|compared with|different|similar)\b/i.test(s))
