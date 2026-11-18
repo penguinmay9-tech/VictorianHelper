@@ -129,13 +129,13 @@ function cleanDraft(text){
 function splitIntoSentences(paragraph){
  return paragraph.match(/[^.!?]+(?:[.!?]+|$)/g)?.map(s=>s.trim()).filter(Boolean)||[paragraph.trim()];
 }
-function explainSentence(sentence){
+function explainSentence(sentence, paragraph){
  const s=sentence.replace(/[.!?]+$/,'').trim();
  const because=s.match(/^(.+?)\s+because\s+(.+)$/i);
  if(because && because[1].split(/\s+/).length>1 && because[2].split(/\s+/).length>1){
   const main=because[1].replace(/[,;:]\s*$/,'').trim();
   const reason=because[2].replace(/[.!?]+$/,'').trim();
-  return {kind:'reason',text:'The reason — '+reason+' — helps explain why '+main.charAt(0).toLowerCase()+main.slice(1)+'. This makes the link between the cause and the main point clear to the reader.'};
+  return {kind:'reason',text:'This gives the reader a clear cause for the situation and helps explain why the first part of the sentence happens. The connection between the reason and the main point is now explicit.'};
  }
  const result=s.match(/^(.+?),?\s+(?:so|therefore|as a result)\s+(.+)$/i);
  if(result && result[1].split(/\s+/).length>1 && result[2].split(/\s+/).length>1){
@@ -143,10 +143,20 @@ function explainSentence(sentence){
   return {kind:'result',text:'This shows the connection between the two parts: '+cause.charAt(0).toLowerCase()+cause.slice(1)+' leads to '+effect.charAt(0).toLowerCase()+effect.slice(1)+'. Making that link clear helps the reader understand why the outcome follows.'};
  }
  const lower=s.toLowerCase();
- if(/\b(for example|for instance|such as|an example|evidence|research|study|statistics|data)\b/i.test(s))
-  return {kind:'example',text:'This detail makes the point more concrete. Explaining exactly what the example demonstrates, and how it supports the main idea, helps the reader see why it has been included.'};
- if(/\b(believe|argue|opinion|think|should|must|important|matters|claim|viewpoint)\b/i.test(s))
-  return {kind:'argument',text:'The significance of this point becomes clearer when the reason behind it is explained. Linking the claim to a relevant example or piece of evidence helps the reader understand why it deserves attention.'};
+ if(/\b(for example|for instance|such as|an example|evidence|research|study|statistics|data)\b/i.test(s)){
+  const context=(paragraph||'').toLowerCase();
+  if(/school gardens?/.test(context) && /grow vegetables?/.test(context) && /learn about nature|natural world/.test(context))
+   return {kind:'example',text:'This example supports the claim about school gardens by showing how practical activity can be connected to learning about the natural world. Growing vegetables gives students something real to observe, while the link to nature explains why the activity has educational value.'};
+  if(/description/.test(s) && /result|outcome/.test(s))
+   return {kind:'example',text:'Each detail adds something different: the example makes the idea concrete, the description helps the reader picture it, and the result explains why it matters. Together, these parts make the point easier to follow and understand.'};
+  return {kind:'example',text:'This example turns the main idea into something specific that the reader can understand. Explaining what it demonstrates makes the connection between the detail and the paragraph’s main point clearer.'};
+ }
+ if(/\b(this moment|this idea|this point|this detail|this shows|this means|this suggests|matters|significant)\b/i.test(s))
+  return {kind:'significance',text:'Explaining why this moment matters helps the reader see how it contributes to the wider message, rather than treating it as an isolated detail.'};
+ if(/\b(believe|argue|opinion|think|should|must|claim|viewpoint)\b/i.test(s)){
+  if(/\b(for example|for instance|such as|evidence|research|study|statistics|data)\b/i.test(paragraph||'')) return null;
+  return {kind:'argument',text:'Stating this viewpoint gives the paragraph a clear position. Explaining the reason behind it will help the reader understand what supports the claim and why it is worth considering.'};
+ }
  if(/\b(happy|sad|angry|afraid|scared|worried|nervous|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i.test(s))
   return {kind:'emotion',text:'This reaction gives the moment more meaning because it shows how the situation affects the person. It also helps the reader understand why the moment may influence what happens next.'};
  if(/\b(said|asked|replied|whispered|shouted|answered|argued|muttered|exclaimed)\b/i.test(s))
@@ -161,8 +171,6 @@ function explainSentence(sentence){
   return {kind:'sequence',text:'This stage contributes to the development of the events or explanation. Showing how it follows from the previous point helps the whole paragraph feel connected.'};
  if(/\b(result|consequence|effect|outcome|led to|caused|therefore)\b/i.test(s))
   return {kind:'outcome',text:'The outcome is important because it shows what the earlier detail leads to. Explaining the effect helps the reader understand the wider significance of the point.'};
- if(/\b(this moment|this idea|this point|this detail|this shows|this means|this suggests|matters|significant)\b/i.test(s))
-  return {kind:'significance',text:'This detail matters because it contributes to the paragraph’s main idea. Making the connection explicit helps the reader understand not only what is being described, but why it has a place in the writing.'};
  return null;
 }
 function expand(text){
@@ -170,7 +178,7 @@ function expand(text){
  if(!cleaned) return {draft:'',html:document.createTextNode('')};
  const paragraphs=cleaned.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
  const totalSentences=paragraphs.reduce((n,p)=>n+splitIntoSentences(p).length,0);
- const maxAdds=Math.min(5,Math.max(1,Math.ceil(totalSentences/2)));
+ const maxAdds=Math.min(5,Math.max(1,totalSentences));
  let addCount=0;
  const usedKinds=new Set();
  const expandedParagraphs=[];
@@ -182,7 +190,7 @@ function expand(text){
   sentences.forEach(sentence=>{
    rebuilt.push(sentence);
    if(addCount>=maxAdds || paragraphAdds>=2) return;
-   const idea=explainSentence(sentence);
+   const idea=explainSentence(sentence,paragraph);
    if(!idea || usedKinds.has(idea.kind)) return;
    if(/\b(consider explaining|add a specific example|give the reader more to think about)\b/i.test(sentence)) {
     if(idea.kind!=='argument' && idea.kind!=='example' && idea.kind!=='significance') return;
