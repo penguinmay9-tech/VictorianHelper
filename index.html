@@ -113,52 +113,84 @@ function review(text){
 }
 const spelling=[[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],[/\bdoesnt\b/gi,"doesn't"],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']];
 function expand(text){
- let out=text.trim();
- const swaps=[
- [/\bvery good\b/gi,'excellent'],[/\bvery bad\b/gi,'terrible'],[/\bvery big\b/gi,'enormous'],[/\bvery small\b/gi,'tiny'],[/\bvery happy\b/gi,'delighted'],[/\bvery sad\b/gi,'deeply upset'],[/\bvery scared\b/gi,'terrified'],[/\bvery angry\b/gi,'furious'],[/\bvery tired\b/gi,'exhausted'],[/\bvery interesting\b/gi,'fascinating'],
- [/\bwalked slowly\b/gi,'strolled'],[/\bran quickly\b/gi,'raced'],[/\bsaid quietly\b/gi,'whispered'],[/\bsaid loudly\b/gi,'shouted'],[/\bvery loud\b/gi,'deafening'],[/\bvery quiet\b/gi,'silent']
+ const original=text.trim().replace(/\s+/g,' ');
+ if(!original) return '';
+ let out=original;
+ // Correct a small set of frequent errors before improving the wording.
+ const corrections=[
+  [/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],
+  [/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],
+  [/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],
+  [/\bdont\b/gi,"don't"],[/\bdoesnt\b/gi,"doesn't"],[/\bcant\b/gi,"can't"],
+  [/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']
  ];
- swaps.forEach(([re,to])=>{out=out.replace(re,to);});
- out=out.replace(/\bdont\b/gi,"don't").replace(/\bcant\b/gi,"can't").replace(/\bdidnt\b/gi,"didn't").replace(/\bwont\b/gi,"won't").replace(/\bteh\b/gi,'the').replace(/\brecieve\b/gi,'receive').replace(/\bfreind\b/gi,'friend').replace(/\bbecuase\b/gi,'because').replace(/\bi\b/g,'I');
+ corrections.forEach(([pattern,value])=>{out=out.replace(pattern,value);});
+ // Replace vague or repetitive phrases with more precise alternatives.
+ const phrases=[
+  [/\ba lot of\b/gi,'many'],[/\bkind of\b/gi,'somewhat'],[/\breally good\b/gi,'effective'],
+  [/\bvery good\b/gi,'excellent'],[/\bvery bad\b/gi,'poor'],[/\bvery big\b/gi,'enormous'],
+  [/\bvery small\b/gi,'tiny'],[/\bvery happy\b/gi,'delighted'],[/\bvery sad\b/gi,'deeply upset'],
+  [/\bvery scared\b/gi,'frightened'],[/\bvery angry\b/gi,'furious'],[/\bvery tired\b/gi,'exhausted'],
+  [/\bvery interesting\b/gi,'fascinating'],[/\bvery important\b/gi,'essential'],
+  [/\bwalked slowly\b/gi,'strolled'],[/\bran quickly\b/gi,'raced'],
+  [/\bsaid quietly\b/gi,'whispered'],[/\bsaid loudly\b/gi,'shouted'],
+  [/\blooked at\b/gi,'examined'],[/\bbegan to\b/gi,'started to'],
+  [/\bin order to\b/gi,'to'],[/\bdue to the fact that\b/gi,'because'],
+  [/\bat this point in time\b/gi,'now'],[/\bfor the purpose of\b/gi,'to']
+ ];
+ phrases.forEach(([pattern,value])=>{out=out.replace(pattern,value);});
+ // Improve sentence openings and connect ideas without adding new events or claims.
+ out=out.replace(/,\s*but\b/gi,'; however,');
+ out=out.replace(/,\s*so\b/gi,', which meant that');
+ out=out.replace(/\bAlso,\s*/gi,'In addition, ');
+ out=out.replace(/\bAnd then\b/gi,'Afterwards');
+ out=out.replace(/\bBut\b/g,'However');
+ out=out.replace(/\s+([,.!?;:])/g,'$1').replace(/([,.!?;:])(?=[A-Za-z])/g,'$1 ');
  out=out.replace(/\s+/g,' ').trim();
+ // Capitalise sentence starts and ensure the draft has a clear ending.
+ out=out.replace(/(^|[.!?]\s+)([a-z])/g,(match,prefix,letter)=>prefix+letter.toUpperCase());
  if(out && !/[.!?]$/.test(out)) out+='.';
- const extras=[];
- const has=(re)=>re.test(out);
- if(has(/\b(happy|sad|angry|afraid|scared|worried|nervous|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i)){
-   extras.push('The emotion is an important part of the moment. Developing what caused this feeling and how it influences the next decision can help the reader understand the character more clearly.');
- }
- if(has(/\b(rain|storm|wind|sun|sunlight|snow|fog|cloud|weather|thunder|cold|heat)\b/i)){
-   extras.push('The weather can help shape the atmosphere. Explain how it affects the people, the setting or what happens next to make this detail feel connected to the scene.');
- }
- if(has(/\b(said|asked|replied|whispered|shouted|exclaimed|told|answered|argued|explained|muttered)\b/i)){
-   extras.push('The dialogue can reveal more than the words themselves. Consider adding a short reaction, gesture or explanation of what the speaker really means, if it fits your scene.');
- }
- if(has(/\b(walked|ran|rushed|climbed|jumped|turned|opened|closed|grabbed|reached|looked|stared|watched|moved|entered|left)\b/i)){
-   extras.push('You can slow this action down by describing its most important step and the character’s reaction. This helps the reader follow the movement instead of simply being told that it happened.');
- }
- if(has(/\b(room|house|street|forest|school|classroom|garden|beach|city|village|hall|castle|field|room|building|place)\b/i)){
-   extras.push('The setting gives the reader a place to imagine. Add only details that are true to your scene, such as what can be seen, heard or noticed there, and explain how the surroundings affect the moment.');
- }
- if(has(/\b(because|reason|therefore|result|so that|as a result)\b/i)){
-   extras.push('Your explanation includes a reason or result. You could develop it further by showing exactly how the cause leads to the outcome, using a relevant example from your topic.');
- }
- if(has(/\b(problem|challenge|difficult|hard|struggle|obstacle|solution|solve|overcome)\b/i)){
-   extras.push('To develop the challenge, explain what makes it difficult, what the person does in response and what changes as a result. This creates a clearer sense of progress.');
- }
- if(has(/\b(first|next|then|finally|afterwards|before|later|eventually)\b/i)){
-   extras.push('Your writing describes events in an order. Add a little more about why each stage leads to the next so the sequence feels connected rather than like a list.');
- }
- if(has(/\b(think|believe|feel|opinion|argue|important|should|must|prefer)\b/i)){
-   extras.push('To make this point more convincing, explain why you think this and support it with a specific example or piece of evidence that is accurate for your topic.');
- }
- if(has(/\b(friend|family|mother|father|sister|brother|teacher|student|person|people|character|team)\b/i)){
-   extras.push('You mention a person or group. Consider explaining their motivation, reaction or relationship to the event, where that information is relevant.');
- }
- if(!extras.length){
-   extras.push('To expand this paragraph meaningfully, add a relevant example, explain why the main point matters, and describe what happens as a result. Only include details that are true to your subject.');
-   extras.push('Try developing one key sentence: explain what caused it, give a specific supporting detail, then link that detail back to your main idea.');
- }
- return out+'\n\n'+extras.join('\n\n');
+ // Add only topic-linked development prompts, rather than generic filler pretending to be a rewrite.
+ const ideas=[];
+ const add=(title,detail)=>ideas.push({title,detail});
+ if(/\b(opinion|believe|think|argue|should|important|claim)\b/i.test(original))
+  add('Strengthen the point','Add one specific example or piece of evidence that supports the opinion, then explain how that evidence proves the point.');
+ if(/\b(because|therefore|as a result|resulted in|led to|caused)\b/i.test(original))
+  add('Make the reasoning clearer','Explain the link between the cause and the result. Name what changed and why that outcome followed.');
+ if(/\b(character|he |she |they |person|people|friend|family|teacher|student)\b/i.test(original))
+  add('Develop the people','Where it fits, explain what the person wants, what they notice, or how their response affects what happens next.');
+ if(/\b(said|asked|replied|whispered|shouted|answered|argued)\b/i.test(original))
+  add('Develop the dialogue','Add a relevant reaction or explain what the speaker’s words reveal. Keep it consistent with what the character actually says and does.');
+ if(/\b(ran|walked|rushed|turned|opened|closed|grabbed|reached|looked|stared|moved|entered|left)\b/i.test(original))
+  add('Make the action easier to picture','Choose the most important action and describe its effect or the immediate reaction. Avoid adding events that are not in your original scene.');
+ if(/\b(rain|storm|wind|sunlight|snow|fog|weather|thunder|cold|heat|dark|bright)\b/i.test(original))
+  add('Use the setting purposefully','Explain how the surroundings affect the mood, the people or the events, rather than adding description that does not move the writing forward.');
+ if(/\b(problem|challenge|difficult|struggle|obstacle|solution|solve|overcome)\b/i.test(original))
+  add('Explain the challenge','Clarify what makes the problem difficult, what response is taken and what that response changes.');
+ if(/\b(first|next|then|finally|afterwards|before|later|eventually)\b/i.test(original))
+  add('Link the sequence','Explain why the next event follows from the previous one so the paragraph reads as a connected account.');
+ if(/\b(for example|such as|including)\b/i.test(original))
+  add('Explain the example','After the example, add a sentence explaining exactly how it supports the main idea.');
+ if(!ideas.length)
+  add('Develop the main idea','Add a relevant example, explain why the detail matters, and link it back to the paragraph’s main point. Use facts from your own topic.');
+ const result=document.createElement('div');
+ const heading=document.createElement('p');
+ heading.textContent='Revised draft';
+ result.appendChild(heading);
+ const draft=document.createElement('p');
+ draft.textContent=out;
+ result.appendChild(draft);
+ const separator=document.createElement('p');
+ separator.textContent='Ideas to make it fuller';
+ result.appendChild(separator);
+ ideas.forEach(item=>{
+  const p=document.createElement('p');
+  const strong=document.createElement('strong');
+  strong.textContent=item.title+': ';
+  p.append(strong,document.createTextNode(item.detail));
+  result.appendChild(p);
+ });
+ return {draft:out,html:result};
 }
 document.getElementById('check').onclick=()=>{
  const text=box.value.trim();
@@ -168,8 +200,9 @@ document.getElementById('check').onclick=()=>{
 document.getElementById('expand').onclick=()=>{
  const text=box.value.trim();
  if(!text){better.textContent='Add some writing to your draft first.';use.hidden=true;return;}
- expandedText=expand(text);
- better.textContent=expandedText;
+ const result=expand(text);
+ expandedText=result.draft;
+ better.replaceChildren(result.html);
  use.hidden=false;
 };
 use.onclick=()=>{if(expandedText){box.value=expandedText;words();box.focus();}};
