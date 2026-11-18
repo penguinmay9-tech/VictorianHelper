@@ -5,76 +5,151 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VictorianHelper — Writing, refined</title>
 <style>
-:root{--ink:#17233b;--muted:#68748a;--line:#e5e9f0;--paper:#fff;--bg:#f6f8fc;--blue:#5369d8;--blue2:#4055c2;--pale:#eef1ff}
+:root{--ink:#17233b;--muted:#68748a;--line:#e5e9f0;--paper:#fff;--bg:#f6f8fc;--blue:#5369d8;--blue2:#4055c2;--pale:#eef1ff;--gold:#a66a24}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.6}
 header{background:#fff;border-bottom:1px solid var(--line)}
-.nav{max-width:1120px;margin:auto;padding:19px 26px;display:flex;align-items:center;justify-content:space-between}
+.nav{max-width:1160px;margin:auto;padding:19px 26px;display:flex;align-items:center;justify-content:space-between}
 .brand{font-size:19px;font-weight:750;letter-spacing:-.5px}.brand span{color:var(--blue)}
 .nav-note{font-size:13px;color:var(--muted)}
-.hero{max-width:1120px;margin:54px auto 30px;padding:0 26px}
+.hero{max-width:1160px;margin:48px auto 28px;padding:0 26px}
 .eyebrow{font-size:12px;font-weight:750;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue)}
-h1{font-size:clamp(34px,5vw,52px);line-height:1.12;letter-spacing:-2px;margin:10px 0 13px}
-.hero p{color:var(--muted);font-size:17px;max-width:650px;margin:0}
-main{max-width:1120px;margin:0 auto 70px;padding:0 26px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.8fr);gap:22px;align-items:start}
+h1{font-size:clamp(34px,5vw,50px);line-height:1.12;letter-spacing:-2px;margin:10px 0 13px}
+.hero p{color:var(--muted);font-size:16px;max-width:720px;margin:0}
+main{max-width:1160px;margin:0 auto 65px;padding:0 26px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(290px,.85fr);gap:22px;align-items:start}
 .panel{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:23px;box-shadow:0 8px 28px rgba(25,42,80,.045)}
 .panel h2{font-size:17px;letter-spacing:-.3px;margin:0 0 5px}
 .sub{font-size:13px;color:var(--muted);margin:0 0 17px}
-textarea{width:100%;min-height:330px;resize:vertical;border:1px solid #dce2ec;border-radius:10px;padding:16px;font:15px/1.7 inherit;color:var(--ink);background:#fcfdff;outline:none}
+textarea{width:100%;min-height:350px;resize:vertical;border:1px solid #dce2ec;border-radius:10px;padding:16px;font:15px/1.7 Arial,sans-serif;color:var(--ink);background:#fcfdff;outline:none}
 textarea:focus{border-color:#8b98e8;box-shadow:0 0 0 3px #eef0ff}
-.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;margin:9px 0 14px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:9px 0 14px}
 .actions{display:flex;flex-wrap:wrap;gap:9px}
-button{border:0;border-radius:8px;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer}
+button{border:0;border-radius:8px;padding:11px 15px;font-size:13px;font-weight:700;cursor:pointer}
 .primary{background:var(--blue);color:white}.primary:hover{background:var(--blue2)}
 .secondary{background:#f0f2f7;color:#34415a}.secondary:hover{background:#e6eaf2}
 .side{display:grid;gap:18px}
-.result{min-height:76px;color:#526078;font-size:14px;overflow-wrap:anywhere}
-.result ul{padding-left:20px;margin:8px 0}
-.result li{margin:5px 0}
-.suggestion{background:var(--pale);border:1px solid #e1e5ff;border-radius:10px;padding:14px;color:#394777;font-size:13px;line-height:1.65;overflow-wrap:anywhere}
-.note{font-size:12px;color:var(--muted);margin:12px 0 0}
+.result{min-height:76px;color:#526078;font-size:13px;overflow-wrap:anywhere}
+.result ul{padding-left:19px;margin:8px 0}.result li{margin:9px 0}
+.result strong{color:var(--ink)}
+.suggestion{background:var(--pale);border:1px solid #e1e5ff;border-radius:10px;padding:14px;color:#394777;font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;max-height:430px;overflow:auto}
+.note{font-size:12px;color:var(--muted);margin:10px 0 0}
+.disclaimer{border-left:3px solid #d6a45d;padding:10px 12px;background:#fff9ef;border-radius:5px;color:#76552c;font-size:12px;margin-top:13px}
 footer{text-align:center;color:#8a94a6;font-size:12px;padding:25px}
-@media(max-width:760px){.hero{margin:38px auto 24px}main{grid-template-columns:1fr}.nav-note{display:none}textarea{min-height:250px}}
+@media(max-width:780px){.hero{margin:36px auto 23px}main{grid-template-columns:1fr}.nav-note{display:none}textarea{min-height:260px}}
 </style>
 </head>
 <body>
 <header><div class="nav"><div class="brand">Victorian<span>Helper</span></div><div class="nav-note">A calmer way to shape your words</div></div></header>
-<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>A focused space to review your writing, catch a few common errors and find fresh ways to develop your ideas.</p></section>
+<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>Review grammar and punctuation, spot common spelling issues, and create a fuller draft with more varied language and sentence structure.</p></section>
 <main>
 <section class="panel">
-<h2>Your draft</h2><p class="sub">Paste or type your writing below to get started.</p>
+<h2>Your draft</h2><p class="sub">Paste or type your writing below. Your text is processed in this browser.</p>
 <textarea id="writing" placeholder="Start writing here…"></textarea>
-<div class="meta"><span id="count">0 words</span><span>Your draft stays in this page</span></div>
-<div class="actions"><button class="primary" id="check">Review writing</button><button class="secondary" id="clear">Clear draft</button></div>
+<div class="meta"><span id="count">0 words</span><span>Private to this page</span></div>
+<div class="actions"><button class="primary" id="check">Check grammar & punctuation</button><button class="primary" id="expand">Expand & enrich writing</button><button class="secondary" id="clear">Clear draft</button></div>
+<p class="note">Expansion uses built-in language rules, not an online AI model. Check the new version carefully and keep only changes that match what you mean.</p>
 </section>
 <div class="side">
-<section class="panel"><h2>Writing review</h2><p class="sub">A few quick checks to help with proofreading.</p><div class="result" id="feedback">Your review will appear here when you select <b>Review writing</b>.</div></section>
-<section class="panel"><h2>Develop your ideas</h2><p class="sub">A prompt to help you add depth and detail.</p><div class="suggestion" id="better">Your suggestion will appear here after you review your draft.</div><div class="actions" style="margin-top:14px"><button class="secondary" id="use" hidden>Use suggestion</button></div></section>
-<section class="panel"><h2>A quick note</h2><p class="note">VictorianHelper uses a small set of built-in spelling and punctuation checks. It is not an AI proofreader and may miss mistakes, so always read through your final draft.</p></section>
+<section class="panel"><h2>Grammar & punctuation review</h2><p class="sub">Checks across spelling, sentence structure and punctuation.</p><div class="result" id="feedback" aria-live="polite">Your review will appear here. Select “Check grammar & punctuation” to begin.</div></section>
+<section class="panel"><h2>Expanded version</h2><p class="sub">A fuller rewrite using vocabulary swaps and sentence improvements.</p><div class="suggestion" id="better">Your expanded writing will appear here after you select “Expand & enrich writing”.</div><div class="actions" style="margin-top:14px"><button class="secondary" id="use" hidden>Replace draft with this version</button></div></section>
+<section class="panel"><h2>About this checker</h2><p class="note">This browser-based checker covers many common rules, but English has exceptions and context matters. It cannot reliably judge every grammar issue, detect every punctuation error or understand your intended meaning. It is not a full AI proofreader.</p></section>
 </div>
 </main>
 <footer>VictorianHelper · Thoughtful tools for better writing</footer>
 <script>
 const box=document.getElementById('writing'),count=document.getElementById('count'),feedback=document.getElementById('feedback'),better=document.getElementById('better'),use=document.getElementById('use');
-let newText='';
+let expandedText='';
 function words(){const t=box.value.trim();count.textContent=(t?t.split(/\s+/).length:0)+' words';}
 box.addEventListener('input',words);
-document.getElementById('clear').onclick=()=>{box.value='';words();feedback.textContent='Your review will appear here when you select Review writing.';better.textContent='Your suggestion will appear here after you review your draft.';use.hidden=true;};
-const fixes=[[/\bi\b/g,'I'],[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bdidnt\b/gi,"didn't"],[/\bdoesnt\b/gi,"doesn't"],[/\bwont\b/gi,"won't"],[/\bwich\b/gi,'which']];
+function addFinding(list,category,message){list.push({category,message});}
+function renderFindings(findings){
+ feedback.replaceChildren();
+ if(!findings.length){feedback.textContent='No issues were found by these checks. This does not guarantee the writing is error-free — read it through carefully.';return;}
+ const intro=document.createElement('p');intro.textContent=findings.length+' possible issue(s) to review:';feedback.appendChild(intro);
+ const ul=document.createElement('ul');
+ findings.forEach(f=>{const li=document.createElement('li');const strong=document.createElement('strong');strong.textContent=f.category+': ';li.append(strong,document.createTextNode(f.message));ul.appendChild(li);});
+ feedback.appendChild(ul);
+}
+function review(text){
+ const f=[];
+ if(/^\s*[a-z]/.test(text))addFinding(f,'Capitalisation','The first word may need a capital letter.');
+ if(/(^|[.!?]\s+)[a-z]/.test(text))addFinding(f,'Capitalisation','A sentence may begin with a lower-case letter.');
+ if(/\bi\b/.test(text))addFinding(f,'Capitalisation','The pronoun “I” should be capitalised.');
+ if(/\s{2,}/.test(text))addFinding(f,'Spacing','There are repeated spaces. Usually use one space between words.');
+ if(/\s+[,.!?;:]/.test(text))addFinding(f,'Punctuation spacing','Remove the space before punctuation marks.');
+ if(/[,.!?;:](?=[A-Za-z])/.test(text))addFinding(f,'Punctuation spacing','Add a space after punctuation where two words or sentences run together.');
+ if(/[!?.,]{2,}/.test(text))addFinding(f,'Repeated punctuation','Check whether repeated punctuation is intentional.');
+ if(/[,;:]$/.test(text.trim()))addFinding(f,'Ending punctuation','The text ends with a comma, semicolon or colon; check whether the sentence is complete.');
+ if((text.match(/"/g)||[]).length%2!==0)addFinding(f,'Quotation marks','There may be an unmatched double quotation mark.');
+ if((text.match(/'/g)||[]).length%2!==0 && !/\b(it's|that's|who's|what's|can't|don't|doesn't|didn't|won't|isn't|aren't|wasn't|weren't|I've|I'll|we're|they're|you're|I'm)\b/i.test(text))addFinding(f,'Apostrophes','Check that apostrophes are paired or used correctly. This check can be uncertain with contractions.');
+ if(/\b(dont|doesnt|didnt|cant|wont|isnt|arent|wasnt|werent|couldnt|shouldnt|wouldnt)\b/i.test(text))addFinding(f,'Apostrophes','A contraction may need an apostrophe, for example “don’t” or “can’t”.');
+ if(/\b(teh|recieve|freind|becuase|thier|seperate|definately|wich|untill|alot|occured|begining|enviroment| goverment)\b/i.test(text))addFinding(f,'Spelling','One or more words may be misspelled. Review common spellings such as “receive”, “friend” and “because”.');
+ if(/\b(your)\s+(welcome|right|wrong|going|being|the one)\b/i.test(text))addFinding(f,'Commonly confused words','Check whether “you’re” (you are) is intended instead of “your”.');
+ if(/\byou\s*’?re\s+(book|car|house|idea|name|friend)\b/i.test(text))addFinding(f,'Commonly confused words','Check whether “your” (belonging to you) is intended instead of “you’re”.');
+ if(/\bits\s+(a|the|very|not|been|going|important|easy|hard)\b/i.test(text))addFinding(f,'Commonly confused words','Check “its” (belonging to it) versus “it’s” (it is or it has).');
+ if(/\b(their|there|they're)\b/i.test(text))addFinding(f,'Commonly confused words','Double-check “their” (belonging to them), “there” (a place) and “they’re” (they are) in context.');
+ if(/\b(to|too|two)\b/i.test(text))addFinding(f,'Commonly confused words','Check “to”, “too” and “two” carefully; they sound alike but have different meanings.');
+ if(/\b(then|than)\b/i.test(text))addFinding(f,'Commonly confused words','Check “then” (time or order) versus “than” (comparison).');
+ if(/\b(affect|effect)\b/i.test(text))addFinding(f,'Word choice','Check “affect” (usually a verb) versus “effect” (usually a noun).');
+ if(/\b(a|an)\s+[aeiou][a-z]+\b/i.test(text))addFinding(f,'Articles','Check whether “an” is needed before a vowel sound; pronunciation, not just spelling, decides this.');
+ if(/\b(an)\s+[bcdfghjklmnpqrstvwxyz][a-z]+\b/i.test(text))addFinding(f,'Articles','Check whether “a” is needed before a consonant sound.');
+ if(/\b(he|she|it)\s+(are|were|have)\b/i.test(text))addFinding(f,'Subject–verb agreement','A singular subject such as “he”, “she” or “it” usually takes “is”, “was” or “has”. Check the sentence.');
+ if(/\b(they|we|you)\s+(is|was|has)\b/i.test(text))addFinding(f,'Subject–verb agreement','A plural subject such as “they” or “we” usually takes “are”, “were” or “have”. Check the sentence.');
+ if(/\b(he|she|it)\s+don't\b/i.test(text))addFinding(f,'Subject–verb agreement','With “he”, “she” or “it”, use “doesn’t” rather than “don’t”.');
+ if(/\b(he|she|it)\s+(go|do|say|make|want|need|like|have)\b/i.test(text))addFinding(f,'Subject–verb agreement','Check whether the present-tense verb needs an -s ending after “he”, “she” or “it”.');
+ if(/\b(I|we|they|you)\s+(is|has)\b/i.test(text))addFinding(f,'Subject–verb agreement','Check whether “am/are” or “have” is needed with this subject.');
+ if(/\b(me and (him|her|them|my friend))\b/i.test(text))addFinding(f,'Pronouns','In formal writing, consider whether “[person] and I” is the correct subject form.');
+ if(/\b(between you and I)\b/i.test(text))addFinding(f,'Pronouns','After a preposition such as “between”, the object form “me” is usually used.');
+ if(/\b(very very|really really|so so)\b/i.test(text))addFinding(f,'Word choice','Repeated intensifiers can weaken a sentence. Consider one precise adjective instead.');
+ const sentences=text.split(/[.!?]+/).map(s=>s.trim()).filter(Boolean);
+ sentences.forEach(s=>{if(s.split(/\s+/).length===1 && !/^(yes|no|stop|help|wow|hello)$/i.test(s))addFinding(f,'Sentence completeness','“'+s+'” may be a fragment rather than a complete sentence. Check for a subject and a verb.');});
+ if(/,\s*(and|but|so)\b/i.test(text))addFinding(f,'Comma use','A comma before “and”, “but” or “so” is needed when it joins two complete clauses, but not always. Check the clauses.');
+ if(/\b(I|he|she|it|we|they|you)\s+\w+ed\b/i.test(text) && /\b(am|is|are)\s+\w+ing\b/i.test(text))addFinding(f,'Tense consistency','The draft may shift between past and present tense. This can be intentional, but check that the timeline is clear.');
+ if(/\b(because|although|when|while|if)\s+[^.!?]+[.!?]/i.test(text) && /^\s*(because|although|when|while|if)\b/i.test(text))addFinding(f,'Sentence structure','A sentence beginning with “because”, “although”, “when”, “while” or “if” may be incomplete if its main clause is missing.');
+ if(/\b(the the|a a|is is|to to|and and|of of)\b/i.test(text))addFinding(f,'Repeated words','A word may have been typed twice.');
+ if(/\b(there is|there are)\b/i.test(text))addFinding(f,'Sentence style','Consider whether a more direct subject would make the sentence clearer.');
+ if(/\b(very|nice|good|bad|big|small|went|got)\b/i.test(text))addFinding(f,'Vocabulary','Some general words could be replaced with more precise choices where they fit your meaning.');
+ return f;
+}
+const spelling=[[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],[/\bdoesnt\b/gi,"doesn't"],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']];
+function expand(text){
+ let out=text.trim();
+ const swaps=[
+ [/\bvery good\b/gi,'excellent'],[/\bvery bad\b/gi,'terrible'],[/\bvery big\b/gi,'enormous'],[/\bvery small\b/gi,'tiny'],[/\bvery happy\b/gi,'delighted'],[/\bvery sad\b/gi,'heartbroken'],[/\bvery scared\b/gi,'terrified'],[/\bvery angry\b/gi,'furious'],[/\bvery tired\b/gi,'exhausted'],[/\bvery cold\b/gi,'freezing'],[/\bvery hot\b/gi,'boiling'],[/\bvery pretty\b/gi,'beautiful'],[/\bvery interesting\b/gi,'fascinating'],
+ [/\bsaid\b/gi,'explained'],[/\bwent\b/gi,'travelled'],[/\bgot\b/gi,'received'],[/\blooked\b/gi,'glanced'],[/\bwalked\b/gi,'strolled'],[/\bran\b/gi,'rushed'],[/\bsmall\b/gi,'little'],[/\bbig\b/gi,'enormous'],[/\bnice\b/gi,'pleasant'],[/\bgood\b/gi,'excellent'],[/\bbad\b/gi,'unpleasant'],[/\bscared\b/gi,'frightened'],[/\bhappy\b/gi,'delighted'],[/\bsad\b/gi,'upset'],[/\bshouted\b/gi,'exclaimed'],[/\bquiet\b/gi,'silent'],[/\bfast\b/gi,'quickly']
+ ];
+ swaps.forEach(([re,to])=>{out=out.replace(re,to);});
+ out=out.replace(/\bI am\b/g,'I am').replace(/\bcan't\b/gi,'cannot').replace(/\bdon't\b/gi,'do not').replace(/\bdidn't\b/gi,'did not').replace(/\bit's\b/gi,'it is').replace(/\bI'm\b/g,'I am');
+ out=out.replace(/\b([A-Z][a-z]+)\s+was\s+([a-z]+)/g,'$1 was $2');
+ out=out.replace(/\s+/g,' ').trim();
+ let parts=out.split(/(?<=[.!?])\s+/).filter(Boolean);
+ if(parts.length>1){
+   parts=parts.map((s,i)=>i===0?s:(/^(However|Although|Meanwhile|Furthermore|Therefore|Finally|In addition|As a result),/i.test(s)?s:'Additionally, '+s.charAt(0).toLowerCase()+s.slice(1)));
+ }
+ out=parts.join(' ');
+ const additions=[];
+ if(out.split(/\s+/).length<45){
+   additions.push('To make the point even clearer, consider explaining why this moment or idea matters and how it connects to the rest of your writing.');
+   additions.push('A specific example, a carefully chosen description, or a short explanation of the result would give the reader more to think about.');
+ } else {
+   additions.push('To strengthen the development, consider adding a specific example and explaining how it supports the main idea.');
+ }
+ return out+(/[.!?]$/.test(out)?'':' .').replace(' .','.')+'\n\n'+additions.join(' ');
+}
 document.getElementById('check').onclick=()=>{
  const text=box.value.trim();
- if(!text){feedback.textContent='Add some writing to your draft first.';better.textContent='';use.hidden=true;return;}
- let fixed=text,notes=[];
- fixes.forEach(([pattern,replacement])=>{if(pattern.test(fixed)){fixed=fixed.replace(pattern,replacement);notes.push('Check the spelling: “'+replacement+'”.');}});
- if(fixed && fixed[0]!==fixed[0].toUpperCase()){fixed=fixed[0].toUpperCase()+fixed.slice(1);notes.push('Consider starting with a capital letter.');}
- if(fixed && !/[.!?]$/.test(fixed)){fixed+='.';notes.push('Consider adding a punctuation mark at the end.');}
- feedback.innerHTML=notes.length?'<ul>'+notes.map(n=>'<li>'+n+'</li>').join('')+'</ul><button class="secondary" id="fix">Apply basic fixes</button>':'No issues from this small set of checks were found. Give your draft one more read.';
- const fixButton=document.getElementById('fix');if(fixButton)fixButton.onclick=()=>{box.value=fixed;words();};
- newText=fixed+'\n\nTo develop this further, add a specific example, explain how a person feels, or include details that help the reader picture what is happening.';
- better.textContent='Try adding a specific example, explaining how someone feels, or describing what the reader could see, hear or notice. This can make your point clearer and more engaging.';
+ if(!text){feedback.textContent='Add some writing to your draft first.';return;}
+ renderFindings(review(text));
+};
+document.getElementById('expand').onclick=()=>{
+ const text=box.value.trim();
+ if(!text){better.textContent='Add some writing to your draft first.';use.hidden=true;return;}
+ expandedText=expand(text);
+ better.textContent=expandedText;
  use.hidden=false;
 };
-use.onclick=()=>{box.value=newText;words();box.focus();};
+use.onclick=()=>{if(expandedText){box.value=expandedText;words();box.focus();}};
+document.getElementById('clear').onclick=()=>{box.value='';words();feedback.textContent='Your review will appear here. Select “Check grammar & punctuation” to begin.';better.textContent='Your expanded writing will appear here after you select “Expand & enrich writing”.';expandedText='';use.hidden=true;};
 words();
 </script>
 </body>
