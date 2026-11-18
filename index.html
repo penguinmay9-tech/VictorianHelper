@@ -40,18 +40,18 @@ footer{text-align:center;color:#8a94a6;font-size:12px;padding:25px}
 </head>
 <body>
 <header><div class="nav"><div class="brand">Victorian<span>Helper</span></div><div class="nav-note">A calmer way to shape your words</div></div></header>
-<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>Review grammar and punctuation, spot common spelling issues, and create a fuller draft with more varied language and sentence structure.</p></section>
+<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>Review grammar and punctuation, spot common spelling issues, and build a longer draft with clearer explanation and stronger links between ideas.</p></section>
 <main>
 <section class="panel">
 <h2>Your draft</h2><p class="sub">Paste or type your writing below. Your text is processed in this browser.</p>
 <textarea id="writing" placeholder="Start writing here…"></textarea>
 <div class="meta"><span id="count">0 words</span><span>Private to this page</span></div>
 <div class="actions"><button class="primary" id="check">Check grammar & punctuation</button><button class="primary" id="expand">Expand & enrich writing</button><button class="secondary" id="clear">Clear draft</button></div>
-<p class="note">Expansion uses built-in language rules, not an online AI model. Check the new version carefully and keep only changes that match what you mean.</p>
+<p class="note">This uses built-in language patterns, not an online AI model. It adds explanatory sentences based on your draft, so check that every addition is accurate.</p>
 </section>
 <div class="side">
 <section class="panel"><h2>Grammar & punctuation review</h2><p class="sub">Checks across spelling, sentence structure and punctuation.</p><div class="result" id="feedback" aria-live="polite">Your review will appear here. Select “Check grammar & punctuation” to begin.</div></section>
-<section class="panel"><h2>Expanded version</h2><p class="sub">A fuller rewrite using vocabulary swaps and sentence improvements.</p><div class="suggestion" id="better">Your expanded writing will appear here after you select “Expand & enrich writing”.</div><div class="actions" style="margin-top:14px"><button class="secondary" id="use" hidden>Replace draft with this version</button></div></section>
+<section class="panel"><h2>Expanded version</h2><p class="sub">A longer draft with explanation connected to the ideas in your writing.</p><div class="suggestion" id="better">Your expanded writing will appear here after you select “Expand & enrich writing”.</div><div class="actions" style="margin-top:14px"><button class="secondary" id="use" hidden>Replace draft with this version</button></div></section>
 <section class="panel"><h2>About this checker</h2><p class="note">This browser-based checker covers many common rules, but English has exceptions and context matters. It cannot reliably judge every grammar issue, detect every punctuation error or understand your intended meaning. It is not a full AI proofreader.</p></section>
 </div>
 </main>
@@ -112,85 +112,105 @@ function review(text){
  return f;
 }
 const spelling=[[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],[/\bdoesnt\b/gi,"doesn't"],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']];
-function expand(text){
- const original=text.trim().replace(/\s+/g,' ');
- if(!original) return '';
- let out=original;
- // Correct a small set of frequent errors before improving the wording.
- const corrections=[
+function cleanDraft(text){
+ let out=text.replace(/\r/g,'').trim();
+ const fixes=[
   [/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],
   [/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],
   [/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],
   [/\bdont\b/gi,"don't"],[/\bdoesnt\b/gi,"doesn't"],[/\bcant\b/gi,"can't"],
   [/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']
  ];
- corrections.forEach(([pattern,value])=>{out=out.replace(pattern,value);});
- // Replace vague or repetitive phrases with more precise alternatives.
- const phrases=[
-  [/\ba lot of\b/gi,'many'],[/\bkind of\b/gi,'somewhat'],[/\breally good\b/gi,'effective'],
-  [/\bvery good\b/gi,'excellent'],[/\bvery bad\b/gi,'poor'],[/\bvery big\b/gi,'enormous'],
-  [/\bvery small\b/gi,'tiny'],[/\bvery happy\b/gi,'delighted'],[/\bvery sad\b/gi,'deeply upset'],
-  [/\bvery scared\b/gi,'frightened'],[/\bvery angry\b/gi,'furious'],[/\bvery tired\b/gi,'exhausted'],
-  [/\bvery interesting\b/gi,'fascinating'],[/\bvery important\b/gi,'essential'],
-  [/\bwalked slowly\b/gi,'strolled'],[/\bran quickly\b/gi,'raced'],
-  [/\bsaid quietly\b/gi,'whispered'],[/\bsaid loudly\b/gi,'shouted'],
-  [/\blooked at\b/gi,'examined'],[/\bbegan to\b/gi,'started to'],
-  [/\bin order to\b/gi,'to'],[/\bdue to the fact that\b/gi,'because'],
-  [/\bat this point in time\b/gi,'now'],[/\bfor the purpose of\b/gi,'to']
- ];
- phrases.forEach(([pattern,value])=>{out=out.replace(pattern,value);});
- // Improve sentence openings and connect ideas without adding new events or claims.
- out=out.replace(/,\s*but\b/gi,'; however,');
- out=out.replace(/,\s*so\b/gi,', which meant that');
- out=out.replace(/\bAlso,\s*/gi,'In addition, ');
- out=out.replace(/\bAnd then\b/gi,'Afterwards');
- out=out.replace(/\bBut\b/g,'However');
- out=out.replace(/\s+([,.!?;:])/g,'$1').replace(/([,.!?;:])(?=[A-Za-z])/g,'$1 ');
- out=out.replace(/\s+/g,' ').trim();
- // Capitalise sentence starts and ensure the draft has a clear ending.
- out=out.replace(/(^|[.!?]\s+)([a-z])/g,(match,prefix,letter)=>prefix+letter.toUpperCase());
- if(out && !/[.!?]$/.test(out)) out+='.';
- // Add only topic-linked development prompts, rather than generic filler pretending to be a rewrite.
- const ideas=[];
- const add=(title,detail)=>ideas.push({title,detail});
- if(/\b(opinion|believe|think|argue|should|important|claim)\b/i.test(original))
-  add('Strengthen the point','Add one specific example or piece of evidence that supports the opinion, then explain how that evidence proves the point.');
- if(/\b(because|therefore|as a result|resulted in|led to|caused)\b/i.test(original))
-  add('Make the reasoning clearer','Explain the link between the cause and the result. Name what changed and why that outcome followed.');
- if(/\b(character|he |she |they |person|people|friend|family|teacher|student)\b/i.test(original))
-  add('Develop the people','Where it fits, explain what the person wants, what they notice, or how their response affects what happens next.');
- if(/\b(said|asked|replied|whispered|shouted|answered|argued)\b/i.test(original))
-  add('Develop the dialogue','Add a relevant reaction or explain what the speaker’s words reveal. Keep it consistent with what the character actually says and does.');
- if(/\b(ran|walked|rushed|turned|opened|closed|grabbed|reached|looked|stared|moved|entered|left)\b/i.test(original))
-  add('Make the action easier to picture','Choose the most important action and describe its effect or the immediate reaction. Avoid adding events that are not in your original scene.');
- if(/\b(rain|storm|wind|sunlight|snow|fog|weather|thunder|cold|heat|dark|bright)\b/i.test(original))
-  add('Use the setting purposefully','Explain how the surroundings affect the mood, the people or the events, rather than adding description that does not move the writing forward.');
- if(/\b(problem|challenge|difficult|struggle|obstacle|solution|solve|overcome)\b/i.test(original))
-  add('Explain the challenge','Clarify what makes the problem difficult, what response is taken and what that response changes.');
- if(/\b(first|next|then|finally|afterwards|before|later|eventually)\b/i.test(original))
-  add('Link the sequence','Explain why the next event follows from the previous one so the paragraph reads as a connected account.');
- if(/\b(for example|such as|including)\b/i.test(original))
-  add('Explain the example','After the example, add a sentence explaining exactly how it supports the main idea.');
- if(!ideas.length)
-  add('Develop the main idea','Add a relevant example, explain why the detail matters, and link it back to the paragraph’s main point. Use facts from your own topic.');
- const result=document.createElement('div');
- const heading=document.createElement('p');
- heading.textContent='Revised draft';
- result.appendChild(heading);
- const draft=document.createElement('p');
- draft.textContent=out;
- result.appendChild(draft);
- const separator=document.createElement('p');
- separator.textContent='Ideas to make it fuller';
- result.appendChild(separator);
- ideas.forEach(item=>{
-  const p=document.createElement('p');
-  const strong=document.createElement('strong');
-  strong.textContent=item.title+': ';
-  p.append(strong,document.createTextNode(item.detail));
-  result.appendChild(p);
+ fixes.forEach(([pattern,value])=>{out=out.replace(pattern,value);});
+ out=out.split('\n').map(line=>line.replace(/[ \t]+/g,' ').replace(/\s+([,.!?;:])/g,'$1').trim())
+  .map(line=>line.replace(/(^|[.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase())).join('\n');
+ return out;
+}
+function splitIntoSentences(paragraph){
+ return paragraph.match(/[^.!?]+(?:[.!?]+|$)/g)?.map(s=>s.trim()).filter(Boolean)||[paragraph.trim()];
+}
+function explainSentence(sentence){
+ const s=sentence.replace(/[.!?]+$/,'').trim();
+ const because=s.match(/^(.+?)\s+because\s+(.+)$/i);
+ if(because && because[1].split(/\s+/).length>1 && because[2].split(/\s+/).length>1){
+  const main=because[1].replace(/[,;:]\s*$/,'').trim();
+  const reason=because[2].replace(/[.!?]+$/,'').trim();
+  return {kind:'reason',text:'The reason — '+reason+' — helps explain why '+main.charAt(0).toLowerCase()+main.slice(1)+'. This makes the link between the cause and the main point clear to the reader.'};
+ }
+ const result=s.match(/^(.+?),?\s+(?:so|therefore|as a result)\s+(.+)$/i);
+ if(result && result[1].split(/\s+/).length>1 && result[2].split(/\s+/).length>1){
+  const cause=result[1].trim(),effect=result[2].replace(/[.!?]+$/,'').trim();
+  return {kind:'result',text:'This shows the connection between the two parts: '+cause.charAt(0).toLowerCase()+cause.slice(1)+' leads to '+effect.charAt(0).toLowerCase()+effect.slice(1)+'. Making that link clear helps the reader understand why the outcome follows.'};
+ }
+ const lower=s.toLowerCase();
+ if(/\b(for example|for instance|such as|an example|evidence|research|study|statistics|data)\b/i.test(s))
+  return {kind:'example',text:'This detail makes the point more concrete. Explaining exactly what the example demonstrates, and how it supports the main idea, helps the reader see why it has been included.'};
+ if(/\b(believe|argue|opinion|think|should|must|important|matters|claim|viewpoint)\b/i.test(s))
+  return {kind:'argument',text:'The significance of this point becomes clearer when the reason behind it is explained. Linking the claim to a relevant example or piece of evidence helps the reader understand why it deserves attention.'};
+ if(/\b(happy|sad|angry|afraid|scared|worried|nervous|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i.test(s))
+  return {kind:'emotion',text:'This reaction gives the moment more meaning because it shows how the situation affects the person. It also helps the reader understand why the moment may influence what happens next.'};
+ if(/\b(said|asked|replied|whispered|shouted|answered|argued|muttered|exclaimed)\b/i.test(s))
+  return {kind:'dialogue',text:'The words can reveal the speaker’s attitude as well as the information being shared. The other person’s response, where relevant, can show how the exchange changes the situation.'};
+ if(/\b(ran|walked|rushed|turned|opened|closed|grabbed|reached|looked|stared|moved|entered|left|climbed|jumped)\b/i.test(s))
+  return {kind:'action',text:'This action moves the moment forward. Explaining its immediate effect helps the reader understand why it matters, rather than seeing it as an isolated event.'};
+ if(/\b(rain|storm|wind|sunlight|snow|fog|weather|thunder|cold|heat|dark|bright|forest|street|room|house|school|classroom|garden|beach|city|village|castle|field)\b/i.test(s))
+  return {kind:'setting',text:'This detail helps establish the setting and shape the atmosphere. Connecting the surroundings to what the people notice, feel or do makes the description more meaningful.'};
+ if(/\b(unlike|whereas|however|although|while|in contrast|compared with|different|similar)\b/i.test(s))
+  return {kind:'contrast',text:'The contrast helps the reader notice the difference between the two ideas. Explaining why that difference matters will make the comparison more purposeful.'};
+ if(/\b(first|next|then|finally|afterwards|before|later|eventually|initially)\b/i.test(s))
+  return {kind:'sequence',text:'This stage contributes to the development of the events or explanation. Showing how it follows from the previous point helps the whole paragraph feel connected.'};
+ if(/\b(result|consequence|effect|outcome|led to|caused|therefore)\b/i.test(s))
+  return {kind:'outcome',text:'The outcome is important because it shows what the earlier detail leads to. Explaining the effect helps the reader understand the wider significance of the point.'};
+ if(/\b(this moment|this idea|this point|this detail|this shows|this means|this suggests|matters|significant)\b/i.test(s))
+  return {kind:'significance',text:'This detail matters because it contributes to the paragraph’s main idea. Making the connection explicit helps the reader understand not only what is being described, but why it has a place in the writing.'};
+ return null;
+}
+function expand(text){
+ const cleaned=cleanDraft(text);
+ if(!cleaned) return {draft:'',html:document.createTextNode('')};
+ const paragraphs=cleaned.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+ const totalSentences=paragraphs.reduce((n,p)=>n+splitIntoSentences(p).length,0);
+ const maxAdds=Math.min(5,Math.max(1,Math.ceil(totalSentences/2)));
+ let addCount=0;
+ const usedKinds=new Set();
+ const expandedParagraphs=[];
+ const added=[];
+ paragraphs.forEach(paragraph=>{
+  const sentences=splitIntoSentences(paragraph);
+  const rebuilt=[];
+  let paragraphAdds=0;
+  sentences.forEach(sentence=>{
+   rebuilt.push(sentence);
+   if(addCount>=maxAdds || paragraphAdds>=2) return;
+   const idea=explainSentence(sentence);
+   if(!idea || usedKinds.has(idea.kind)) return;
+   if(/\b(consider explaining|add a specific example|give the reader more to think about)\b/i.test(sentence)) {
+    if(idea.kind!=='argument' && idea.kind!=='example' && idea.kind!=='significance') return;
+   }
+   rebuilt.push(idea.text);
+   added.push(idea.text);
+   usedKinds.add(idea.kind);
+   addCount++;
+   paragraphAdds++;
+  });
+  expandedParagraphs.push(rebuilt.join(' '));
  });
- return {draft:out,html:result};
+ if(!added.length){
+  const stop=new Set(('about after again also although always another around because before being between both could does each few from further have having however into itself just more most much must other over same should some such than that their them then there these they thing this those through very was were what when where which while will would your reader writing point idea moment make made give gives helps').split(' '));
+  const counts=new Map();
+  cleaned.toLowerCase().match(/[a-z]{4,}/g)?.forEach(word=>{if(!stop.has(word))counts.set(word,(counts.get(word)||0)+1);});
+  const keywords=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
+  const focus=keywords.length?keywords.join(', '):'the main idea';
+  const addition='This develops the paragraph’s focus on '+focus+'. Explaining how these details support the main point, and why that connection matters, gives the reader a clearer understanding of the message.';
+  expandedParagraphs[expandedParagraphs.length-1]+=' '+addition;
+  added.push(addition);
+ }
+ const draft=expandedParagraphs.join('\n\n');
+ const wrap=document.createElement('div');
+ const title=document.createElement('p');title.textContent='Expanded draft';wrap.appendChild(title);
+ expandedParagraphs.forEach(p=>{const node=document.createElement('p');node.textContent=p;wrap.appendChild(node);});
+ const note=document.createElement('p');note.className='note';note.textContent='Added '+added.length+' explanatory sentence(s) based on patterns in your writing. Read them carefully and remove anything that does not match what you mean.';wrap.appendChild(note);
+ return {draft,html:wrap};
 }
 document.getElementById('check').onclick=()=>{
  const text=box.value.trim();
