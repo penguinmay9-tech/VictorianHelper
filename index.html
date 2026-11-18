@@ -2,51 +2,79 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#6d5ce8">
-<title>ClearWrite — Make your words shine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClearWrite - My Writing Helper</title>
 <style>
-:root{--ink:#24233a;--muted:#6f7085;--purple:#6d5ce8;--pink:#ff7eaa;--paper:#fff;--bg:#f5f3ff;--line:#e9e6f5}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#eeeaff,transparent 35%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{max-width:1100px;margin:auto;padding:26px 24px;display:flex;align-items:center;justify-content:space-between}.brand{font-weight:850;font-size:1.35rem;letter-spacing:-.04em}.brand span{color:var(--purple)}.tag{font-size:.85rem;color:var(--muted);background:#fff;padding:9px 14px;border-radius:99px;border:1px solid var(--line)}
-main{max-width:1100px;margin:30px auto 70px;padding:0 24px}.hero{text-align:center;margin:34px auto 30px;max-width:720px}.eyebrow{color:var(--purple);font-weight:750;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:clamp(2.3rem,6vw,4.2rem);line-height:1.04;letter-spacing:-.06em;margin:12px 0}.hero h1 span{background:linear-gradient(100deg,var(--purple),#df62a0);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);font-size:1.08rem;line-height:1.65;margin:0 auto}
-.panel{background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px #39307812;overflow:hidden}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}.toolbar strong{font-size:.95rem}.hint{font-size:.83rem;color:var(--muted)}textarea{display:block;width:100%;min-height:250px;border:0;resize:vertical;padding:24px;font:1rem/1.7 inherit;color:var(--ink);outline:none}textarea::placeholder{color:#a4a2b5}.bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-top:1px solid var(--line);flex-wrap:wrap}.count{font-size:.84rem;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:12px 17px;font-weight:750;font-size:.9rem;cursor:pointer;transition:transform .15s,opacity .15s}.btn:hover{transform:translateY(-1px)}.btn:focus-visible{outline:3px solid #bcb4ff;outline-offset:3px}.primary{background:var(--purple);color:white}.soft{background:#f0edff;color:#5142c4}.pink{background:#fff0f5;color:#bd4777}
-.results{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px}.result{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;min-height:130px}.result h2{font-size:1rem;margin:0 0 12px}.result p{color:var(--muted);font-size:.92rem;line-height:1.6;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.result ul{margin:0;padding-left:20px;color:var(--muted);font-size:.9rem;line-height:1.7}.result .btn{margin-top:14px}.empty{color:#9995ad!important}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}.feature{background:#ffffffb8;border:1px solid var(--line);border-radius:18px;padding:18px}.feature .emoji{font-size:1.45rem}.feature h3{margin:9px 0 5px;font-size:.96rem}.feature p{margin:0;color:var(--muted);font-size:.85rem;line-height:1.5}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:28px}
-@media(max-width:700px){.results,.features{grid-template-columns:1fr}.hero{margin-top:22px}header{padding:20px 18px}main{padding:0 16px}.toolbar,.bottom{padding:15px}textarea{padding:18px}}
+body{margin:0;background:#fff8df;color:#292929;font-family:Arial,sans-serif}
+header{background:#b9e6ff;padding:22px;text-align:center;border-bottom:4px solid #333}
+h1{margin:0;font-size:2.2rem}header p{margin:8px 0 0}
+main{max-width:850px;margin:25px auto;padding:0 15px}
+h2{font-size:1.35rem}
+.card{background:white;border:3px solid #333;border-radius:14px;padding:18px;margin:18px 0;box-shadow:4px 4px 0 #333}
+textarea{width:100%;min-height:180px;box-sizing:border-box;padding:12px;border:2px solid #555;border-radius:8px;font:16px Arial;resize:vertical}
+button{background:#b9e6ff;border:2px solid #333;border-radius:9px;padding:11px 15px;font-size:16px;font-weight:bold;cursor:pointer;margin:7px 5px 0 0}
+button:hover{background:#91d7ff}
+#feedback,#better{line-height:1.6;overflow-wrap:anywhere}
+.tip{background:#e7f7df;padding:12px;border-radius:8px;margin-top:12px}
+footer{text-align:center;padding:20px}
+.small{font-size:14px;color:#555}
 </style>
 </head>
 <body>
-<header><div class="brand">✦ <span>Clear</span>Write</div><div class="tag">A little help for your writing ✨</div></header>
+<header>
+<h1>✏️ ClearWrite</h1>
+<p>My little helper for making writing better!</p>
+</header>
 <main>
-<section class="hero"><div class="eyebrow">Your writing sidekick</div><h1>Make your words <span>shine.</span></h1><p>Check spelling, tidy up grammar, and turn simple sentences into writing that feels clearer, fuller and more interesting.</p></section>
-<section class="panel" aria-label="Writing editor">
-<div class="toolbar"><strong>✍️ Your writing space</strong><span class="hint">Tip: paste or type your work below</span></div>
-<textarea id="writing" spellcheck="true" aria-label="Your writing" placeholder="Start writing here…\n\nFor example: yesterday i go to the park it was fun"></textarea>
-<div class="bottom"><span class="count" id="count">0 words · 0 characters</span><div class="actions"><button class="btn soft" id="clear">Clear</button><button class="btn primary" id="check">Check my writing ✨</button></div></div>
-</section>
-<section class="results" aria-live="polite">
-<div class="result"><h2>🔎 Writing check</h2><div id="feedback"><p class="empty">Your grammar and spelling suggestions will appear here.</p></div></div>
-<div class="result"><h2>🌟 Make it more interesting</h2><div id="improve"><p class="empty">Your expanded version will appear here.</p></div><button class="btn pink" id="useImproved" hidden>Use this version</button></div>
-</section>
-<section class="features">
-<div class="feature"><div class="emoji">🔤</div><h3>Spelling support</h3><p>Spot some common spelling mistakes and see simple corrections.</p></div>
-<div class="feature"><div class="emoji">🧹</div><h3>Grammar tidy-up</h3><p>Get helpful tips for punctuation, capital letters and common grammar slips.</p></div>
-<div class="feature"><div class="emoji">💡</div><h3>Grow your ideas</h3><p>Build on your sentences with prompts that help add detail and personality.</p></div>
-</section>
+<div class="card">
+<h2>👋 Hello!</h2>
+<p>Put your writing in the box. I can help you spot some spelling mistakes, check a few grammar things and think of ways to make your writing more interesting.</p>
+</div>
+<div class="card">
+<h2>📝 1. Put your writing here</h2>
+<textarea id="writing" placeholder="Type your story or writing here..."></textarea>
+<p class="small" id="count">0 words</p>
+<button id="check">Check my writing!</button>
+<button id="clear">Start again</button>
+</div>
+<div class="card">
+<h2>🔎 2. Spelling and grammar tips</h2>
+<div id="feedback">Your tips will show up here when you press the button.</div>
+</div>
+<div class="card">
+<h2>🌟 3. Make it more interesting</h2>
+<p>Here is an idea to help you add more detail:</p>
+<div id="better">Your improved idea will show up here.</div>
+<button id="use" hidden>Use this writing</button>
+<div class="tip">💡 <b>Top tip:</b> Try adding describing words, how someone felt, or what you could see, hear or smell.</div>
+</div>
+<div class="card">
+<h2>🎯 Remember</h2>
+<p>This is a simple helper, so it might not spot every mistake. Read your work again before you hand it in!</p>
+</div>
 </main>
-<footer>Made to help your ideas come across clearly. Always give your work a final read-through 💜</footer>
+<footer>Made with 💙 to help make writing a bit easier.</footer>
 <script>
-const writing=document.getElementById('writing'),count=document.getElementById('count'),feedback=document.getElementById('feedback'),improve=document.getElementById('improve'),useImproved=document.getElementById('useImproved');
-let improvedText='';
-function updateCount(){const t=writing.value.trim();count.textContent=(t?t.split(/\s+/).length:0)+' words · '+writing.value.length+' characters'}
-writing.addEventListener('input',updateCount);
-document.getElementById('clear').addEventListener('click',()=>{writing.value='';updateCount();feedback.innerHTML='<p class="empty">Your grammar and spelling suggestions will appear here.</p>';improve.innerHTML='<p class="empty">Your expanded version will appear here.</p>';useImproved.hidden=true;writing.focus()});
-const fixes=[[/\bi\b/g,'I'],[/\bi'm\b/gi,'I am'],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bwont\b/gi,"won't"],[/\bdoesnt\b/gi,"doesn't"],[/\bdidnt\b/gi,"didn't"],[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bwich\b/gi,'which'],[/\bfreind\b/gi,'friend'],[/\balot\b/gi,'a lot']];
-function checkText(text){let corrected=text,notes=[];for(const [pattern,replacement] of fixes){if(pattern.test(corrected)){corrected=corrected.replace(pattern,replacement);notes.push('Try “'+replacement+'” for a commonly misspelled or incorrectly written word.')}}if(corrected&&!/^[\s]*[A-Z“"'(]/.test(corrected)){corrected=corrected.charAt(0).toUpperCase()+corrected.slice(1);notes.push('Start your sentence with a capital letter.')}if(corrected&&!/[.!?]["')\]]?\s*$/.test(corrected)){corrected+='.';notes.push('Add punctuation at the end of your writing.')}if(/\s{2,}/.test(corrected)){corrected=corrected.replace(/\s{2,}/g,' ');notes.push('Remove extra spaces.')}if(/\bi\s+(am|is|are|was|were|go|went|has|have)\b/i.test(corrected))notes.push('Check that the subject and verb agree. Read the sentence aloud to see if it sounds right.');return {corrected,notes}}
-function makeExpanded(text){let clean=text.trim();if(!clean)return '';let sentences=clean.split(/(?<=[.!?])\s+/);let additions=['This is important because it helps the reader understand the idea more clearly.','Another detail worth thinking about is how this makes the experience feel memorable.'];if(sentences.length===1&&clean.split(/\s+/).length<18)return clean+' '+additions[0]+' '+additions[1];return clean+'\n\nTo explore this idea further, consider why it matters and what details help explain it. You could also include a specific example to make your point more vivid.'}
-document.getElementById('check').addEventListener('click',()=>{const original=writing.value.trim();if(!original){feedback.innerHTML='<p class="empty">Add a little writing first, then press the check button.</p>';improve.innerHTML='<p class="empty">Your expanded version will appear here.</p>';useImproved.hidden=true;return}const result=checkText(original);if(result.notes.length){feedback.innerHTML='<ul>'+[...new Set(result.notes)].map(n=>'<li>'+n+'</li>').join('')+'</ul><button class="btn soft" id="applyFixes">Apply simple fixes</button>';document.getElementById('applyFixes').addEventListener('click',()=>{writing.value=result.corrected;updateCount()})}else{feedback.innerHTML='<p>Lovely start! No common issues were spotted by this basic check. Your browser may also underline spelling suggestions as you type.</p>'}improvedText=makeExpanded(result.corrected);improve.textContent=improvedText;useImproved.hidden=false});
-useImproved.addEventListener('click',()=>{writing.value=improvedText;updateCount();writing.focus()});
-updateCount();
+const box=document.getElementById('writing'),count=document.getElementById('count'),feedback=document.getElementById('feedback'),better=document.getElementById('better'),use=document.getElementById('use');
+let newText='';
+function words(){let t=box.value.trim();count.textContent=(t?t.split(/\s+/).length:0)+' words';}
+box.addEventListener('input',words);
+document.getElementById('clear').onclick=()=>{box.value='';words();feedback.textContent='Your tips will show up here when you press the button.';better.textContent='Your improved idea will show up here.';use.hidden=true;};
+const fixes=[[/\bi\b/g,'I'],[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bdidnt\b/gi,"didn't"],[/\bdoesnt\b/gi,"doesn't"],[/\bwont\b/gi,"won't"],[/\bwich\b/gi,'which']];
+document.getElementById('check').onclick=()=>{
+ let text=box.value.trim();
+ if(!text){feedback.textContent='Type something in the box first!';better.textContent='';use.hidden=true;return;}
+ let fixed=text,notes=[];
+ fixes.forEach(([pattern,replacement])=>{if(pattern.test(fixed)){fixed=fixed.replace(pattern,replacement);notes.push('Change the spelling to "'+replacement+'".');}});
+ if(fixed && fixed[0]!==fixed[0].toUpperCase()){fixed=fixed[0].toUpperCase()+fixed.slice(1);notes.push('Start with a capital letter.');}
+ if(fixed && !/[.!?]$/.test(fixed)){fixed+='.';notes.push('Put a full stop, question mark or exclamation mark at the end.');}
+ feedback.innerHTML=notes.length?'<ul>'+notes.map(n=>'<li>'+n+'</li>').join('')+'</ul><button id="fix">Fix the easy mistakes</button>':'No common mistakes found! Well done. Remember, this checker is only a little helper.';
+ const fixButton=document.getElementById('fix');if(fixButton)fixButton.onclick=()=>{box.value=fixed;words();};
+ newText=fixed+'\n\nYou could make this even better by adding more detail. Describe what happened, how it looked or sounded, and how you felt. Add an example so the reader can imagine it.';
+ better.textContent=newText;use.hidden=false;
+};
+use.onclick=()=>{box.value=newText;words();box.focus();};
+words();
 </script>
 </body>
 </html>
