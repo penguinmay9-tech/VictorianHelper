@@ -115,26 +115,50 @@ const spelling=[[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,
 function expand(text){
  let out=text.trim();
  const swaps=[
- [/\bvery good\b/gi,'excellent'],[/\bvery bad\b/gi,'terrible'],[/\bvery big\b/gi,'enormous'],[/\bvery small\b/gi,'tiny'],[/\bvery happy\b/gi,'delighted'],[/\bvery sad\b/gi,'heartbroken'],[/\bvery scared\b/gi,'terrified'],[/\bvery angry\b/gi,'furious'],[/\bvery tired\b/gi,'exhausted'],[/\bvery cold\b/gi,'freezing'],[/\bvery hot\b/gi,'boiling'],[/\bvery pretty\b/gi,'beautiful'],[/\bvery interesting\b/gi,'fascinating'],
- [/\bsaid\b/gi,'explained'],[/\bwent\b/gi,'travelled'],[/\bgot\b/gi,'received'],[/\blooked\b/gi,'glanced'],[/\bwalked\b/gi,'strolled'],[/\bran\b/gi,'rushed'],[/\bsmall\b/gi,'little'],[/\bbig\b/gi,'enormous'],[/\bnice\b/gi,'pleasant'],[/\bgood\b/gi,'excellent'],[/\bbad\b/gi,'unpleasant'],[/\bscared\b/gi,'frightened'],[/\bhappy\b/gi,'delighted'],[/\bsad\b/gi,'upset'],[/\bshouted\b/gi,'exclaimed'],[/\bquiet\b/gi,'silent'],[/\bfast\b/gi,'quickly']
+ [/\bvery good\b/gi,'excellent'],[/\bvery bad\b/gi,'terrible'],[/\bvery big\b/gi,'enormous'],[/\bvery small\b/gi,'tiny'],[/\bvery happy\b/gi,'delighted'],[/\bvery sad\b/gi,'deeply upset'],[/\bvery scared\b/gi,'terrified'],[/\bvery angry\b/gi,'furious'],[/\bvery tired\b/gi,'exhausted'],[/\bvery interesting\b/gi,'fascinating'],
+ [/\bwalked slowly\b/gi,'strolled'],[/\bran quickly\b/gi,'raced'],[/\bsaid quietly\b/gi,'whispered'],[/\bsaid loudly\b/gi,'shouted'],[/\bvery loud\b/gi,'deafening'],[/\bvery quiet\b/gi,'silent']
  ];
  swaps.forEach(([re,to])=>{out=out.replace(re,to);});
- out=out.replace(/\bI am\b/g,'I am').replace(/\bcan't\b/gi,'cannot').replace(/\bdon't\b/gi,'do not').replace(/\bdidn't\b/gi,'did not').replace(/\bit's\b/gi,'it is').replace(/\bI'm\b/g,'I am');
- out=out.replace(/\b([A-Z][a-z]+)\s+was\s+([a-z]+)/g,'$1 was $2');
+ out=out.replace(/\bdont\b/gi,"don't").replace(/\bcant\b/gi,"can't").replace(/\bdidnt\b/gi,"didn't").replace(/\bwont\b/gi,"won't").replace(/\bteh\b/gi,'the').replace(/\brecieve\b/gi,'receive').replace(/\bfreind\b/gi,'friend').replace(/\bbecuase\b/gi,'because').replace(/\bi\b/g,'I');
  out=out.replace(/\s+/g,' ').trim();
- let parts=out.split(/(?<=[.!?])\s+/).filter(Boolean);
- if(parts.length>1){
-   parts=parts.map((s,i)=>i===0?s:(/^(However|Although|Meanwhile|Furthermore|Therefore|Finally|In addition|As a result),/i.test(s)?s:'Additionally, '+s.charAt(0).toLowerCase()+s.slice(1)));
+ if(out && !/[.!?]$/.test(out)) out+='.';
+ const extras=[];
+ const has=(re)=>re.test(out);
+ if(has(/\b(happy|sad|angry|afraid|scared|worried|nervous|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i)){
+   extras.push('The emotion is an important part of the moment. Developing what caused this feeling and how it influences the next decision can help the reader understand the character more clearly.');
  }
- out=parts.join(' ');
- const additions=[];
- if(out.split(/\s+/).length<45){
-   additions.push('To make the point even clearer, consider explaining why this moment or idea matters and how it connects to the rest of your writing.');
-   additions.push('A specific example, a carefully chosen description, or a short explanation of the result would give the reader more to think about.');
- } else {
-   additions.push('To strengthen the development, consider adding a specific example and explaining how it supports the main idea.');
+ if(has(/\b(rain|storm|wind|sun|sunlight|snow|fog|cloud|weather|thunder|cold|heat)\b/i)){
+   extras.push('The weather can help shape the atmosphere. Explain how it affects the people, the setting or what happens next to make this detail feel connected to the scene.');
  }
- return out+(/[.!?]$/.test(out)?'':' .').replace(' .','.')+'\n\n'+additions.join(' ');
+ if(has(/\b(said|asked|replied|whispered|shouted|exclaimed|told|answered|argued|explained|muttered)\b/i)){
+   extras.push('The dialogue can reveal more than the words themselves. Consider adding a short reaction, gesture or explanation of what the speaker really means, if it fits your scene.');
+ }
+ if(has(/\b(walked|ran|rushed|climbed|jumped|turned|opened|closed|grabbed|reached|looked|stared|watched|moved|entered|left)\b/i)){
+   extras.push('You can slow this action down by describing its most important step and the character’s reaction. This helps the reader follow the movement instead of simply being told that it happened.');
+ }
+ if(has(/\b(room|house|street|forest|school|classroom|garden|beach|city|village|hall|castle|field|room|building|place)\b/i)){
+   extras.push('The setting gives the reader a place to imagine. Add only details that are true to your scene, such as what can be seen, heard or noticed there, and explain how the surroundings affect the moment.');
+ }
+ if(has(/\b(because|reason|therefore|result|so that|as a result)\b/i)){
+   extras.push('Your explanation includes a reason or result. You could develop it further by showing exactly how the cause leads to the outcome, using a relevant example from your topic.');
+ }
+ if(has(/\b(problem|challenge|difficult|hard|struggle|obstacle|solution|solve|overcome)\b/i)){
+   extras.push('To develop the challenge, explain what makes it difficult, what the person does in response and what changes as a result. This creates a clearer sense of progress.');
+ }
+ if(has(/\b(first|next|then|finally|afterwards|before|later|eventually)\b/i)){
+   extras.push('Your writing describes events in an order. Add a little more about why each stage leads to the next so the sequence feels connected rather than like a list.');
+ }
+ if(has(/\b(think|believe|feel|opinion|argue|important|should|must|prefer)\b/i)){
+   extras.push('To make this point more convincing, explain why you think this and support it with a specific example or piece of evidence that is accurate for your topic.');
+ }
+ if(has(/\b(friend|family|mother|father|sister|brother|teacher|student|person|people|character|team)\b/i)){
+   extras.push('You mention a person or group. Consider explaining their motivation, reaction or relationship to the event, where that information is relevant.');
+ }
+ if(!extras.length){
+   extras.push('To expand this paragraph meaningfully, add a relevant example, explain why the main point matters, and describe what happens as a result. Only include details that are true to your subject.');
+   extras.push('Try developing one key sentence: explain what caused it, give a specific supporting detail, then link that detail back to your main idea.');
+ }
+ return out+'\n\n'+extras.join('\n\n');
 }
 document.getElementById('check').onclick=()=>{
  const text=box.value.trim();
