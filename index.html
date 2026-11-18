@@ -135,7 +135,10 @@ function explainSentence(sentence, paragraph){
  if(because && because[1].split(/\s+/).length>1 && because[2].split(/\s+/).length>1){
   const main=because[1].replace(/[,;:]\s*$/,'').trim();
   const reason=because[2].replace(/[.!?]+$/,'').trim();
-  return {kind:'reason',text:'This gives the reader a clear cause for the situation and helps explain why the first part of the sentence happens. The connection between the reason and the main point is now explicit.'};
+  const feeling=main.match(/\b(nervous|happy|sad|angry|afraid|scared|worried|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i);
+  const place=reason.match(/\b(room|house|street|forest|classroom|school|garden|beach|city|village|castle|field)\b/i);
+  if(feeling && place && /\b(dark|cold|empty|quiet|stormy|bright|noisy)\b/i.test(reason)) return {kind:'reason',text:'The description of the '+place[0]+' helps explain the character’s '+feeling[0]+' reaction. This links the surroundings to the character’s feelings and gives the moment a clearer atmosphere.'};
+  return {kind:'reason',text:'That connection makes the reason for the situation easier to understand. It shows how one detail leads to the response described in the first part of the sentence.'};
  }
  const result=s.match(/^(.+?),?\s+(?:so|therefore|as a result)\s+(.+)$/i);
  if(result && result[1].split(/\s+/).length>1 && result[2].split(/\s+/).length>1){
@@ -153,7 +156,7 @@ function explainSentence(sentence, paragraph){
  }
  if(/\b(this moment|this idea|this point|this detail|this shows|this means|this suggests|matters|significant)\b/i.test(s))
   return {kind:'significance',text:'Explaining why this moment matters helps the reader see how it contributes to the wider message, rather than treating it as an isolated detail.'};
- if(/\b(believe|argue|opinion|think|should|must|claim|viewpoint)\b/i.test(s)){
+ if((/\b(believe|argue|opinion|should|must|claim|viewpoint)\b/i.test(s) || (/\bthink\b/i.test(s) && !/\bthink about\b/i.test(s)))){
   if(/\b(for example|for instance|such as|evidence|research|study|statistics|data)\b/i.test(paragraph||'')) return null;
   return {kind:'argument',text:'Stating this viewpoint gives the paragraph a clear position. Explaining the reason behind it will help the reader understand what supports the claim and why it is worth considering.'};
  }
