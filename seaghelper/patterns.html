@@ -106,6 +106,6 @@ const yearInfo={
 const panel=document.getElementById("yearPanel");
 function showYear(y){const d=yearInfo[y];panel.innerHTML='<div class="year-label">'+d.tag+'</div><h2>'+y+' assessment overview</h2><p>'+d.summary+'</p><div class="cols"><div><h3>English</h3><p>'+d.english+'</p>'+(d.words?'<h3>'+y+' spelling words to practise</h3><p>'+d.words+'</p><p class="small">Revision examples only — not confirmed words from the live paper.</p>':'')+'</div><div><h3>Maths</h3><p>'+d.maths+'</p></div></div><div class="notice">'+d.note+'</div>';document.querySelectorAll("[data-year]").forEach(b=>{const active=b.dataset.year===y;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});}
 document.querySelectorAll("[data-year]").forEach(b=>b.addEventListener("click",()=>showYear(b.dataset.year)));
-showYear("2023");
+showYear("2025");
 </script>
 </body></html>
