@@ -14,7 +14,41 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  const detail=pick(["the paper smelled faintly of smoke","a narrow blue mark crossed its surface","one corner had been carefully repaired","a date was written in the margin","the edges were worn smooth","a tiny symbol had been drawn beside the title"]);
  const passage={title:pick(["A Clue by the Harbour","The Unexpected Discovery","A Record of the Past","The Search Begins","A Small Piece of History","The Mystery at "+place]),text:name+" had expected an ordinary afternoon helping at "+place+". The group had been asked to "+task+", and at first the work seemed straightforward. Then "+name+" noticed "+thing+". "+detail.charAt(0).toUpperCase()+detail.slice(1)+". Rather than putting it aside, "+name+" asked the others to take a closer look.\n\nThey decided to follow the information they had found. The first part of the journey was easy, but "+obstacle+". For a moment, the group considered giving up. Instead, they compared their notes, checked the details again and agreed on a different route. This careful approach led them towards "+discovery+".\n\n"+(tier>=6?"The group also considered whether the evidence could have more than one explanation. They discussed which details were reliable, separated observation from assumption and looked for information that could confirm their first impression. ":"")+(tier>=11?"Although the evidence appeared convincing, they recognised that a single discovery could not explain the whole history of the area. They considered what might be missing from the record and why different witnesses might remember events differently. ":"")+(tier>=16?"They evaluated the strengths and limitations of the information, asking whether the source was complete, how its purpose might affect what it recorded and what further evidence would be needed before reaching a firm conclusion. ":"")+(tier>=21?"The group finally compared competing interpretations and justified its conclusion by weighing the reliability, relevance and limitations of each clue rather than accepting the first explanation. ":"")+"By the end of the afternoon, the group understood that the discovery was important for a reason they had not expected. It offered evidence about how the area had changed and why local records should be protected. "+name+" wrote a clear account of what had happened so that other people could learn from it. The task had taken longer than planned, but the group left with a much better understanding of their surroundings."};
  const qs=[];
- const mc=(section,text,correct,distractors,explanation)=>{const opts=mix([String(correct)].concat(distractors.map(String)));return C(section,text,opts,opts.indexOf(String(correct)),explanation);};
+ const mc=(section,text,correct,distractors,explanation)=>{
+  const answer=String(correct);
+  const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+  const key=value=>{
+   const v=String(value).trim().toLowerCase();
+   const f=v.match(/^(-?\\d+)\\s*\\/\\s*(\\d+)$/);
+   if(f){const n=Number(f[1]),d=Number(f[2]);if(d!==0){const g=gcd(n,d);return "fraction:"+n/g+"/"+d/g;}}
+   return v.replace(/\\s+/g," ");
+  };
+  const options=[],keys=new Set();
+  const add=value=>{const v=String(value).trim(),k=key(v);if(v&& !keys.has(k)&&options.length<5){options.push(v);keys.add(k);}};
+  add(answer);
+  for(const value of distractors)add(value);
+  if(options.length<5){
+   const fraction=answer.match(/^(-?\\d+)\\/(\\d+)$/);
+   if(fraction){
+    const n=Number(fraction[1]),d=Number(fraction[2]);
+    for(const [nn,dd] of [[n+1,d],[Math.max(0,n-1),d],[n,d+1],[n+1,d+1],[Math.max(0,n-1),d+1],[n,d+2],[n+2,d],[n+2,d+1]])if(dd>0)add(nn+"/"+dd);
+   }else{
+    const numeric=answer.match(/^([£$]?)(-?\\d+(?:\\.\\d+)?)(.*)$/);
+    if(numeric){
+     const prefix=numeric[1],value=Number(numeric[2]),suffix=numeric[3];
+     const decimals=(numeric[2].split(".")[1]||"").length;
+     const step=decimals?Math.pow(10,-decimals):1;
+     for(const delta of [step,-step,2*step,-2*step,5*step,-5*step,10*step,-10*step,20*step,-20*step]){
+      const next=value+delta;
+      add(prefix+(decimals?next.toFixed(decimals):String(next))+suffix);
+     }
+    }
+   }
+  }
+  for(const fallback of ["None of these answers","All of these answers","Not enough information","Cannot be determined"])add(fallback);
+  const opts=mix(options.slice(0,5));
+  return C(section,text,opts,opts.indexOf(answer),explanation);
+ };
  const WQ=(section,text,model,notes)=>W(section,text,model,notes);
  const spellings=[
  ["accommodate","accomodate","accommadate","acommodate","accommmodate"],["conscience","concience","consciense","conshience","conscince"],["rhythm","rythm","rhythym","rithm","rythem"],["embarrass","embarass","embarras","embarrase","embarras"],["definitely","definately","definitly","definatly","definetely"],["occasion","ocassion","ocasion","occassion","occaission"],["recommend","recomend","reccommend","recommened","recomend"],["opportunity","oportunity","oppurtunity","oppertunity","opportunety"],["familiar","familliar","familier","familar","fammiliar"],["persuade","perswade","persuede","persuad","perswaid"],["ancient","auncient","anciante","ancent","aincient"],["knowledge","knowlege","knowlidge","knowladge","knowledg"],["temperature","temprature","tempereture","temparature","temprerature"],["cemetery","cemetary","cemetry","cemeterey","cemetary"],["immediately","immediatly","imediately","immedietely","immediatley"],["excellent","exellent","excellant","excelent","excelllent"],["disappear","dissapear","disapear","dissappear","disappeer"],["particular","particuler","particullar","particualr","particuler"],["restaurant","restaraunt","resturant","resteraunt","restaurent"],["language","langauge","languge","langwage","langauge"],["separate","seperate","seperete","separrate","seperrate"],["business","buisness","bussiness","busines","buisines"],["necessary","neccessary","necesary","necessery","nessesary"],["environment","enviroment","environmant","envirronment","enviroment"],["privilege","privilage","priviledge","privlege","privillage"],["exaggerate","exagerate","exaggerrate","exagerrate","exaggerete"],["convenient","conveinient","convinient","conveniant","convenent"],["sincerely","sincerly","sincerley","sincirly","sincereley"],["maintenance","maintainance","maintenence","maintanance","maintenanse"],["independent","independant","independet","independant","independant"]
@@ -92,12 +126,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  qs.push(WQ("Writer’s methods","How does the writer make the setback seem challenging for the group?","The obstacle interrupts the group's progress, and the possibility of giving up makes the reader unsure whether they will succeed.","Refer to the setback and the group's reaction."));
  qs.push(WQ("Comprehension","Why did "+name+" decide to write an account of the events?","So that other people could learn from the discovery and understand why local evidence should be protected.","Use the final paragraph."));
  qs.push(WQ("Summary","Summarise the purpose, main challenge and outcome of the group's visit in two or three sentences.","The group visits "+place+" to "+task+". After finding "+thing+" and overcoming a difficulty, they discover "+discovery+". They record what happened so others can understand the area's history.","Include the purpose, challenge and outcome."));
- // Match the official SEAG English exercise order: punctuation, grammar, spelling, comprehension.
- const punctuationQuestions=qs.slice(10,15);
- const grammarQuestions=qs.slice(5,10);
- const spellingQuestions=qs.slice(0,5);
- const comprehensionQuestions=qs.slice(15,28);
- qs.splice(0,qs.length,...punctuationQuestions,...grammarQuestions,...spellingQuestions,...comprehensionQuestions);
+ // Keep the requested order: spelling, grammar, punctuation, comprehension, then maths.
  const max=12+tier*8, types=["add","subtract","multiply","divide","fraction","percent","decimal","ratio","perimeter","area","angle","measure","time","mean","money","scale","volume","range","fractionAdd","percentageChange","speed","probability"];
  function mathQ(type,written){
   let a,b,c,ans,section,text,explain,unit="",d;
@@ -129,16 +158,6 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  for(let i=0;i<22;i++)qs.push(mathQ(types[i],false));
  for(let i=0;i<6;i++)qs.push(mathQ(types[(i*3+7)%types.length],true));
 
- // Add varied, natural instruction wording to each item across all 125 papers.
- // The wording frame is selected deterministically from Set/Level/Paper and question number.
- const leadA=["Read the question carefully.","Study the information before answering.","Consider the details given.","Use the evidence in the question.","Think about the wording and context.","Examine the information closely.","Pay attention to the key details.","Use the clues provided."];
- const leadB=["Choose the most accurate response:","Select the answer that best fits:","Identify the strongest answer to this question:","Which option is correct?","Decide which response is best:","Find the answer that is supported:","Select the most suitable option:","Which response completes the task correctly?"];
- const leadC=["Check each option before deciding.","Use your understanding to make the best choice.","Base your answer on the details provided.","Look for the answer that fits the context.","Make sure your choice matches the question.","Consider why the other options do not fit."];
- const paperIndex=(setNo-1)*25+(levelNo-1)*5+(paperNo-1);
- for(let i=0;i<qs.length;i++){
-  const q=qs[i], variant=paperIndex+i*125;
-  q.text=leadA[variant%8]+" "+leadB[Math.floor(variant/8)%8]+" "+q.text+" "+leadC[Math.floor(variant/64)%6];
- }
  if(qs.length!==56)throw new Error("Generated paper has "+qs.length+" questions, not 56.");
  return {passage:passage,questions:qs};
 }
