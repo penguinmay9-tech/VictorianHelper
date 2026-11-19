@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17234a">
+<title>SeagHelper — Practice for SEAG</title>
+<style>
+:root{
+ --navy:#17234a;--navy2:#243462;--blue:#5266d8;--blue-light:#edf0ff;
+ --teal:#168b82;--teal-light:#e9f8f5;--gold:#d99a36;--gold-light:#fff6e6;
+ --ink:#1d2942;--muted:#6d7890;--line:#e4e8f1;--paper:#fff;--bg:#f4f6fb;
+ --green:#16865e;--green-bg:#eaf7f0;--red:#ba4650;--red-bg:#fff0f1;
+ --shadow:0 12px 32px rgba(20,35,75,.07)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input{font:inherit}
+button{cursor:pointer}
+header{background:var(--navy);color:white}
+.nav{max-width:1160px;margin:auto;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{display:flex;align-items:center;gap:11px;font-size:20px;font-weight:850;letter-spacing:-.6px}
+.brand-mark{width:37px;height:37px;border-radius:12px;background:linear-gradient(135deg,#7988ef,#4e61d2);display:grid;place-items:center;font-size:18px;box-shadow:0 5px 14px #101b40}
+.brand span{color:#aebaff}
+.nav-note{font-size:12px;color:#d4daf0}
+main{max-width:1160px;margin:0 auto;padding:0 25px 65px}
+.hero{padding:46px 0 25px}
+.eyebrow{color:var(--blue);font-size:11px;letter-spacing:1.6px;font-weight:850;text-transform:uppercase}
+h1{font-size:clamp(34px,5vw,52px);letter-spacing:-2px;line-height:1.09;margin:10px 0 13px;color:var(--navy)}
+.hero p{max-width:720px;color:var(--muted);font-size:16px;margin:0}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{border:0;border-radius:10px;padding:12px 17px;font-size:13px;font-weight:800;transition:.15s}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 5px 13px #5266d833}
+.btn-primary:hover{background:#4356c5;transform:translateY(-1px)}
+.btn-dark{background:var(--navy);color:white}
+.btn-light{background:#eef1f8;color:#35415e}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+.card h2{font-size:17px;margin:0 0 6px;color:var(--navy)}
+.card p{font-size:13px;color:var(--muted);margin:0}
+.mode-card{position:relative;min-height:190px;display:flex;flex-direction:column;align-items:flex-start}
+.mode-icon{width:43px;height:43px;border-radius:13px;display:grid;place-items:center;font-size:21px;margin-bottom:14px}
+.mode-card .btn{margin-top:auto;padding:10px 14px}
+.mode-card .mode-meta{font-size:11px;color:var(--muted);margin:11px 0 14px}
+.blue-bg{background:var(--blue-light)}.teal-bg{background:var(--teal-light)}.gold-bg{background:var(--gold-light)}
+.section-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:31px 0 13px}
+.section-heading h2{margin:0;color:var(--navy);font-size:21px;letter-spacing:-.5px}
+.section-heading p{margin:0;color:var(--muted);font-size:12px}
+.format-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.format-item{border:1px solid var(--line);background:#fff;padding:16px;border-radius:13px}
+.format-item strong{display:block;font-size:14px;color:var(--navy);margin-bottom:3px}
+.format-item span{font-size:12px;color:var(--muted)}
+.callout{background:var(--blue-light);border:1px solid #dfe4ff;color:#3e4c8c;padding:17px 19px;border-radius:13px;font-size:13px;margin-top:18px}
+.home-links{display:flex;gap:16px;flex-wrap:wrap;margin-top:13px;font-size:12px;font-weight:750}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{padding:16px;background:#fff;border:1px solid var(--line);border-radius:13px}
+.stat strong{display:block;font-size:25px;color:var(--navy);line-height:1.2}
+.stat span{font-size:11px;color:var(--muted)}
+#quizView,#resultView{display:none}
+.quiz-top{padding:28px 0 17px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.quiz-title{font-size:20px;font-weight:850;color:var(--navy)}
+.quiz-sub{font-size:12px;color:var(--muted)}
+.timer{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-size:16px;font-weight:850;font-variant-numeric:tabular-nums;color:var(--navy)}
+.timer.warning{color:var(--red);border-color:#f1c4c8;background:var(--red-bg)}
+.progress-track{height:8px;border-radius:8px;background:#e7eaf3;overflow:hidden;margin-bottom:18px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),#37a69c);width:0%;transition:width .2s}
+.quiz-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.8fr);gap:17px;align-items:start}
+.question-card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:24px;box-shadow:var(--shadow)}
+.question-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px}
+.tag{font-size:10px;letter-spacing:.7px;font-weight:850;text-transform:uppercase;color:#4c5fc8;background:var(--blue-light);border-radius:20px;padding:6px 10px}
+.q-number{font-size:12px;color:var(--muted);font-weight:750}
+.question-card h2{font-size:21px;line-height:1.4;color:var(--navy);margin:0 0 16px}
+.context{font-size:13px;color:#5a667d;background:#f7f8fc;border:1px solid var(--line);padding:15px;border-radius:12px;margin-bottom:17px;white-space:pre-wrap}
+.passage{background:#fffdf8;border:1px solid #efe3ca;border-radius:13px;padding:19px;margin-bottom:17px;color:#3e3a35;font-size:14px;line-height:1.8;white-space:pre-line}
+.passage h3{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#9b6b2b;margin:0 0 8px}
+.options{display:grid;gap:9px}
+.option{display:flex;align-items:flex-start;gap:11px;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:12px 13px;text-align:left;color:var(--ink);font-size:14px;line-height:1.45;width:100%;transition:.12s}
+.option:hover{border-color:#a7b1ef;background:#fafaff}
+.option.selected{border-color:var(--blue);background:var(--blue-light)}
+.option.correct{border-color:#8bcdb0;background:var(--green-bg)}
+.option.incorrect{border-color:#e9a6ac;background:var(--red-bg)}
+.option-letter{flex:0 0 24px;width:24px;height:24px;border:1px solid #dce1ed;border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:850;color:#64708a;background:#fff}
+.option.selected .option-letter{background:var(--blue);color:#fff;border-color:var(--blue)}
+.answer-input{width:100%;border:1.5px solid #dce2ed;border-radius:10px;padding:13px 14px;outline:none;font-size:15px;color:var(--ink);background:#fff}
+.answer-input:focus{border-color:#8996e8;box-shadow:0 0 0 3px #edf0ff}
+.answer-hint{font-size:11px;color:var(--muted);margin-top:7px}
+.feedback{display:none;margin-top:15px;padding:15px;border-radius:11px;font-size:13px}
+.feedback.good{display:block;background:var(--green-bg);color:#246849;border:1px solid #d3eddd}
+.feedback.bad{display:block;background:var(--red-bg);color:#853b43;border:1px solid #f1d3d6}
+.feedback.neutral{display:block;background:var(--gold-light);color:#775b2e;border:1px solid #f2e1bf}
+.feedback strong{display:block;margin-bottom:4px}
+.self-mark{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.self-mark button{border:1px solid #d9deeb;background:white;border-radius:9px;padding:8px 11px;font-size:11px;font-weight:800;color:#33415f}
+.self-mark button:hover{border-color:var(--blue);color:var(--blue)}
+.quiz-actions{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:18px;flex-wrap:wrap}
+.action-group{display:flex;gap:8px;flex-wrap:wrap}
+.question-nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:15px}
+.qdot{width:29px;height:29px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--muted);font-size:10px;font-weight:800}
+.qdot.done{background:var(--teal-light);border-color:#bce3d9;color:#16786e}
+.qdot.active{outline:2px solid var(--blue);color:var(--blue)}
+.side-card h3{font-size:14px;color:var(--navy);margin:0 0 8px}
+.side-card p,.side-card li{font-size:12px;color:var(--muted)}
+.side-card ul{padding-left:18px;margin:8px 0}
+.side-card li{margin:6px 0}
+.result-hero{background:var(--navy);color:white;border-radius:17px;padding:25px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:28px 0 17px}
+.result-hero h2{font-size:24px;margin:0 0 4px}
+.result-hero p{font-size:12px;color:#d1d9f2;margin:0}
+.score{font-size:34px;font-weight:900;color:#c6ceff;white-space:nowrap}
+.review-list{display:grid;gap:10px;margin-top:15px}
+.review-item{border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px}
+.review-item strong{font-size:13px;color:var(--navy)}
+.review-item p{font-size:12px;color:var(--muted);margin:6px 0}
+.review-item .answer{color:#21694d}
+.hidden{display:none!important}
+footer{padding:24px;text-align:center;color:#8992a6;font-size:11px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.quiz-layout{grid-template-columns:1fr}.format-grid{grid-template-columns:1fr}.side-card{display:none}}
+@media(max-width:540px){.nav{padding:14px 17px}.nav-note{display:none}main{padding:0 16px 45px}.hero{padding-top:34px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.question-card{padding:17px}.question-card h2{font-size:18px}.quiz-top{align-items:flex-start}.section-heading{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+ <div class="nav">
+  <div class="brand"><div class="brand-mark">S</div><div>Seag<span>Helper</span></div></div>
+  <div class="nav-note">Your friendly SEAG practice space · Primary 7</div>
+ </div>
+</header>
+<main>
+<section id="homeView">
+ <div class="hero">
+  <div class="eyebrow">Practise little · improve lots</div>
+  <h1>Ready to build<br>your confidence?</h1>
+  <p>Original SEAG-style practice for English, comprehension and Maths. Work through questions, check explanations and see what to practise next.</p>
+  <div class="hero-actions"><button class="btn btn-primary" data-mode="full">Start a 60-minute mock</button><button class="btn btn-light" data-mode="comp">Try comprehension</button></div>
+ </div>
+ <div class="grid">
+  <article class="card mode-card">
+   <div class="mode-icon blue-bg">📖</div><h2>Comprehension</h2><p>Read an original passage, explore vocabulary and inference, and answer written questions.</p><div class="mode-meta">13 questions · 7 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="comp">Start comprehension</button>
+  </article>
+  <article class="card mode-card">
+   <div class="mode-icon teal-bg">✏️</div><h2>English skills</h2><p>Practise punctuation, grammar and spelling with explanations for every question.</p><div class="mode-meta">15 questions · 5 in each skill</div><button class="btn btn-primary" data-mode="english">Practise English</button>
+  </article>
+  <article class="card mode-card">
+   <div class="mode-icon gold-bg">🔢</div><h2>Maths</h2><p>Build confidence with number, fractions, measures, shape, money, probability and data.</p><div class="mode-meta">28 questions · 22 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="maths">Practise Maths</button>
+  </article>
+ </div>
+ <div class="section-heading"><h2>Your practice progress</h2><p>Saved on this device only</p></div>
+ <div class="stats">
+  <div class="stat"><strong id="attemptCount">0</strong><span>Practice sessions</span></div>
+  <div class="stat"><strong id="bestScore">—</strong><span>Best percentage</span></div>
+  <div class="stat"><strong id="lastScore">—</strong><span>Latest percentage</span></div>
+ </div>
+ <div class="section-heading"><h2>Know the format</h2><p>Based on SEAG's published 2026 guide</p></div>
+ <div class="format-grid">
+  <div class="format-item"><strong>English · 28 questions</strong><span>Punctuation, grammar, spelling and comprehension.</span></div>
+  <div class="format-item"><strong>Maths · 28 questions</strong><span>Number, measures, shape, money, probability and data.</span></div>
+  <div class="format-item"><strong>Main test · 60 minutes</strong><span>Both sections in one timed main test. You can choose which to start with.</span></div>
+ </div>
+ <div class="callout"><strong>A note about practice:</strong> SeagHelper is an independent revision project, not an official SEAG website. All questions and passages here are original practice questions. They are designed to practise similar skills, not predict the real assessment.</div>
+ <div class="home-links">
+  <a href="https://seagni.co.uk/guidance/assessment-guide" target="_blank" rel="noopener">Official SEAG assessment guide ↗</a>
+  <a href="https://seagni.co.uk/guidance/practice-materials" target="_blank" rel="noopener">Official free practice materials ↗</a>
+ </div>
+</section>
+
+<section id="quizView">
+ <div class="quiz-top">
+  <div><div class="quiz-title" id="quizTitle">Practice</div><div class="quiz-sub" id="quizSubtitle">Take your time and think carefully.</div></div>
+  <div class="timer" id="timer" hidden>60:00</div>
+ </div>
+ <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+ <div class="quiz-layout">
+  <section class="question-card">
+   <div class="question-top"><span class="tag" id="questionTag">Comprehension</span><span class="q-number" id="questionNumber">Question 1 of 13</span></div>
+   <div id="passageBox" class="passage hidden"></div>
+   <h2 id="questionText"></h2>
+   <div id="questionContext" class="context hidden"></div>
+   <div id="answerArea"></div>
+   <div id="feedback" class="feedback" aria-live="polite"></div>
+   <div class="quiz-actions">
+    <div class="action-group"><button class="btn btn-light" id="prevBtn">← Back</button><button class="btn btn-primary" id="checkBtn">Check answer</button></div>
+    <div class="action-group"><button class="btn btn-light" id="nextBtn">Next →</button><button class="btn btn-dark" id="finishBtn">Finish</button></div>
+   </div>
+   <div class="question-nav" id="questionNav" aria-label="Question navigation"></div>
+  </section>
+  <aside class="card side-card">
+   <h3>Helpful reminders</h3>
+   <ul>
+    <li>Read the whole question before choosing.</li>
+    <li>For comprehension, look back at the passage for clues.</li>
+    <li>For inference, use evidence and explain what it suggests.</li>
+    <li>For Maths, write down the steps you use.</li>
+    <li>Check units and read your answer again.</li>
+   </ul>
+   <p>There is no rush in untimed practice. In a mock, keep moving and return to harder questions later.</p>
+  </aside>
+ </div>
+</section>
+
+<section id="resultView">
+ <div class="result-hero">
+  <div><h2>Practice complete!</h2><p id="resultMessage">Good work finishing your session.</p></div>
+  <div class="score" id="resultScore">0%</div>
+ </div>
+ <div class="stats">
+  <div class="stat"><strong id="correctCount">0</strong><span>Marked correct</span></div>
+  <div class="stat"><strong id="reviewCount">0</strong><span>To review</span></div>
+  <div class="stat"><strong id="timeUsed">—</strong><span>Time used</span></div>
+ </div>
+ <div class="section-heading"><h2>Review your answers</h2><p>Learning from mistakes is progress.</p></div>
+ <div class="review-list" id="reviewList"></div>
+ <div class="hero-actions"><button class="btn btn-primary" id="againBtn">Try this practice again</button><button class="btn btn-light" id="homeBtn">Back to home</button></div>
+</section>
+</main>
+<footer>SeagHelper · Original practice for confident learning · Not affiliated with SEAG or GL Assessment</footer>
+
+<script>
+const passageTitle = "The Map in the Attic";
+const passageText = "When Amina visited her grandfather during the spring holidays, she expected to spend most of the afternoon sorting old books. Instead, she discovered a rolled-up map tucked behind a wooden box in the attic. Its edges were yellow and brittle, and a faded blue line crossed the paper from the village to the coast.\\n\\nGrandfather leaned over her shoulder. “That was drawn by your great-grandmother,” he said. “She used to walk the old route every Sunday, long before the new road was built.” He pointed to a tiny sketch of a stone bridge. Amina had passed that bridge many times, but she had never wondered how old it was.\\n\\nThe next morning, they followed the map. At first the path was easy to recognise: it ran beside a field and then dipped between two hedges. Further on, however, the marks became harder to follow. Brambles had grown across the narrow track, and the bridge was almost hidden by ivy. Amina brushed a leaf aside and noticed a date carved into one of the stones. It was much older than she had imagined.\\n\\nGrandfather explained that the route had once been used by people carrying baskets to the weekly market. The new road had made journeys quicker, but the old path had gradually fallen out of use. Amina looked again at the map. What had seemed like a forgotten drawing now felt like a record of hundreds of ordinary journeys.\\n\\nBefore they returned home, she copied the route into her notebook. She added the date from the bridge and a small sketch of the ivy-covered stones. The map had not simply shown her where to walk; it had helped her notice a story that was still hidden in the landscape.";
+
+const C = (section, text, options, correct, explanation) => ({section,kind:"mc",text,options,correct,explanation});
+const W = (section,text,model,notes) => ({section,kind:"written",text,model,notes});
+const N = (section,text,accepted,model,explanation) => ({section,kind:"number",text,accepted,model,explanation});
+const comprehension = [
+ C("Comprehension","Why had Amina expected to spend the afternoon sorting books?",["Her grandfather had asked her to organise them.","She was looking for a book about the coast.","She wanted to avoid going outside.","The attic was being decorated.","She had promised to sell the books."],0,"The passage says she expected to spend most of the afternoon sorting old books."),
+ C("Comprehension","Where was the map hidden?",["Inside a book","Under the stairs","Behind a wooden box","In a kitchen drawer","Beneath the bridge"],2,"The map was tucked behind a wooden box in the attic."),
+ C("Comprehension","What does the description “yellow and brittle” suggest about the map?",["It had been left out in the rain yesterday.","It was old and could be damaged easily.","It had been painted recently.","It was made from metal.","It had been folded only once."],1,"Yellowing and brittle edges are clues that the paper is old and delicate."),
+ C("Vocabulary","In the passage, what does “gradually” most nearly mean?",["Without warning","In a noisy way","Little by little","Only once","At exactly the same time"],2,"Gradually means slowly or little by little over a period of time."),
+ C("Inference","Why did Amina brush a leaf aside near the bridge?",["To find the date carved into the stone","To pick a leaf for her notebook","To clear the whole path","To hide the map from her grandfather","To make the bridge look newer"],0,"She noticed the carved date after moving a leaf aside."),
+ C("Inference","Why had the old path fallen out of use?",["The bridge had been washed away.","The village had moved to the coast.","The weekly market had closed permanently.","The new road made journeys quicker.","The map showed the wrong route."],3,"Grandfather explains that the new road made journeys quicker, so the old route was used less."),
+ C("Writer’s purpose","Which statement best describes the main idea of the passage?",["Old maps are always more accurate than new ones.","Amina discovers how an old route connects the present landscape with the past.","Grandfather wants to sell a map to a museum.","The village plans to build another road.","Amina dislikes spending time in the attic."],1,"The map helps Amina understand the history of an ordinary path and the people who used it."),
+ W("Comprehension","Give two details that show the map was old and delicate.","The edges were yellow and brittle; the blue line was faded. Any two relevant details from the passage earn credit.","Look for physical clues in the first paragraph."),
+ W("Comprehension","What did people use the old route for?","People used it to carry baskets to the weekly market.","Find the sentence where Grandfather explains who used the route and why."),
+ W("Inference","How does Amina’s attitude to the map change during the passage?","At first she sees it as an old drawing, but after following it she realises it records the journeys of many people and tells a story about the landscape.","Explain the difference between her first impression and her later understanding."),
+ W("Writer’s methods","The writer describes the bridge as “almost hidden by ivy”. What picture does this create for the reader?","It suggests the bridge has been partly covered by plants and is difficult to see, making it seem neglected or forgotten.","Mention the image created and connect it to the old path being unused."),
+ W("Comprehension","Why does Amina copy the route and the carved date into her notebook?","She wants to keep a record of what she has discovered, including the route and evidence of the bridge’s age.","Use the final paragraph to support your answer."),
+ W("Summary","In two or three sentences, summarise what Amina learns from finding and following the map.","Amina discovers an old map made by her great-grandmother and follows its route with her grandfather. She learns that the path once carried people to the market, and that the landscape can preserve traces of ordinary lives from the past.","Include the discovery, the walk and what she learns. Use your own words.")
+];
+const english = [
+ C("Punctuation","Choose the sentence with the correct punctuation.",["After the match we went, home.","After the match, we went home.","After, the match we went home.","After the match we, went home.","After the match we went home,"],1,"A comma after the introductory phrase makes the sentence easier to read."),
+ C("Punctuation","Which sentence uses speech marks correctly?",["Maya asked, “Are you coming with us?”","Maya asked “Are you coming with us”?","Maya asked, Are you coming with us?","“Maya asked, Are you coming with us?”","Maya asked, “Are you coming with us”?."],0,"The spoken words are inside speech marks, and the question mark belongs inside them."),
+ C("Punctuation","Which sentence uses the apostrophe correctly for coats belonging to several girls?",["The girl's coats were wet.","The girls coat's were wet.","The girls' coats were wet.","The girls's coats were wet.","The girls coats were wet."],2,"The plural noun girls ends in s, so the apostrophe goes after the s."),
+ C("Punctuation","Choose the correctly punctuated sentence.",["Although it was raining we, continued walking.","Although it was raining, we continued walking.","Although, it was raining we continued walking.","Although it was raining we continued, walking.","Although it was raining; we, continued walking."],1,"A comma separates the opening subordinate clause from the main clause."),
+ C("Punctuation","Which sentence uses a colon correctly?",["Bring three things: a pencil, a ruler and an eraser.","Bring: three things a pencil, a ruler and an eraser.","Bring three: things a pencil, a ruler and an eraser.","Bring three things a pencil: a ruler and an eraser.","Bring three things, a pencil: a ruler and an eraser."],0,"A colon can introduce a list after a complete clause."),
+ C("Grammar","Choose the correct verb: “Neither of the boys ___ forgotten the map.”",["have","are","has","were","do"],2,"“Neither” is treated as singular here, so “has” is correct."),
+ C("Grammar","Which word completes the sentence? “The team celebrated ___ victory.”",["their","there","they’re","theirs","them"],0,"“Their” is the possessive determiner showing that the victory belongs to the team."),
+ C("Grammar","Choose the correct tense: “By the time we arrived, the film ___.”",["starts","has started","had started","will start","starting"],2,"The film started before the later past event, so the past perfect “had started” fits."),
+ C("Grammar","Which sentence is grammatically correct?",["Me and Sam were early.","Sam and I were early.","Sam and me was early.","I and Sam was early.","Me and Sam was early."],1,"“Sam and I” is the correct subject form."),
+ C("Grammar","Choose the best conjunction: “You may borrow the book ___ you return it on Friday.”",["unless","although","provided that","despite","whereas"],2,"“Provided that” means on the condition that."),
+ C("Spelling","Choose the correctly spelt word.",["neccessary","necessary","necesary","necessery","neccesary"],1,"The correct spelling is necessary: one c and two s letters."),
+ C("Spelling","Choose the correctly spelt word.",["seperate","separrate","separate","seperete","seperrate"],2,"The correct spelling is separate."),
+ C("Spelling","Choose the correctly spelt word.",["accomodation","acommodation","accommodation","accommadation","accomadation"],2,"Accommodation has double c and double m."),
+ C("Spelling","Choose the correctly spelt word.",["privilege","privilage","priviledge","privlege","privillage"],0,"The correct spelling is privilege."),
+ C("Spelling","Choose the correctly spelt word.",["environment","enviroment","environmant","envirronment","environement"],0,"The correct spelling is environment.")
+];
+const maths = [
+ C("Number","What is 480 + 275?",["745","755","765","775","785"],1,"480 + 200 = 680, then 75 more makes 755."),
+ C("Number","What is 840 ÷ 7?",["110","115","120","125","130"],2,"84 ÷ 7 = 12, so 840 ÷ 7 = 120."),
+ C("Number","What is 36 × 24?",["824","844","864","884","904"],2,"36 × 20 = 720 and 36 × 4 = 144. Total = 864."),
+ C("Fractions","What is three quarters of 64?",["16","32","40","48","56"],3,"64 ÷ 4 = 16, then 16 × 3 = 48."),
+ C("Fractions","What is 2/5 + 1/5?",["1/5","2/10","3/5","3/10","4/5"],2,"The denominators are the same, so add the numerators: 3/5."),
+ C("Decimals","Which fraction is equal to 0.6?",["1/6","2/3","3/5","6/100","5/6"],2,"0.6 = 6/10, which simplifies to 3/5."),
+ C("Percentages","What is 15% of 80?",["8","10","12","15","18"],2,"10% is 8 and 5% is 4, so 15% is 12."),
+ C("Ratio","The ratio of red to blue counters is 2:3. There are 25 counters altogether. How many are red?",["5","10","12","15","20"],1,"There are 5 equal parts. 25 ÷ 5 = 5 per part; red is 2 parts, so 10."),
+ C("Shape","A rectangle is 9 cm long and 4 cm wide. What is its perimeter?",["13 cm","18 cm","22 cm","26 cm","36 cm"],3,"Perimeter = 9 + 4 + 9 + 4 = 26 cm."),
+ C("Shape","A rectangle measures 12 cm by 7 cm. What is its area?",["19 cm²","38 cm²","72 cm²","84 cm²","96 cm²"],3,"Area = length × width = 12 × 7 = 84 cm²."),
+ C("Angles","Two angles in a triangle are 48° and 67°. What is the third angle?",["55°","60°","65°","67°","75°"],2,"Angles in a triangle total 180°. 180 − 48 − 67 = 65°."),
+ C("Measures","A cuboid is 5 cm long, 3 cm wide and 4 cm high. What is its volume?",["12 cm³","20 cm³","40 cm³","60 cm³","75 cm³"],3,"Volume = length × width × height = 5 × 3 × 4 = 60 cm³."),
+ C("Measures","How many metres are there in 3.5 kilometres?",["35 m","350 m","3,050 m","3,500 m","35,000 m"],3,"1 kilometre = 1,000 metres, so 3.5 km = 3,500 m."),
+ C("Time","A lesson starts at 09:45 and ends at 11:20. How long is it?",["1 hour 25 minutes","1 hour 30 minutes","1 hour 35 minutes","1 hour 40 minutes","1 hour 45 minutes"],2,"From 09:45 to 10:45 is 1 hour, then 35 minutes to 11:20."),
+ C("Probability","A bag contains 3 red counters and 2 blue counters. What is the probability of picking a red counter?",["1/5","2/5","1/2","3/5","3/2"],3,"There are 3 red out of 5 counters altogether, so the probability is 3/5."),
+ C("Data","What is the mean of 6, 8, 10 and 12?",["8","9","10","11","12"],1,"Add them to get 36, then divide by 4: mean = 9."),
+ C("Money","Three notebooks cost £1.20 each. What is the total cost?",["£2.40","£3.20","£3.40","£3.60","£4.20"],3,"3 × £1.20 = £3.60."),
+ C("Decimals","What is 2.4 + 0.75?",["2.85","3.05","3.15","3.25","3.75"],2,"2.40 + 0.75 = 3.15."),
+ C("Decimals","What is 4.08 − 1.9?",["2.08","2.18","2.28","2.81","3.18"],1,"Write 1.9 as 1.90. Then 4.08 − 1.90 = 2.18."),
+ C("Fractions","What is two thirds of 45?",["15","20","25","30","35"],3,"45 ÷ 3 = 15, then 15 × 2 = 30."),
+ C("Measures","A map scale is 1 cm represents 4 km. Two places are 6.5 cm apart on the map. What is the real distance?",["10 km","20 km","24 km","26 km","30 km"],3,"6.5 × 4 = 26 km."),
+ C("Data","A set of numbers is 12, 9, 15 and 14. What is the range?",["3","4","5","6","7"],3,"Range = highest − lowest = 15 − 9 = 6."),
+ N("Number","Calculate 7.5 × 8.",["60","60.0"],"60","Multiply 75 × 8 = 600, then divide by 10 = 60."),
+ N("Money","A £20 item has a 15% discount. What is the sale price?",["17","£17","17.00","£17.00"],"£17.00","15% of £20 is £3. Subtract £3 from £20 to get £17."),
+ N("Shape","A rectangle is 8.5 cm long and 3 cm wide. Calculate its perimeter.",["23","23cm","23 cm"],"23 cm","Perimeter = 8.5 + 3 + 8.5 + 3 = 23 cm."),
+ N("Fractions","Calculate 5/6 − 1/3. Give your answer in its simplest form.",["1/2","0.5"],"1/2","1/3 is 2/6, so 5/6 − 2/6 = 3/6 = 1/2."),
+ N("Ratio","The ratio of adults to children is 4:5. There are 36 people altogether. How many are adults?",["16","16 adults"],"16","There are 9 parts altogether. 36 ÷ 9 = 4 per part; adults = 4 × 4 = 16."),
+ N("Data","Find the mean of 7, 11, 12, 14 and 16.",["12","12.0"],"12","The total is 60. Divide by 5 values: mean = 12.")
+];
+
+const allEnglish = comprehension.concat(english);
+const fullSet = allEnglish.concat(maths);
+let mode="", questions=[], current=0, answers={}, checked={}, startedAt=0, secondsLeft=3600, timerId=null, finished=false;
+let mockStartSeconds=3600;
+const $ = id => document.getElementById(id);
+const homeView=$("homeView"), quizView=$("quizView"), resultView=$("resultView");
+
+function getHistory(){
+ try{return JSON.parse(localStorage.getItem("seaghelper_progress")||"[]");}
+ catch(e){return [];}
+}
+function updateHomeStats(){
+ const history=getHistory();
+ $("attemptCount").textContent=history.length;
+ const percents=history.map(x=>x.percent);
+ $("bestScore").textContent=percents.length?Math.max(...percents)+"%":"—";
+ $("lastScore").textContent=percents.length?percents[percents.length-1]+"%":"—";
+}
+function saveHistory(record){
+ const history=getHistory();history.push(record);
+ try{localStorage.setItem("seaghelper_progress",JSON.stringify(history.slice(-30)));}catch(e){}
+}
+function begin(which){
+ mode=which;current=0;answers={};checked={};finished=false;
+ questions=which==="comp"?comprehension.slice():which==="english"?english.slice():which==="maths"?maths.slice():fullSet.slice();
+ startedAt=Date.now();secondsLeft=3600;
+ homeView.style.display="none";resultView.style.display="none";quizView.style.display="block";
+ $("quizTitle").textContent=which==="comp"?"Comprehension practice":which==="english"?"English skills practice":which==="maths"?"Maths practice":"Full SEAG-style mock";
+ $("quizSubtitle").textContent=which==="full"?"56 original questions · 60-minute challenge":"Untimed practice · Check each answer as you go";
+ $("timer").hidden=which!=="full";$("timer").classList.remove("warning");
+ if(timerId){clearInterval(timerId);timerId=null;}
+ if(which==="full"){
+  updateTimer();timerId=setInterval(()=>{secondsLeft--;updateTimer();if(secondsLeft<=0){clearInterval(timerId);timerId=null;finish(true);}},1000);
+ }
+ renderQuestion();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function updateTimer(){
+ const mins=Math.floor(secondsLeft/60),secs=secondsLeft%60;
+ $("timer").textContent=String(mins).padStart(2,"0")+":"+String(secs).padStart(2,"0");
+ if(secondsLeft<=300)$("timer").classList.add("warning");
+}
+function renderQuestion(){
+ const q=questions[current];const isComp=q.section==="Comprehension"||q.section==="Vocabulary"||q.section==="Inference"||q.section==="Writer’s purpose"||q.section==="Writer’s methods"||q.section==="Summary";
+ $("questionTag").textContent=q.section;
+ $("questionNumber").textContent="Question "+(current+1)+" of "+questions.length;
+ $("progressFill").style.width=((current+1)/questions.length*100)+"%";
+ $("questionText").textContent=q.text;
+ $("questionContext").classList.add("hidden");
+ if(q.context){$("questionContext").textContent=q.context;$("questionContext").classList.remove("hidden");}
+ const passageBox=$("passageBox");
+ if(isComp){
+  passageBox.classList.remove("hidden");
+  passageBox.innerHTML="<h3>Read the passage carefully</h3>";
+  const p=document.createElement("div");p.textContent=passageText;passageBox.appendChild(p);
+  if(current===0){const t=document.createElement("div");t.style.fontWeight="800";t.style.marginTop="10px";t.textContent=passageTitle;passageBox.insertBefore(t,passageBox.children[1]);}
+ }else{passageBox.classList.add("hidden");passageBox.replaceChildren();}
+ const area=$("answerArea");area.replaceChildren();
+ if(q.kind==="mc"){
+  const list=document.createElement("div");list.className="options";
+  q.options.forEach((option,index)=>{
+   const b=document.createElement("button");b.type="button";b.className="option";
+   if(answers[current]===index)b.classList.add("selected");
+   const letter=document.createElement("span");letter.className="option-letter";letter.textContent=String.fromCharCode(65+index);
+   const txt=document.createElement("span");txt.textContent=option;b.append(letter,txt);
+   b.disabled=!!checked[current];
+   if(checked[current]&&index===q.correct)b.classList.add("correct");
+   if(checked[current]&&answers[current]===index&&index!==q.correct)b.classList.add("incorrect");
+   b.addEventListener("click",()=>{if(checked[current])return;answers[current]=index;renderQuestion();});
+   list.appendChild(b);
+  });
+  area.appendChild(list);
+ }else{
+  const input=document.createElement("input");input.className="answer-input";input.id="writtenAnswer";
+  input.type="text";input.placeholder=q.kind==="number"?"Type your answer (include units if asked)":"Write a short answer in your own words";
+  input.value=answers[current]||"";input.disabled=!!checked[current];area.appendChild(input);
+  const hint=document.createElement("div");hint.className="answer-hint";hint.textContent=q.kind==="written"?"Aim to answer the question directly and use evidence from the passage.":"Show your working on paper before entering your final answer.";
+  area.appendChild(hint);
+ }
+ const feedback=$("feedback");feedback.className="feedback";feedback.replaceChildren();
+ if(checked[current])showFeedback(q);
+ $("checkBtn").hidden=!!checked[current];
+ $("nextBtn").textContent=current===questions.length-1?"See results →":"Next →";
+ $("prevBtn").disabled=current===0;
+ $("finishBtn").textContent=mode==="full"?"Finish mock":"Finish practice";
+ renderDots();
+}
+function normalise(s){return String(s||"").toLowerCase().replace(/[£$,]/g,"").replace(/\s+/g," ").trim().replace(/[.]$/,"");}
+function showFeedback(q){
+ const f=$("feedback");f.replaceChildren();f.className="feedback";
+ if(q.kind==="mc"){
+  const correct=answers[current]===q.correct;f.classList.add(correct?"good":"bad");
+  const strong=document.createElement("strong");strong.textContent=correct?"Correct — well done!":"Not quite — let's learn from it.";
+  const p=document.createElement("div");p.textContent=q.explanation+" Correct answer: "+q.options[q.correct]+".";
+  f.append(strong,p);
+ }else if(q.kind==="number"){
+  const got=normalise(answers[current]);const ok=q.accepted.some(x=>normalise(x)===got);
+  checked[current].score=ok?1:0;f.classList.add(ok?"good":"bad");
+  const strong=document.createElement("strong");strong.textContent=ok?"Correct — well done!":"Not quite. Check the method.";
+  const p=document.createElement("div");p.textContent=q.explanation+" Model answer: "+q.model+".";
+  f.append(strong,p);
+ }else{
+  f.classList.add("neutral");
+  const strong=document.createElement("strong");strong.textContent="Compare your answer with this example.";
+  const p=document.createElement("div");p.textContent=q.model;
+  const n=document.createElement("div");n.style.marginTop="7px";n.textContent="Tip: "+q.notes;
+  const label=document.createElement("div");label.style.marginTop="10px";label.style.fontWeight="800";label.textContent="How did you do?";
+  const marks=document.createElement("div");marks.className="self-mark";
+  [["I included the key points",1],["I got some of it",0.5],["I need to practise this",0]].forEach(([txt,val])=>{
+   const b=document.createElement("button");b.type="button";b.textContent=txt;b.disabled=checked[current].selfMarked!==undefined;
+   if(checked[current].selfMarked===val)b.style.borderColor="var(--blue)";
+   b.addEventListener("click",()=>{checked[current].selfMarked=val;checked[current].score=val;renderQuestion();});marks.appendChild(b);
+  });
+  f.append(strong,p,n,label,marks);
+ }
+}
+function renderDots(){
+ const nav=$("questionNav");nav.replaceChildren();
+ questions.forEach((q,i)=>{
+  const b=document.createElement("button");b.className="qdot";b.type="button";b.textContent=i+1;
+  if(i===current)b.classList.add("active");if(checked[i])b.classList.add("done");
+  b.title="Go to question "+(i+1);b.addEventListener("click",()=>{current=i;renderQuestion();});nav.appendChild(b);
+ });
+}
+$("checkBtn").addEventListener("click",()=>{
+ const q=questions[current];
+ if(q.kind==="mc"){
+  if(answers[current]===undefined){$("feedback").className="feedback neutral";$("feedback").textContent="Choose an answer first.";return;}
+  checked[current]={score:answers[current]===q.correct?1:0};
+ }else{
+  const val=$("writtenAnswer").value.trim();
+  if(!val){$("feedback").className="feedback neutral";$("feedback").textContent="Write an answer first, even if it is only a few words.";return;}
+  answers[current]=val;checked[current]={};
+ }
+ renderQuestion();
+});
+$("prevBtn").addEventListener("click",()=>{if(current>0){current--;renderQuestion();}});
+$("nextBtn").addEventListener("click",()=>{
+ if(!checked[current]){$("feedback").className="feedback neutral";$("feedback").textContent="Check your answer before moving on.";return;}
+ if(current<questions.length-1){current++;renderQuestion();}else finish(false);
+});
+$("finishBtn").addEventListener("click",()=>finish(false));
+function finish(timeUp){
+ if(finished)return;finished=true;if(timerId){clearInterval(timerId);timerId=null;}
+ let score=0,marked=0;
+ questions.forEach((q,i)=>{
+  if(checked[i]&&typeof checked[i].score==="number"){score+=checked[i].score;marked++;}
+ });
+ const percent=Math.round(score/questions.length*100);
+ const elapsed=mode==="full"?3600-secondsLeft:Math.floor((Date.now()-startedAt)/1000);
+ saveHistory({mode,percent,score:Number(score.toFixed(1)),total:questions.length,date:new Date().toISOString()});
+ quizView.style.display="none";resultView.style.display="block";
+ $("resultScore").textContent=percent+"%";
+ $("correctCount").textContent=score.toFixed(score%1?1:0);
+ $("reviewCount").textContent=questions.length-marked;
+ $("timeUsed").textContent=Math.floor(elapsed/60)+"m "+(elapsed%60)+"s";
+ $("resultMessage").textContent=timeUp?"Time is up. You completed the questions you reached.": "You completed "+questions.length+" original practice questions. Every attempt helps you learn.";
+ const list=$("reviewList");list.replaceChildren();
+ questions.forEach((q,i)=>{
+  const item=document.createElement("article");item.className="review-item";
+  const title=document.createElement("strong");title.textContent="Q"+(i+1)+" · "+q.section+": "+q.text;
+  const your=document.createElement("p");
+  if(q.kind==="mc")your.textContent="Your answer: "+(answers[i]===undefined?"Not answered":q.options[answers[i]])+".";
+  else your.textContent="Your answer: "+(answers[i]||"Not answered")+".";
+  const correct=document.createElement("p");correct.className="answer";
+  if(q.kind==="mc")correct.textContent="Correct answer: "+q.options[q.correct]+". "+q.explanation;
+  else if(q.kind==="number")correct.textContent="Model answer: "+q.model+". "+q.explanation;
+  else correct.textContent="Example answer: "+q.model;
+  item.append(title,your,correct);list.appendChild(item);
+ });
+ updateHomeStats();window.scrollTo({top:0,behavior:"smooth"});
+}
+$("againBtn").addEventListener("click",()=>begin(mode));
+$("homeBtn").addEventListener("click",()=>{resultView.style.display="none";homeView.style.display="block";updateHomeStats();window.scrollTo({top:0,behavior:"smooth"});});
+document.querySelectorAll("[data-mode]").forEach(button=>button.addEventListener("click",()=>begin(button.dataset.mode)));
+updateHomeStats();
+</script>
+</body>
+</html>
