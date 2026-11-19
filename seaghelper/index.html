@@ -132,12 +132,12 @@ footer{padding:24px;text-align:center;color:#8992a6;font-size:11px}
  <div class="hero">
   <div class="eyebrow">Practise little · improve lots</div>
   <h1>Ready to build<br>your confidence?</h1>
-  <p>Original SEAG-style practice for English, comprehension and Maths. Work through questions, check explanations and see what to practise next.</p>
+  <p>Original SEAG-style practice. Questions are shuffled each session, and comprehension passages rotate. Work through explanations and see what to practise next.</p>
   <div class="hero-actions"><button class="btn btn-primary" data-mode="full">Start a 60-minute mock</button><button class="btn btn-light" data-mode="comp">Try comprehension</button></div>
  </div>
  <div class="grid">
   <article class="card mode-card">
-   <div class="mode-icon blue-bg">📖</div><h2>Comprehension</h2><p>Read an original passage, explore vocabulary and inference, and answer written questions.</p><div class="mode-meta">13 questions · 7 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="comp">Start comprehension</button>
+   <div class="mode-icon blue-bg">📖</div><h2>Comprehension</h2><p>Read a short passage that changes between sessions, then answer multiple-choice and written questions.</p><div class="mode-meta">13 questions · 7 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="comp">Start comprehension</button>
   </article>
   <article class="card mode-card">
    <div class="mode-icon teal-bg">✏️</div><h2>English skills</h2><p>Practise punctuation, grammar and spelling with explanations for every question.</p><div class="mode-meta">15 questions · 5 in each skill</div><button class="btn btn-primary" data-mode="english">Practise English</button>
@@ -154,9 +154,9 @@ footer{padding:24px;text-align:center;color:#8992a6;font-size:11px}
  </div>
  <div class="section-heading"><h2>Know the format</h2><p>Based on SEAG's published 2026 guide</p></div>
  <div class="format-grid">
-  <div class="format-item"><strong>English · 28 questions</strong><span>Punctuation, grammar, spelling and comprehension.</span></div>
+  <div class="format-item"><strong>English · 28 questions</strong><span>5 spelling, 5 grammar, 5 punctuation, then 13 comprehension questions.</span></div>
   <div class="format-item"><strong>Maths · 28 questions</strong><span>Number, measures, shape, money, probability and data.</span></div>
-  <div class="format-item"><strong>Main test · 60 minutes</strong><span>Both sections in one timed main test. You can choose which to start with.</span></div>
+  <div class="format-item"><strong>Main test · 60 minutes</strong><span>Full mock order: spelling, grammar, punctuation, comprehension, then 28 Maths questions.</span></div>
  </div>
  <div class="callout"><strong>A note about practice:</strong> SeagHelper is an independent revision project, not an official SEAG website. All questions and passages here are original practice questions. They are designed to practise similar skills, not predict the real assessment.</div>
  <div class="home-links">
@@ -217,8 +217,12 @@ footer{padding:24px;text-align:center;color:#8992a6;font-size:11px}
 <footer>SeagHelper · Original practice for confident learning · Not affiliated with SEAG or GL Assessment</footer>
 
 <script>
-const passageTitle = "The Map in the Attic";
-const passageText = "When Amina visited her grandfather during the spring holidays, she expected to spend most of the afternoon sorting old books. Instead, she discovered a rolled-up map tucked behind a wooden box in the attic. Its edges were yellow and brittle, and a faded blue line crossed the paper from the village to the coast.\\n\\nGrandfather leaned over her shoulder. “That was drawn by your great-grandmother,” he said. “She used to walk the old route every Sunday, long before the new road was built.” He pointed to a tiny sketch of a stone bridge. Amina had passed that bridge many times, but she had never wondered how old it was.\\n\\nThe next morning, they followed the map. At first the path was easy to recognise: it ran beside a field and then dipped between two hedges. Further on, however, the marks became harder to follow. Brambles had grown across the narrow track, and the bridge was almost hidden by ivy. Amina brushed a leaf aside and noticed a date carved into one of the stones. It was much older than she had imagined.\\n\\nGrandfather explained that the route had once been used by people carrying baskets to the weekly market. The new road had made journeys quicker, but the old path had gradually fallen out of use. Amina looked again at the map. What had seemed like a forgotten drawing now felt like a record of hundreds of ordinary journeys.\\n\\nBefore they returned home, she copied the route into her notebook. She added the date from the bridge and a small sketch of the ivy-covered stones. The map had not simply shown her where to walk; it had helped her notice a story that was still hidden in the landscape.";
+const passages = [
+ {title:"The Map in the Attic",text:"During the spring holidays, Amina found an old map behind a wooden box in her grandfather’s attic. Its paper was yellow and brittle, and a blue line led from the village towards the coast.\n\nGrandfather explained that her great-grandmother had drawn it. She used to follow the route to the weekly market, crossing a small stone bridge. The next morning, Amina and her grandfather followed the map. Brambles covered parts of the path, and ivy hid much of the bridge. When Amina moved a leaf, she spotted an old date carved into the stone.\n\nThe new road had made journeys quicker, so people gradually stopped using the old path. Before going home, Amina copied the route and the date into her notebook. The map had helped her discover a piece of local history."},
+ {title:"A Route from the Past",text:"Amina was helping her grandfather tidy the attic when she noticed a rolled map behind a wooden box. The paper was yellow and fragile. A blue line showed a route from their village to the coast.\n\nHer grandfather said that Amina’s great-grandmother had drawn it many years earlier. She walked the route each week to reach the market, passing an old stone bridge. The following morning, they set off together. Parts of the narrow path were hidden by brambles, while ivy covered the bridge. Amina brushed a leaf away and found a date carved into the stone.\n\nA newer road had made travelling faster, and the old route was gradually forgotten. Amina recorded the path and the date in her notebook. She realised that the map revealed how people in the village had travelled long ago."},
+ {title:"The Forgotten Footpath",text:"While sorting boxes in her grandfather’s attic, Amina discovered a folded map. Its edges had turned yellow and brittle. A faded blue line connected the village with the coast.\n\nGrandfather told her that her great-grandmother had made the map. She once walked that route every Sunday to take baskets to the weekly market. They decided to find the path the next day. At first it was easy to follow, but brambles soon covered the track. Ivy almost concealed the little stone bridge. Amina moved a leaf and noticed a date carved into one of its stones.\n\nPeople had stopped using the path when a new road made the journey quicker. Before they returned, Amina sketched the bridge and copied the route into her notebook. The map had turned an ordinary walk into a discovery about the past."}
+];
+let currentPassage = passages[0];
 
 const C = (section, text, options, correct, explanation) => ({section,kind:"mc",text,options,correct,explanation});
 const W = (section,text,model,notes) => ({section,kind:"written",text,model,notes});
@@ -286,6 +290,31 @@ const maths = [
  N("Data","Find the mean of 7, 11, 12, 14 and 16.",["12","12.0"],"12","The total is 60. Divide by 5 values: mean = 12.")
 ];
 
+const sectionOrder = ["Spelling","Grammar","Punctuation"];
+const shuffle = items => {
+ const a=items.slice();
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+};
+function shuffledQuestions(items){
+ return shuffle(items).map(q=>{
+  if(q.kind!=="mc")return {...q};
+  const paired=q.options.map((option,index)=>({option,index}));
+  const mixed=shuffle(paired);
+  return {...q,options:mixed.map(x=>x.option),correct:mixed.findIndex(x=>x.index===q.correct)};
+ });
+}
+function orderedEnglish(){
+ return sectionOrder.flatMap(section=>shuffledQuestions(english.filter(q=>q.section===section)));
+}
+function freshPassage(){
+ let previous=-1;
+ try{previous=Number(localStorage.getItem("seaghelper_last_passage"));}catch(e){}
+ let choices=passages.map((_,i)=>i).filter(i=>i!==previous);
+ const picked=choices[Math.floor(Math.random()*choices.length)];
+ currentPassage=passages[picked];
+ try{localStorage.setItem("seaghelper_last_passage",String(picked));}catch(e){}
+}
 const allEnglish = comprehension.concat(english);
 const fullSet = allEnglish.concat(maths);
 let mode="", questions=[], current=0, answers={}, checked={}, startedAt=0, secondsLeft=3600, timerId=null, finished=false;
@@ -310,11 +339,24 @@ function saveHistory(record){
 }
 function begin(which){
  mode=which;current=0;answers={};checked={};finished=false;
- questions=which==="comp"?comprehension.slice():which==="english"?english.slice():which==="maths"?maths.slice():fullSet.slice();
+ freshPassage();
+ if(which==="comp"){
+  const mc=shuffledQuestions(comprehension.filter(q=>q.kind==="mc"));
+  const written=shuffledQuestions(comprehension.filter(q=>q.kind==="written"));
+  questions=mc.concat(written);
+ }else if(which==="english"){
+  questions=orderedEnglish();
+ }else if(which==="maths"){
+  questions=shuffledQuestions(maths);
+ }else{
+  const mc=shuffledQuestions(comprehension.filter(q=>q.kind==="mc"));
+  const written=shuffledQuestions(comprehension.filter(q=>q.kind==="written"));
+  questions=orderedEnglish().concat(mc,written,shuffledQuestions(maths));
+ }
  startedAt=Date.now();secondsLeft=3600;
  homeView.style.display="none";resultView.style.display="none";quizView.style.display="block";
  $("quizTitle").textContent=which==="comp"?"Comprehension practice":which==="english"?"English skills practice":which==="maths"?"Maths practice":"Full SEAG-style mock";
- $("quizSubtitle").textContent=which==="full"?"56 original questions · 60-minute challenge":"Untimed practice · Check each answer as you go";
+ $("quizSubtitle").textContent=which==="full"?"56 questions · 15 English skills, 13 comprehension and 28 Maths · 60 minutes":"Untimed practice · Check each answer as you go";
  $("timer").hidden=which!=="full";$("timer").classList.remove("warning");
  if(timerId){clearInterval(timerId);timerId=null;}
  if(which==="full"){
@@ -340,8 +382,8 @@ function renderQuestion(){
  if(isComp){
   passageBox.classList.remove("hidden");
   passageBox.innerHTML="<h3>Read the passage carefully</h3>";
-  const p=document.createElement("div");p.textContent=passageText;passageBox.appendChild(p);
-  if(current===0){const t=document.createElement("div");t.style.fontWeight="800";t.style.marginTop="10px";t.textContent=passageTitle;passageBox.insertBefore(t,passageBox.children[1]);}
+  const p=document.createElement("div");p.textContent=currentPassage.text;passageBox.appendChild(p);
+  if(current===0){const t=document.createElement("div");t.style.fontWeight="800";t.style.marginTop="10px";t.textContent=currentPassage.title;passageBox.insertBefore(t,passageBox.children[1]);}
  }else{passageBox.classList.add("hidden");passageBox.replaceChildren();}
  const area=$("answerArea");area.replaceChildren();
  if(q.kind==="mc"){
