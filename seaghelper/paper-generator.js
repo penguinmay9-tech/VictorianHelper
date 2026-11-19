@@ -90,7 +90,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   const word=errorIndex<0?row[0]:pick(row.slice(1));
   const layout=spellingLayouts[errorIndex<0?int(0,3):errorIndex];
   const parts=layout.map(part=>part.replace("WORD",word));
-  const sentence=parts.map((part,j)=>String.fromCharCode(65+j)+": "+part).join(" ");
+  const sentence=parts.map((part,j)=>"("+String.fromCharCode(65+j)+") "+part).join(" ");
   const correctLabel=errorIndex<0?"N":String.fromCharCode(65+errorIndex);
   qs.push(mc("Spelling",pick(spellingPrompts)+String.fromCharCode(10,10)+sentence,correctLabel,["A","B","C","D","N"].filter(x=>x!==correctLabel),"Read the whole sentence. Choose the section containing the spelling error, or N if every word is correct."));
  }
