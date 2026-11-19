@@ -18,7 +18,7 @@ A parent/guardian or teacher should own and supervise the AI provider account, b
 1. Create or use an adult-managed Cloudflare account and open **Workers & Pages**.
 2. Create a Worker (for example, name it `victorianhelper-ai`).
 3. Paste the contents of this repository's `worker.js` into the Worker editor and deploy it.
-4. In the Worker settings, open **Settings → Variables and Secrets**. Add a **Secret** named `OPENAI_API_KEY` and enter the API key there. Do not put this key into GitHub, `index.html`, or any browser code.
+4. In the Worker settings, open **Settings → Variables and Secrets**. Add a **Secret** named `VICCY_API_KEY` and enter the API key there. Do not put this key into GitHub, `index.html`, or any browser code.
 5. Add a plain-text variable named `OPENAI_MODEL` with value `gpt-5.4-mini`. The model can be changed later by the adult managing the service.
 6. Deploy the Worker again after changing settings, and copy its public Worker URL.
 7. In `index.html`, replace the empty string in `const AI_EXPAND_ENDPOINT = ''; ` with the Worker URL, for example `https://victorianhelper-ai.<adult-managed-subdomain>.workers.dev`. The URL is public; the API key is not.
