@@ -58,7 +58,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   return C(section,text,opts,opts.indexOf(answer),explanation);
  };
  const WQ=(section,text,model,notes)=>W(section,text,model,notes);
- const fixLabelOrder=list=>list.forEach(q=>{if((q.section==="Spelling"||q.section==="Punctuation")&&q.kind==="mc"&&Array.isArray(q.options)){const answer=q.options[q.correct];const ordered=["A","B","C","D","N"];if(ordered.includes(answer)){q.options=ordered.slice();q.correct=ordered.indexOf(answer);}}});
+ const fixLabelOrder=list=>list.forEach(q=>{if((q.section==="Spelling"||q.section==="Punctuation")&&Array.isArray(q.options)){const answer=q.options[q.correct];const ordered=["A","B","C","D","N"];if(ordered.includes(answer)){q.options=ordered.slice();q.correct=ordered.indexOf(answer);}}});
 
  // The very first practice paper is a gentle starter: short reading, basic English and small-number Maths.
  if(setNo===1&&levelNo===1&&paperNo===1){
