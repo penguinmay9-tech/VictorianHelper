@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viccy's Victorian Knowledge Library</title>
+<style>
+:root{--ink:#17233b;--muted:#68748a;--line:#e5e9f0;--paper:#fff;--bg:#f6f8fc;--blue:#5369d8;--blue2:#4055c2;--pale:#eef1ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.65}
+header{background:#fff;border-bottom:1px solid var(--line)}
+.nav{max-width:1100px;margin:auto;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:19px;font-weight:750;letter-spacing:-.5px}.brand span{color:var(--blue)}
+.nav a{color:var(--blue);font-size:13px;font-weight:700;text-decoration:none}
+.hero{max-width:1100px;margin:44px auto 24px;padding:0 26px}
+.eyebrow{font-size:12px;font-weight:750;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue)}
+h1{font-size:clamp(34px,5vw,48px);line-height:1.12;letter-spacing:-1.8px;margin:10px 0 13px}
+.hero p{color:var(--muted);font-size:16px;max-width:790px;margin:0}
+main{max-width:1100px;margin:0 auto 60px;padding:0 26px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:22px;box-shadow:0 8px 28px rgba(25,42,80,.04);margin-bottom:18px}
+.panel h2{font-size:19px;margin:0 0 8px;letter-spacing:-.3px}
+.panel p{margin:7px 0;color:#4f5d73}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.topic{background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px}
+.topic h3{font-size:15px;margin:0 0 6px;color:var(--ink)}
+.topic p{font-size:13px;line-height:1.65;margin:0;color:#56637a}
+.timeline{display:grid;gap:0;margin-top:10px}
+.event{display:grid;grid-template-columns:86px 1fr;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)}
+.event:last-child{border-bottom:0}
+.year{font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums}
+.event p{font-size:13px;margin:0;color:#536078}
+.sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.source{border:1px solid var(--line);border-radius:11px;padding:14px}
+.source strong{display:block;font-size:14px;margin-bottom:4px}
+.source p{font-size:12px;line-height:1.55;margin:0 0 8px;color:#5b667a}
+.source a{font-size:13px;color:var(--blue);font-weight:700;text-decoration:none}
+.source a:hover,.nav a:hover{text-decoration:underline}
+.callout{background:var(--pale);border:1px solid #e1e5ff;border-radius:11px;padding:15px;color:#394777;font-size:13px}
+footer{text-align:center;color:#8a94a6;font-size:12px;padding:24px}
+@media(max-width:700px){.grid,.sources{grid-template-columns:1fr}.event{grid-template-columns:72px 1fr}.hero{margin-top:32px}.nav{padding:16px 20px}}
+</style>
+</head>
+<body>
+<header><div class="nav"><div class="brand">Viccy<span>Library</span></div><a href="index.html">← Back to VictorianHelper</a></div></header>
+<section class="hero">
+<div class="eyebrow">A student-friendly history guide</div>
+<h1>Explore the Victorian world.</h1>
+<p>The Victorian period is usually dated from 1837 to 1901, when Queen Victoria was monarch. It was a time of major industrial, scientific, political and cultural change — but people did not all experience it in the same way. Use this library to explore the topics, build writing ideas and find trustworthy places to check facts.</p>
+</section>
+<main>
+<section class="panel">
+<h2>Start with the big picture</h2>
+<p>During Victoria's reign, Britain and Ireland changed through industrialisation, urban growth, new transport and communication, scientific discoveries, reform campaigns and the expansion of the British Empire. These changes brought opportunities and wealth for some, while many people faced low pay, insecure work, overcrowded homes, pollution and unequal rights.</p>
+<p><strong>A useful history question:</strong> Who benefited from a change, who paid the cost, and did everyone experience it in the same way?</p>
+<div class="callout"><strong>Remember:</strong> “Victorian” does not mean one single lifestyle. A wealthy family in a large town, a farm worker in rural Ireland, a domestic servant, a factory worker and a child in a mining community could have very different lives. Experiences also changed between 1837 and 1901.</div>
+</section>
+
+<section class="panel">
+<h2>Topics to explore</h2>
+<div class="grid">
+<article class="topic"><h3>1. Queen Victoria and the monarchy</h3><p>Victoria became queen in 1837 and reigned until 1901. Explore her family, Prince Albert, royal public image, jubilees and the way the monarchy changed during a period of political reform.</p></article>
+<article class="topic"><h3>2. Social classes and inequality</h3><p>Study the upper, middle and working classes, wealth, housing, education and social mobility. Avoid assuming that every person in a class lived in exactly the same way.</p></article>
+<article class="topic"><h3>3. Homes and daily life</h3><p>Compare large town houses, rented rooms, cottages and overcrowded urban housing. Explore heating, lighting, water, furniture, cleaning, servants and the division of household work.</p></article>
+<article class="topic"><h3>4. Children and family life</h3><p>Look at childhood, family expectations, toys, clothing, work and the gradual spread of schooling. A child's experience depended strongly on family income, location and the period.</p></article>
+<article class="topic"><h3>5. Schools and education</h3><p>Explore lessons, attendance, school buildings, teachers, discipline and the growth of state-supported elementary education. The 1870 Education Act helped create board schools in England and Wales; compulsory attendance followed in 1880.</p></article>
+<article class="topic"><h3>6. Jobs, factories and mines</h3><p>Investigate mills, mines, workshops, docks, shops, offices, farms and domestic service. Industrial growth created new jobs but often involved long hours, dangerous conditions and low pay.</p></article>
+<article class="topic"><h3>7. Child labour and reform</h3><p>Some children worked in factories, mines, farms and as street sellers or domestic workers. Campaigns and laws gradually restricted some forms of child labour, although enforcement and conditions varied.</p></article>
+<article class="topic"><h3>8. Cities, housing and pollution</h3><p>Rapid urban growth placed pressure on housing, clean water and waste removal. Study crowded streets, smoke, rivers, public parks, sewers and the campaigns that improved public health.</p></article>
+<article class="topic"><h3>9. Food, shopping and clothing</h3><p>Explore what people ate, food preservation, markets, shops, imported goods and changing fashions. Clothes depended on income, occupation, age, gender and the decade; there was no single Victorian outfit.</p></article>
+<article class="topic"><h3>10. Transport and communication</h3><p>Railways transformed travel and the movement of goods. Canals, horse-drawn vehicles and ships remained important. The telegraph and later telephone changed how quickly messages could travel.</p></article>
+<article class="topic"><h3>11. Inventions, science and technology</h3><p>Explore steam power, photography, sewing machines, electric lighting, telegraphy, engineering and scientific debate. Some technologies began before Victoria's reign but spread or developed rapidly during it.</p></article>
+<article class="topic"><h3>12. Medicine and public health</h3><p>Learn about cholera, tuberculosis, sanitation, clean water, hospitals, anaesthesia, antiseptic surgery and changing ideas about germs. Medical knowledge developed unevenly and many diseases remained dangerous.</p></article>
+<article class="topic"><h3>13. Women, rights and reform</h3><p>Explore women's work, property rights, education, campaigning and changing expectations. The Married Women's Property Acts of 1870 and 1882 changed aspects of married women's legal and financial rights in England and Wales.</p></article>
+<article class="topic"><h3>14. The British Empire and the wider world</h3><p>Britain's empire connected people, trade and territories across the world. Study how imperial power created wealth for some and involved conquest, exploitation, racism and resistance. Include the viewpoints of people in colonised societies, not only British officials.</p></article>
+<article class="topic"><h3>15. Ireland in the Victorian period</h3><p>Ireland was part of the United Kingdom during Victoria's reign. Explore the Great Famine of the 1840s and early 1850s, emigration, land, poverty, political movements and the different experiences of rural and urban communities.</p></article>
+<article class="topic"><h3>16. Religion and beliefs</h3><p>Religion shaped family life, education, charity, politics and debates about science. Britain and Ireland included many Christian traditions and other faith communities, with different beliefs and experiences.</p></article>
+<article class="topic"><h3>17. Entertainment, sport and leisure</h3><p>Explore music halls, theatres, fairs, seaside holidays, parks, public gardens, football, cricket, cycling, reading and popular newspapers. Leisure opportunities depended on time, money and where people lived.</p></article>
+<article class="topic"><h3>18. Books, art and architecture</h3><p>Study writers such as Charles Dickens, the Brontë sisters, George Eliot, Lewis Carroll, Thomas Hardy and Oscar Wilde, alongside art, photography, Gothic Revival buildings and changing ideas about design.</p></article>
+<article class="topic"><h3>19. Politics, protest and social change</h3><p>Explore voting reforms, trade unions, campaigns for better working conditions, public health laws, education reform and movements for women's rights. Change was debated and often took years of campaigning.</p></article>
+<article class="topic"><h3>20. Crime, policing and prisons</h3><p>Look at the development of professional policing, courts, prisons, public debate about poverty and crime, and how newspapers shaped popular fears. Be careful to distinguish documented evidence from sensational stories.</p></article>
+</div>
+</section>
+
+<section class="panel">
+<h2>A quick timeline</h2>
+<div class="timeline">
+<div class="event"><div class="year">1837</div><p>Victoria becomes queen. The Victorian period begins.</p></div>
+<div class="event"><div class="year">1840</div><p>The Uniform Penny Post begins in Great Britain, making prepaid letter postage much more affordable.</p></div>
+<div class="event"><div class="year">1845–52</div><p>The Great Famine in Ireland causes mass death and emigration. Potato blight was central, while political and economic conditions made the disaster worse.</p></div>
+<div class="event"><div class="year">1851</div><p>The Great Exhibition opens in the Crystal Palace in London, displaying products, inventions and design from Britain and around the world.</p></div>
+<div class="event"><div class="year">1854</div><p>During a cholera outbreak in Soho, London, John Snow's investigation helps demonstrate the importance of contaminated water in disease transmission.</p></div>
+<div class="event"><div class="year">1858</div><p>The hot summer and polluted River Thames contribute to the event known as the Great Stink, increasing pressure for major sewer improvements in London.</p></div>
+<div class="event"><div class="year">1863</div><p>The Metropolitan Railway opens in London, often described as the world's first underground passenger railway.</p></div>
+<div class="event"><div class="year">1870</div><p>The Education Act establishes a framework for board schools in England and Wales where existing schooling is insufficient.</p></div>
+<div class="event"><div class="year">1880</div><p>Elementary school attendance becomes compulsory for children in England and Wales, with exemptions and enforcement changing over time.</p></div>
+<div class="event"><div class="year">1897</div><p>Victoria's Diamond Jubilee marks 60 years on the throne.</p></div>
+<div class="event"><div class="year">1901</div><p>Queen Victoria dies. Her reign ends and the Victorian period closes.</p></div>
+</div>
+<p class="note">This is a short guide, not a complete timeline. Some laws applied differently across England, Wales, Scotland and Ireland, so check the location and date when writing about a particular event.</p>
+</section>
+
+<section class="panel">
+<h2>Trusted websites and archives</h2>
+<p>These institutions provide useful introductions, historical documents, museum objects and teaching resources. Open the original source when you need to check a detail or find evidence for an assignment.</p>
+<div class="sources">
+<div class="source"><strong>English Heritage — Victorian England</strong><p>An overview of the era, with pages on daily life, food and health, architecture, politics, religion and commerce.</p><a href="https://www.english-heritage.org.uk/learn/story-of-england/victorian/" target="_blank" rel="noopener">Explore Victorian England ↗</a></div>
+<div class="source"><strong>English Heritage — Teaching the Victorians</strong><p>Learning guidance and activities, including the importance of studying different social experiences and the British Empire.</p><a href="https://www.english-heritage.org.uk/learn/teaching-resources/teaching-history/teaching-victorians/" target="_blank" rel="noopener">Open teaching resources ↗</a></div>
+<div class="source"><strong>The National Archives — Victorian Lives</strong><p>Primary-source documents, photographs, transcripts and activities about people who lived in Victorian times.</p><a href="https://www.nationalarchives.gov.uk/education/resources/victorian-lives/" target="_blank" rel="noopener">Explore original records ↗</a></div>
+<div class="source"><strong>Historical Association — Victorian Britain</strong><p>A broad reference guide covering industrialisation, social reform, the Empire and the changing population.</p><a href="https://www.history.org.uk/primary/resource/3871/victorian-britain-a-brief-history" target="_blank" rel="noopener">Read the history guide ↗</a></div>
+<div class="source"><strong>London Museum — Life in Victorian London</strong><p>Explore city life, infrastructure, healthcare, politics, entertainment and the experiences of Londoners.</p><a href="https://www.londonmuseum.org.uk/collections/london-stories/life-in-victorian-london/" target="_blank" rel="noopener">Discover Victorian London ↗</a></div>
+<div class="source"><strong>Victoria and Albert Museum — Victorian fashion</strong><p>Explore surviving clothing and how styles changed, including corsets, crinolines and bustles.</p><a href="https://www.vam.ac.uk/articles/corsets-crinolines-and-bustles-fashionable-victorian-underwear" target="_blank" rel="noopener">Explore clothing history ↗</a></div>
+<div class="source"><strong>English Heritage — Victorian inventions</strong><p>Find out about important developments in science, technology, industry and social reform.</p><a href="https://www.english-heritage.org.uk/visit/inspire-me/victorian-inventions/" target="_blank" rel="noopener">Explore inventions ↗</a></div>
+<div class="source"><strong>British Library — Discovering Literature</strong><p>Literary resources and expert interpretation, including writers such as Dickens and the Brontës. The Library notes that some resources remain limited.</p><a href="https://www.bl.uk/about/learn/learning-resources/about-discovering-literature" target="_blank" rel="noopener">Explore literature resources ↗</a></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>How to use this with Viccy</h2>
+<p>Try a focused prompt such as “Write a paragraph about a Victorian school day”, “Explain why railways changed Victorian Britain”, or “Compare the life of a rich child and a poor child”. For stronger history writing, include a date, place, person or piece of evidence, then explain why it matters.</p>
+<div class="callout"><strong>Accuracy reminder:</strong> Viccy's AI connection is prepared in the project but is not live until an adult-managed server is deployed and connected. The links above are research sources for you to open. The current website does not automatically read those pages or verify facts in real time. Always check important details against the original source.</div>
+</section>
+</main>
+<footer>Viccy's Victorian Knowledge Library · Built for curious history learners</footer>
+</body>
+</html>
