@@ -68,7 +68,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
    const label=hasError?String.fromCharCode(65+errorIndex):"N";
    const parts=hasError?incorrectParts:correctParts;
    const sentence=parts.map((part,i)=>"("+String.fromCharCode(65+i)+") "+part).join(" ");
-   easyQs.push(mc(section,instruction+"\\n\\n"+sentence,label,["A","B","C","D","N"].filter(x=>x!==label),hasError?explanation:"All four labelled parts are correct."));
+   easyQs.push(mc(section,instruction+"\n\n"+sentence,label,["A","B","C","D","N"].filter(x=>x!==label),hasError?explanation:"All four labelled parts are correct."));
   };
   const spellingInstruction="Read the sentence. Which labelled part contains a spelling mistake? Choose N if all four parts are correct.";
   addLabelledError("Spelling",spellingInstruction,["We stayed inside","because the rain","was very heavy","that afternoon."],["We stayed inside","becaus the rain","was very heavy","that afternoon."],1,"The correct spelling is “because”.");
