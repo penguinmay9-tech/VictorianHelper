@@ -29,16 +29,21 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   word=>"The word '"+word+"' was copied carefully onto the display board.",
   word=>"The report used the word '"+word+"' when describing the discovery."
  ];
+ const spellingLayouts=[
+  ["The word \"WORD\" appeared","in the writer's report,","which the editor checked","before publication."],
+  ["The writer checked the spelling of","the word \"WORD\" before including it","in the report and","sending the final copy."],
+  ["The writer prepared the report,","then checked the word","\"WORD\" before sending","the final copy to the editor."],
+  ["The writer checked the report","before sending it to the editor","for a final review of","the word \"WORD\"."]
+ ];
  for(let i=0;i<5;i++){
-  const chosen=mix(spellings).slice(0,4);
+  const row=pick(spellings);
   const hasError=rand()<0.8;
   const errorIndex=hasError?int(0,3):-1;
-  const sentenceLines=chosen.map((row,j)=>{
-   const variant=errorIndex===j?pick(row.slice(1)):row[0];
-   return pick(spellingFrames)(variant)+"\n"+String.fromCharCode(65+j)+".";
-  });
+  const word=errorIndex<0?row[0]:pick(row.slice(1));
+  const layout=spellingLayouts[hasError?errorIndex:int(0,3)];
+  const sentence=layout.map((part,j)=>String.fromCharCode(65+j)+": "+part.replace("WORD",word)).join(" ");
   const correctLabel=errorIndex<0?"N":String.fromCharCode(65+errorIndex);
-  qs.push(mc("Spelling","Read sentences A–D. Which sentence contains a spelling mistake? Choose A, B, C or D. If all four sentences are spelt correctly, choose N.\n\n"+sentenceLines.join("\n"),correctLabel,["A","B","C","D","N"].filter(x=>x!==correctLabel),"Read all four sentences carefully. Select the letter of the sentence with the spelling error, or N if none contains an error."));
+  qs.push(mc("Spelling","Read the sentence. Which section (A, B, C or D) contains a spelling mistake? Choose N if the whole sentence is correct.\\n\\n"+sentence,correctLabel,["A","B","C","D","N"].filter(x=>x!==correctLabel),"Read the whole sentence. Choose the letter of the section containing the spelling error, or N if every word is spelt correctly."));
  }
  const grammar=[
  ()=>mc("Grammar","Choose the verb that completes the sentence: “"+pick(["Each visitor","Neither runner","Every member","The collection of maps"])+" ___ ready to begin.”","is",["are","have","were","be"],"The subject is singular, so the singular verb is required."),
