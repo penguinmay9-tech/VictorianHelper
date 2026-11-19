@@ -79,7 +79,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   "Which answer is best supported by the passage? ",
   "Look closely at the events described. "
  ];
- qs.push(mc("Comprehension",pick(compOpeners)+"what was the group originally asked to do?",task,["repair the railway station","prepare a sports competition","build a new road","collect money for a journey"],"The opening paragraph explains the purpose of the group's visit."));
+ qs.push(mc("Comprehension",pick(["What was the group originally asked to do?","Which task had the group been asked to complete?","What was the main purpose of the group’s visit?","Why had the group gone to "+place+"?"]),task,["repair the railway station","prepare a sports competition","build a new road","collect money for a journey"],"The opening paragraph explains the purpose of the group's visit."));
  qs.push(mc("Comprehension","Which item first drew "+name+"'s attention during the visit?",thing,["a broken bicycle","a basket of fruit","a red umbrella","a wooden chair"],"The discovery is introduced in the first paragraph."));
  qs.push(mc("Vocabulary","In this passage, which meaning is closest to the word “evidence”?","information that helps show something is true",["a promise to do something later","a place where people meet","a plan for a future journey","a feeling of disappointment"],"Evidence is information or facts that support an idea."));
  qs.push(mc("Inference","What can the reader infer about the group's decision after the setback?","They wanted to check the details and choose a better approach.",["They had decided to stop helping.","They wanted to hide the object.","They had forgotten where they were.","They were waiting for the weather to change."],"They checked the details and agreed on a different route."));
