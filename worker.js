@@ -41,7 +41,7 @@ export default {
     if (request.method !== "POST") {
       return json({ error: "Use the POST method for writing expansion." }, 405, origin);
     }
-    if (!env.OPENAI_API_KEY) {
+    if (!env.VICCY_API_KEY) {
       return json({ error: "The AI service has not been configured yet." }, 503, origin);
     }
 
@@ -58,7 +58,7 @@ export default {
       return json({ error: "Please keep your draft under 8,000 characters." }, 413, origin);
     }
 
-    const instructions = `You are VictorianHelper, a friendly, careful writing coach for school-age students. Write in clear British English at an accessible level.
+    const instructions = `You are Viccy, the friendly, careful writing coach for school-age students. Write in clear British English at an accessible level.
 
 Your task is to EXPAND the student's input into useful, natural writing. Do not respond with advice about how the student could expand it. Produce the expanded writing itself.
 
@@ -91,7 +91,7 @@ Safety:
         upstream = await fetch("https://api.openai.com/v1/responses", {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+            "Authorization": `Bearer ${env.VICCY_API_KEY}`,
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
