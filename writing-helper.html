@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VictorianHelper — Writing Assistant</title>
+<style>
+:root{--ink:#17233b;--muted:#68748a;--line:#e5e9f0;--paper:#fff;--bg:#f6f8fc;--blue:#5369d8;--blue2:#4055c2;--pale:#eef1ff;--gold:#a66a24}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.6}
+header{background:#fff;border-bottom:1px solid var(--line)}
+.nav{max-width:1160px;margin:auto;padding:19px 26px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:19px;font-weight:750;letter-spacing:-.5px}.brand span{color:var(--blue)}
+.nav-note{font-size:13px;color:var(--muted)}.nav-note a{color:var(--blue);font-weight:700;text-decoration:none;margin-right:5px}.nav-note a:hover{text-decoration:underline}
+.hero{max-width:1160px;margin:48px auto 28px;padding:0 26px}
+.eyebrow{font-size:12px;font-weight:750;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue)}
+h1{font-size:clamp(34px,5vw,50px);line-height:1.12;letter-spacing:-2px;margin:10px 0 13px}
+.hero p{color:var(--muted);font-size:16px;max-width:720px;margin:0}
+main{max-width:1160px;margin:0 auto 65px;padding:0 26px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(290px,.85fr);gap:22px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:23px;box-shadow:0 8px 28px rgba(25,42,80,.045)}
+.panel h2{font-size:17px;letter-spacing:-.3px;margin:0 0 5px}
+.sub{font-size:13px;color:var(--muted);margin:0 0 17px}
+textarea{width:100%;min-height:350px;resize:vertical;border:1px solid #dce2ec;border-radius:10px;padding:16px;font:15px/1.7 Arial,sans-serif;color:var(--ink);background:#fcfdff;outline:none}
+textarea:focus{border-color:#8b98e8;box-shadow:0 0 0 3px #eef0ff}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:9px 0 14px}
+.actions{display:flex;flex-wrap:wrap;gap:9px}
+button{border:0;border-radius:8px;padding:11px 15px;font-size:13px;font-weight:700;cursor:pointer}
+.primary{background:var(--blue);color:white}.primary:hover{background:var(--blue2)}
+.secondary{background:#f0f2f7;color:#34415a}.secondary:hover{background:#e6eaf2}
+.side{display:grid;gap:18px}
+.result{min-height:76px;color:#526078;font-size:13px;overflow-wrap:anywhere}
+.result ul{padding-left:19px;margin:8px 0}.result li{margin:9px 0}
+.result strong{color:var(--ink)}
+.suggestion{background:var(--pale);border:1px solid #e1e5ff;border-radius:10px;padding:14px;color:#394777;font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;max-height:430px;overflow:auto}
+.note{font-size:12px;color:var(--muted);margin:10px 0 0}
+.disclaimer{border-left:3px solid #d6a45d;padding:10px 12px;background:#fff9ef;border-radius:5px;color:#76552c;font-size:12px;margin-top:13px}
+footer{text-align:center;color:#8a94a6;font-size:12px;padding:25px}
+@media(max-width:780px){.hero{margin:36px auto 23px}main{grid-template-columns:1fr}.nav-note{display:none}textarea{min-height:260px}}
+</style>
+</head>
+<body>
+<header><div class="nav"><div class="brand">Victorian<span>Helper</span></div><div class="nav-note"><a href="index.html">Victorian knowledge library</a> · A calmer way to shape your words</div></div></header>
+<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>Review grammar and punctuation, spot common spelling issues, and build richer writing from almost any topic, not just a fixed list of keywords.</p></section>
+<main>
+<section class="panel">
+<h2>Your draft</h2><p class="sub">Paste or type your writing below. Grammar checks run here; AI expansion sends your draft to the connected service when you click the button.</p>
+<textarea id="writing" placeholder="Start writing here…"></textarea>
+<div class="meta"><span id="count">0 words</span><span>Only sent for AI expansion when selected</span></div>
+<div class="actions"><button class="primary" id="check">Check grammar & punctuation</button><button class="primary" id="expand">Expand & enrich writing</button><button class="secondary" id="clear">Clear draft</button></div>
+<p class="note">The local preview works without an AI connection. When connected, the AI service receives your draft and can expand a wide range of topics. Do not enter sensitive personal information.</p>
+</section>
+<div class="side">
+<section class="panel"><h2>Grammar & punctuation review</h2><p class="sub">Checks across spelling, sentence structure and punctuation.</p><div class="result" id="feedback" aria-live="polite">Your review will appear here. Select “Check grammar & punctuation” to begin.</div></section>
+<section class="panel"><h2>Expanded version</h2><p class="sub">AI-powered expansion for almost any topic once the secure service is connected.</p><div class="suggestion" id="better">Your expanded writing will appear here after you select “Expand & enrich writing”.</div><div class="actions" style="margin-top:14px"><button class="secondary" id="use" hidden>Replace draft with this version</button></div></section>
+<section class="panel"><h2>About this checker</h2><p class="note">This browser-based checker covers many common rules, but English has exceptions and context matters. It cannot reliably judge every grammar issue, detect every punctuation error or understand your intended meaning. It is not a full AI proofreader.</p></section>
+</div>
+</main>
+<footer>VictorianHelper · Thoughtful tools for better writing</footer>
+<script>
+const box=document.getElementById('writing'),count=document.getElementById('count'),feedback=document.getElementById('feedback'),better=document.getElementById('better'),use=document.getElementById('use');
+let expandedText='';
+const AI_EXPAND_ENDPOINT = ''; // Adult/teacher: add the deployed Worker URL here after setup.
+
+async function expandWithAI(text){
+ const response = await fetch(AI_EXPAND_ENDPOINT,{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({text})
+ });
+ let data={};
+ try{data=await response.json();}catch(error){throw new Error('The AI service returned an unreadable response.');}
+ if(!response.ok) throw new Error(data.error || 'The AI service could not expand this writing.');
+ if(typeof data.expandedText!=='string' || !data.expandedText.trim()) throw new Error('The AI service returned an empty result.');
+ return data.expandedText.trim();
+}
+function words(){const t=box.value.trim();count.textContent=(t?t.split(/\s+/).length:0)+' words';}
+box.addEventListener('input',words);
+function addFinding(list,category,message){list.push({category,message});}
+function renderFindings(findings){
+ feedback.replaceChildren();
+ if(!findings.length){feedback.textContent='No issues were found by these checks. This does not guarantee the writing is error-free — read it through carefully.';return;}
+ const intro=document.createElement('p');intro.textContent=findings.length+' possible issue(s) to review:';feedback.appendChild(intro);
+ const ul=document.createElement('ul');
+ findings.forEach(f=>{const li=document.createElement('li');const strong=document.createElement('strong');strong.textContent=f.category+': ';li.append(strong,document.createTextNode(f.message));ul.appendChild(li);});
+ feedback.appendChild(ul);
+}
+function review(text){
+ const f=[];
+ if(/^\s*[a-z]/.test(text))addFinding(f,'Capitalisation','The first word may need a capital letter.');
+ if(/(^|[.!?]\s+)[a-z]/.test(text))addFinding(f,'Capitalisation','A sentence may begin with a lower-case letter.');
+ if(/\bi\b/.test(text))addFinding(f,'Capitalisation','The pronoun “I” should be capitalised.');
+ if(/\s{2,}/.test(text))addFinding(f,'Spacing','There are repeated spaces. Usually use one space between words.');
+ if(/\s+[,.!?;:]/.test(text))addFinding(f,'Punctuation spacing','Remove the space before punctuation marks.');
+ if(/[,.!?;:](?=[A-Za-z])/.test(text))addFinding(f,'Punctuation spacing','Add a space after punctuation where two words or sentences run together.');
+ if(/[!?.,]{2,}/.test(text))addFinding(f,'Repeated punctuation','Check whether repeated punctuation is intentional.');
+ if(/[,;:]$/.test(text.trim()))addFinding(f,'Ending punctuation','The text ends with a comma, semicolon or colon; check whether the sentence is complete.');
+ if((text.match(/"/g)||[]).length%2!==0)addFinding(f,'Quotation marks','There may be an unmatched double quotation mark.');
+ if((text.match(/'/g)||[]).length%2!==0 && !/\b(it's|that's|who's|what's|can't|don't|doesn't|didn't|won't|isn't|aren't|wasn't|weren't|I've|I'll|we're|they're|you're|I'm)\b/i.test(text))addFinding(f,'Apostrophes','Check that apostrophes are paired or used correctly. This check can be uncertain with contractions.');
+ if(/\b(dont|doesnt|didnt|cant|wont|isnt|arent|wasnt|werent|couldnt|shouldnt|wouldnt)\b/i.test(text))addFinding(f,'Apostrophes','A contraction may need an apostrophe, for example “don’t” or “can’t”.');
+ if(/\b(teh|recieve|freind|becuase|thier|seperate|definately|wich|untill|alot|occured|begining|enviroment| goverment)\b/i.test(text))addFinding(f,'Spelling','One or more words may be misspelled. Review common spellings such as “receive”, “friend” and “because”.');
+ if(/\b(your)\s+(welcome|right|wrong|going|being|the one)\b/i.test(text))addFinding(f,'Commonly confused words','Check whether “you’re” (you are) is intended instead of “your”.');
+ if(/\byou\s*’?re\s+(book|car|house|idea|name|friend)\b/i.test(text))addFinding(f,'Commonly confused words','Check whether “your” (belonging to you) is intended instead of “you’re”.');
+ if(/\bits\s+(a|the|very|not|been|going|important|easy|hard)\b/i.test(text))addFinding(f,'Commonly confused words','Check “its” (belonging to it) versus “it’s” (it is or it has).');
+ if(/\b(their|there|they're)\b/i.test(text))addFinding(f,'Commonly confused words','Double-check “their” (belonging to them), “there” (a place) and “they’re” (they are) in context.');
+ if(/\b(to|too|two)\b/i.test(text))addFinding(f,'Commonly confused words','Check “to”, “too” and “two” carefully; they sound alike but have different meanings.');
+ if(/\b(then|than)\b/i.test(text))addFinding(f,'Commonly confused words','Check “then” (time or order) versus “than” (comparison).');
+ if(/\b(affect|effect)\b/i.test(text))addFinding(f,'Word choice','Check “affect” (usually a verb) versus “effect” (usually a noun).');
+ if(/\b(a|an)\s+[aeiou][a-z]+\b/i.test(text))addFinding(f,'Articles','Check whether “an” is needed before a vowel sound; pronunciation, not just spelling, decides this.');
+ if(/\b(an)\s+[bcdfghjklmnpqrstvwxyz][a-z]+\b/i.test(text))addFinding(f,'Articles','Check whether “a” is needed before a consonant sound.');
+ if(/\b(he|she|it)\s+(are|were|have)\b/i.test(text))addFinding(f,'Subject–verb agreement','A singular subject such as “he”, “she” or “it” usually takes “is”, “was” or “has”. Check the sentence.');
+ if(/\b(they|we|you)\s+(is|was|has)\b/i.test(text))addFinding(f,'Subject–verb agreement','A plural subject such as “they” or “we” usually takes “are”, “were” or “have”. Check the sentence.');
+ if(/\b(he|she|it)\s+don't\b/i.test(text))addFinding(f,'Subject–verb agreement','With “he”, “she” or “it”, use “doesn’t” rather than “don’t”.');
+ if(/\b(he|she|it)\s+(go|do|say|make|want|need|like|have)\b/i.test(text))addFinding(f,'Subject–verb agreement','Check whether the present-tense verb needs an -s ending after “he”, “she” or “it”.');
+ if(/\b(I|we|they|you)\s+(is|has)\b/i.test(text))addFinding(f,'Subject–verb agreement','Check whether “am/are” or “have” is needed with this subject.');
+ if(/\b(me and (him|her|them|my friend))\b/i.test(text))addFinding(f,'Pronouns','In formal writing, consider whether “[person] and I” is the correct subject form.');
+ if(/\b(between you and I)\b/i.test(text))addFinding(f,'Pronouns','After a preposition such as “between”, the object form “me” is usually used.');
+ if(/\b(very very|really really|so so)\b/i.test(text))addFinding(f,'Word choice','Repeated intensifiers can weaken a sentence. Consider one precise adjective instead.');
+ const sentences=text.split(/[.!?]+/).map(s=>s.trim()).filter(Boolean);
+ sentences.forEach(s=>{if(s.split(/\s+/).length===1 && !/^(yes|no|stop|help|wow|hello)$/i.test(s))addFinding(f,'Sentence completeness','“'+s+'” may be a fragment rather than a complete sentence. Check for a subject and a verb.');});
+ if(/,\s*(and|but|so)\b/i.test(text))addFinding(f,'Comma use','A comma before “and”, “but” or “so” is needed when it joins two complete clauses, but not always. Check the clauses.');
+ if(/\b(I|he|she|it|we|they|you)\s+\w+ed\b/i.test(text) && /\b(am|is|are)\s+\w+ing\b/i.test(text))addFinding(f,'Tense consistency','The draft may shift between past and present tense. This can be intentional, but check that the timeline is clear.');
+ if(/\b(because|although|when|while|if)\s+[^.!?]+[.!?]/i.test(text) && /^\s*(because|although|when|while|if)\b/i.test(text))addFinding(f,'Sentence structure','A sentence beginning with “because”, “although”, “when”, “while” or “if” may be incomplete if its main clause is missing.');
+ if(/\b(the the|a a|is is|to to|and and|of of)\b/i.test(text))addFinding(f,'Repeated words','A word may have been typed twice.');
+ if(/\b(there is|there are)\b/i.test(text))addFinding(f,'Sentence style','Consider whether a more direct subject would make the sentence clearer.');
+ if(/\b(very|nice|good|bad|big|small|went|got)\b/i.test(text))addFinding(f,'Vocabulary','Some general words could be replaced with more precise choices where they fit your meaning.');
+ return f;
+}
+const spelling=[[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],[/\bdoesnt\b/gi,"doesn't"],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']];
+function cleanDraft(text){
+ let out=text.replace(/\r/g,'').trim();
+ const fixes=[
+  [/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],
+  [/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],
+  [/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],
+  [/\bdont\b/gi,"don't"],[/\bdoesnt\b/gi,"doesn't"],[/\bcant\b/gi,"can't"],
+  [/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']
+ ];
+ fixes.forEach(([pattern,value])=>{out=out.replace(pattern,value);});
+ out=out.split('\n').map(line=>line.replace(/[ \t]+/g,' ').replace(/\s+([,.!?;:])/g,'$1').trim())
+  .map(line=>line.replace(/(^|[.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase())).join('\n');
+ return out;
+}
+function splitIntoSentences(paragraph){
+ return paragraph.match(/[^.!?]+(?:[.!?]+|$)/g)?.map(s=>s.trim()).filter(Boolean)||[paragraph.trim()];
+}
+function explainSentence(sentence, paragraph){
+ const s=sentence.replace(/[.!?]+$/,'').trim();
+ const because=s.match(/^(.+?)\s+because\s+(.+)$/i);
+ if(because && because[1].split(/\s+/).length>1 && because[2].split(/\s+/).length>1){
+  const main=because[1].replace(/[,;:]\s*$/,'').trim();
+  const reason=because[2].replace(/[.!?]+$/,'').trim();
+  const feeling=main.match(/\b(nervous|happy|sad|angry|afraid|scared|worried|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i);
+  const place=reason.match(/\b(room|house|street|forest|classroom|school|garden|beach|city|village|castle|field)\b/i);
+  if(feeling && place && /\b(dark|cold|empty|quiet|stormy|bright|noisy)\b/i.test(reason)) return {kind:'reason',text:'The description of the '+place[0]+' helps explain the character’s '+feeling[0]+' reaction. This links the surroundings to the character’s feelings and gives the moment a clearer atmosphere.'};
+  return {kind:'reason',text:'That connection makes the reason for the situation easier to understand. It shows how one detail leads to the response described in the first part of the sentence.'};
+ }
+ const result=s.match(/^(.+?),?\s+(?:so|therefore|as a result)\s+(.+)$/i);
+ if(result && result[1].split(/\s+/).length>1 && result[2].split(/\s+/).length>1){
+  const cause=result[1].trim(),effect=result[2].replace(/[.!?]+$/,'').trim();
+  return {kind:'result',text:'This shows the connection between the two parts: '+cause.charAt(0).toLowerCase()+cause.slice(1)+' leads to '+effect.charAt(0).toLowerCase()+effect.slice(1)+'. Making that link clear helps the reader understand why the outcome follows.'};
+ }
+ const lower=s.toLowerCase();
+ if(/\b(for example|for instance|such as|example|description|result|outcome|evidence|research|study|statistics|data)\b/i.test(s)){
+  const context=(paragraph||'').toLowerCase();
+  if(/school gardens?/.test(context) && /grow vegetables?/.test(context) && /learn about nature|natural world/.test(context))
+   return {kind:'example',text:'This example supports the claim about school gardens by showing how practical activity can be connected to learning about the natural world. Growing vegetables gives students something real to observe, while the link to nature explains why the activity has educational value.'};
+  if(/description/.test(s) && /result|outcome/.test(s))
+   return {kind:'example',text:'Each detail adds something different: the example makes the idea concrete, the description helps the reader picture it, and the result explains why it matters. Together, these parts make the point easier to follow and understand.'};
+  return {kind:'example',text:'This example turns the main idea into something specific that the reader can understand. Explaining what it demonstrates makes the connection between the detail and the paragraph’s main point clearer.'};
+ }
+ if(/\b(this moment|this idea|this point|this detail|this shows|this means|this suggests|matters|significant)\b/i.test(s))
+  return {kind:'significance',text:'Explaining why this moment matters helps the reader see how it contributes to the wider message, rather than treating it as an isolated detail.'};
+ if((/\b(believe|argue|opinion|should|must|claim|viewpoint)\b/i.test(s) || (/\bthink\b/i.test(s) && !/\bthink about\b/i.test(s)))){
+  if(/\b(for example|for instance|such as|evidence|research|study|statistics|data)\b/i.test(paragraph||'')) return null;
+  return {kind:'argument',text:'Stating this viewpoint gives the paragraph a clear position. Explaining the reason behind it will help the reader understand what supports the claim and why it is worth considering.'};
+ }
+ if(/\b(happy|sad|angry|afraid|scared|worried|nervous|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i.test(s))
+  return {kind:'emotion',text:'This reaction gives the moment more meaning because it shows how the situation affects the person. It also helps the reader understand why the moment may influence what happens next.'};
+ if(/\b(said|asked|replied|whispered|shouted|answered|argued|muttered|exclaimed)\b/i.test(s))
+  return {kind:'dialogue',text:'The words can reveal the speaker’s attitude as well as the information being shared. The other person’s response, where relevant, can show how the exchange changes the situation.'};
+ if(/\b(ran|walked|rushed|turned|opened|closed|grabbed|reached|looked|stared|moved|entered|left|climbed|jumped)\b/i.test(s)){
+  const pace=s.match(/\b(slowly|quickly|suddenly|carefully|quietly|hesitantly)\b/i);
+  const direction=s.match(/\b(towards|into|out of|through|across|along|away from)\s+(?:the\s+)?[a-z]+/i);
+  if(pace && direction){
+   const adjectives={slowly:'slow',quickly:'quick',suddenly:'sudden',carefully:'careful',quietly:'quiet',hesitantly:'hesitant'};
+   return {kind:'action',text:'The '+adjectives[pace[0].toLowerCase()]+' movement '+direction[0]+' gives the reader a clearer sense of how the action unfolds and draws attention to the character’s approach.'};
+  }
+  return {kind:'action',text:'This action moves the moment forward. Explaining its immediate effect helps the reader understand why it matters, rather than seeing it as an isolated event.'};
+ }
+ if(/\b(rain|storm|wind|sunlight|snow|fog|weather|thunder|cold|heat|dark|bright|forest|street|room|house|school|classroom|garden|beach|city|village|castle|field)\b/i.test(s))
+  return {kind:'setting',text:'This detail helps establish the setting and shape the atmosphere. Connecting the surroundings to what the people notice, feel or do makes the description more meaningful.'};
+ if(/\b(unlike|whereas|however|although|while|in contrast|compared with|different|similar)\b/i.test(s))
+  return {kind:'contrast',text:'The contrast helps the reader notice the difference between the two ideas. Explaining why that difference matters will make the comparison more purposeful.'};
+ if(/\b(first|next|then|finally|afterwards|before|later|eventually|initially)\b/i.test(s))
+  return {kind:'sequence',text:'This stage contributes to the development of the events or explanation. Showing how it follows from the previous point helps the whole paragraph feel connected.'};
+ if(/\b(result|consequence|effect|outcome|led to|caused|therefore)\b/i.test(s))
+  return {kind:'outcome',text:'The outcome is important because it shows what the earlier detail leads to. Explaining the effect helps the reader understand the wider significance of the point.'};
+ return null;
+}
+function expand(text){
+ const cleaned=cleanDraft(text);
+ if(!cleaned) return {draft:'',html:document.createTextNode('')};
+ const paragraphs=cleaned.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+ const totalSentences=paragraphs.reduce((n,p)=>n+splitIntoSentences(p).length,0);
+ const maxAdds=Math.min(5,Math.max(1,totalSentences));
+ let addCount=0;
+ const usedKinds=new Set();
+ const expandedParagraphs=[];
+ const added=[];
+ paragraphs.forEach(paragraph=>{
+  const sentences=splitIntoSentences(paragraph);
+  const rebuilt=[];
+  let paragraphAdds=0;
+  sentences.forEach(sentence=>{
+   rebuilt.push(sentence);
+   if(addCount>=maxAdds || paragraphAdds>=2) return;
+   const idea=explainSentence(sentence,paragraph);
+   if(!idea || usedKinds.has(idea.kind)) return;
+   if(/\b(consider explaining|add a specific example|give the reader more to think about)\b/i.test(sentence)) {
+    if(idea.kind!=='argument' && idea.kind!=='example' && idea.kind!=='significance') return;
+   }
+   rebuilt.push(idea.text);
+   added.push(idea.text);
+   usedKinds.add(idea.kind);
+   addCount++;
+   paragraphAdds++;
+  });
+  expandedParagraphs.push(rebuilt.join(' '));
+ });
+ if(!added.length){
+  const stop=new Set(('about after again also although always another around because before being between both could does each few from further have having however into itself just more most much must other over same should some such than that their them then there these they thing this those through very was were what when where which while will would your reader writing point idea moment make made give gives helps').split(' '));
+  const counts=new Map();
+  cleaned.toLowerCase().match(/[a-z]{4,}/g)?.forEach(word=>{if(!stop.has(word))counts.set(word,(counts.get(word)||0)+1);});
+  const keywords=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
+  const focus=keywords.length?keywords.join(', '):'the main idea';
+  const addition='This develops the paragraph’s focus on '+focus+'. Explaining how these details support the main point, and why that connection matters, gives the reader a clearer understanding of the message.';
+  expandedParagraphs[expandedParagraphs.length-1]+=' '+addition;
+  added.push(addition);
+ }
+ const draft=expandedParagraphs.join('\n\n');
+ const wrap=document.createElement('div');
+ const title=document.createElement('p');title.textContent='Expanded draft';wrap.appendChild(title);
+ expandedParagraphs.forEach(p=>{const node=document.createElement('p');node.textContent=p;wrap.appendChild(node);});
+ const note=document.createElement('p');note.className='note';note.textContent='Added '+added.length+' explanatory sentence(s) based on patterns in your writing. Read them carefully and remove anything that does not match what you mean.';wrap.appendChild(note);
+ return {draft,html:wrap};
+}
+document.getElementById('check').onclick=()=>{
+ const text=box.value.trim();
+ if(!text){feedback.textContent='Add some writing to your draft first.';return;}
+ renderFindings(review(text));
+};
+document.getElementById('expand').onclick=async()=>{
+ const text=box.value.trim();
+ if(!text){better.textContent='Add some writing to your draft first.';use.hidden=true;return;}
+ const button=document.getElementById('expand');
+ button.disabled=true;
+ button.textContent='Expanding…';
+ better.textContent='Working on a more developed version…';
+ use.hidden=true;
+ try{
+  if(AI_EXPAND_ENDPOINT){
+   expandedText=await expandWithAI(text);
+   const draft=document.createElement('p');
+   draft.textContent=expandedText;
+   better.replaceChildren(draft);
+  }else{
+   const result=expand(text);
+   expandedText=result.draft;
+   better.replaceChildren(result.html);
+   const note=document.createElement('p');
+   note.className='note';
+   note.textContent='This is the local preview, not the AI version. The secure AI service has not been connected yet.';
+   better.appendChild(note);
+  }
+  use.hidden=false;
+ }catch(error){
+  better.textContent=error.message || 'Something went wrong. Please try again.';
+ }finally{
+  button.disabled=false;
+  button.textContent='Expand & enrich writing';
+ }
+};
+use.onclick=()=>{if(expandedText){box.value=expandedText;words();box.focus();}};
+document.getElementById('clear').onclick=()=>{box.value='';words();feedback.textContent='Your review will appear here. Select “Check grammar & punctuation” to begin.';better.textContent='Your expanded writing will appear here after you select “Expand & enrich writing”.';expandedText='';use.hidden=true;};
+words();
+</script>
+</body>
+</html>
