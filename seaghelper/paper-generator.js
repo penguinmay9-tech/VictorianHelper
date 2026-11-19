@@ -122,6 +122,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   ];
   easyWritten.forEach(x=>easyQs.push(WQ("Number",x[0],x[1],"Show a simple calculation.")));
   if(easyQs.length!==56)throw new Error("Easy starter paper has "+easyQs.length+" questions, not 56.");
+  fixLabelOrder(easyQs);
   return {passage:easyPassage,questions:easyQs};
  }
  const spellings=[
@@ -302,5 +303,6 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  for(const typeIndex of writtenMathTypes)qs.push(mathQ(types[typeIndex],true));
 
  if(qs.length!==56)throw new Error("Generated paper has "+qs.length+" questions, not 56.");
+ fixLabelOrder(qs);
  return {passage:passage,questions:qs};
 }
