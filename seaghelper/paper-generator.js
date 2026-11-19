@@ -30,26 +30,10 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   word=>"The report used the word '"+word+"' when describing the discovery."
  ];
  const spellingLayouts=[
-  ["The writer checked","the word \"WORD\" carefully","before sending the report","to the editor."],
-  ["The class discussed","the meaning of \"WORD\"","during their English lesson","on Friday."],
-  ["Before the competition,","the coach wrote \"WORD\"","on the noticeboard","beside the team list."],
-  ["The museum guide explained","why the word \"WORD\"","was important to the history","of the old building."],
-  ["After reading the instructions,","Amira copied \"WORD\"","into her notebook","for the homework task."],
-  ["The newspaper included","the word \"WORD\"","in its report about","the village celebration."],
-  ["At the end of the lesson,","the teacher asked everyone","to spell \"WORD\"","without looking at the board."],
-  ["The librarian noticed","that \"WORD\"","had been written incorrectly","on the display card."],
-  ["During the school project,","the pupils used \"WORD\"","when they described","their latest discovery."],
-  ["The final paragraph","included the word \"WORD\"","because it explained","the writer's main point."],
-  ["While preparing the exhibition,","the team checked \"WORD\"","before printing the labels","for each display."],
-  ["The visitor carefully read","the word \"WORD\"","on the information sheet","beside the entrance."],
-  ["At the meeting,","the secretary wrote \"WORD\"","in the minutes","so everyone could remember it."],
-  ["The author selected","the word \"WORD\"","to make the description","more precise."],
-  ["Before handing in the essay,","the pupil checked \"WORD\"","and corrected the spelling","in the final paragraph."],
-  ["The science group recorded","the word \"WORD\"","next to the results","of their experiment."],
-  ["The headteacher announced","that \"WORD\"","would appear in the school newsletter","the following week."],
-  ["On the information board,","the organiser placed \"WORD\"","under the correct heading","for visitors to read."],
-  ["The editor checked","the word \"WORD\"","before approving the article","for publication."],
-  ["The class wrote a sentence","containing \"WORD\"","and then exchanged their books","for a partner to check."]
+  ["The word \"WORD\" appeared","in the writer's report,","which the editor checked","before publication."],
+  ["The writer checked the spelling of","the word \"WORD\" before including it","in the report and","sending the final copy."],
+  ["The writer prepared the report","before checking the word \"WORD\"","and sending the final copy","to the editor."],
+  ["The writer prepared the report","and checked all the details","before including the word \"WORD\"","in the final document."]
  ];
  const spellingPrompts=[
   "Read the sentence, which is split into four parts. Which part contains a spelling mistake? Choose N if all four parts are correct.",
@@ -64,7 +48,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   const hasError=rand()<0.8;
   const errorIndex=hasError?int(0,3):-1;
   const word=errorIndex<0?row[0]:pick(row.slice(1));
-  const layout=spellingLayouts[int(0,spellingLayouts.length-1)];
+  const layout=spellingLayouts[errorIndex<0?int(0,3):errorIndex];
   const parts=layout.map(part=>part.replace("WORD",word));
   const sentence=parts.map((part,j)=>String.fromCharCode(65+j)+": "+part).join(" ");
   const correctLabel=errorIndex<0?"N":String.fromCharCode(65+errorIndex);
