@@ -23,7 +23,7 @@
 <section class="panel">
 <div class="row" style="justify-content:space-between"><h2 id="activityTitle">Lesson 61 · Activity 1</h2><span class="pill">16 questions</span></div>
 <div class="notice">Upload screenshots of the story and questions, or paste/type them below. Do not include your Reading Eggs password, full name or other personal details in screenshots.</div>
-<h2 style="margin-top:18px">1. Add the story and question screenshots</h2>
+<h2 style="margin-top:18px">AI access</h2><label class="muted" for="accessCode">Access code supplied by the adult managing this site</label><input id="accessCode" type="password" autocomplete="off" placeholder="Enter the site access code"><p class="muted">This code is not saved in your browser. Ask the adult site manager for it.</p><h2 style="margin-top:18px">1. Add the story and question screenshots</h2>
 <label class="upload"><strong>📷 Choose screenshots</strong><span class="muted">Choose up to 3 images. Include the story and as many questions as possible.</span><input id="images" type="file" accept="image/png,image/jpeg,image/webp" multiple></label>
 <div class="row" style="margin-top:10px"><button class="btn secondary" id="readBtn">Read screenshot text</button><span class="status" id="ocrStatus">Optional: browser text reader.</span></div>
 <div style="margin-top:12px"><label class="muted" for="story">Story text (optional if readable in the screenshots)</label><textarea id="story" placeholder="Paste or type the story here..."></textarea></div>
@@ -55,15 +55,17 @@ document.getElementById('readBtn').addEventListener('click',async()=>{const file
 function fileAsDataUrl(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Could not read image'));reader.readAsDataURL(file)})}
 document.getElementById('askAiBtn').addEventListener('click',async()=>{
  const button=document.getElementById('askAiBtn'), output=document.getElementById('aiOutput'), files=[...document.getElementById('images').files];
+ const accessCode=document.getElementById('accessCode').value.trim();
  const story=document.getElementById('story').value.trim();
  const questions=[];for(let i=1;i<=16;i++){const question=document.getElementById('question'+i).value.trim();const attempt=document.getElementById('answer'+i).value.trim();if(question||attempt)questions.push({number:i,question,attempt})}
+ if(!accessCode){output.textContent='Enter the site access code first. Ask the adult managing the website for it.';return}
  if(!story&&!files.length&&!questions.length){output.textContent='Add the story, screenshots or at least one question first.';return}
  if(files.length>3){output.textContent='Please choose no more than 3 screenshots at a time.';return}
  if(files.some(f=>!['image/png','image/jpeg','image/webp'].includes(f.type)||f.size>900000)){output.textContent='Use PNG, JPG or WEBP screenshots, each smaller than 900 KB. Try fewer images if needed.';return}
  button.disabled=true;button.textContent='AI is reading...';output.textContent='Reading the material and working through the questions. This can take a little while.';
  try{
   const images=await Promise.all(files.map(fileAsDataUrl));
-  const response=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lesson:selected,activity:1,story,questions,images})});
+  const response=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessCode},body:JSON.stringify({lesson:selected,activity:1,story,questions,images})});
   const data=await response.json().catch(()=>({}));
   if(!response.ok){if(response.status===404)throw new Error('The AI server is not deployed yet. The page needs its secure server setup before this button can work.');throw new Error(data.error||'The AI request did not work. Please try again.')}
   output.textContent=data.answer||'The AI did not return an explanation. Try a clearer screenshot.';
