@@ -35,7 +35,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   const errorIndex=hasError?int(0,3):-1;
   const sentenceLines=chosen.map((row,j)=>{
    const variant=errorIndex===j?pick(row.slice(1)):row[0];
-   return String.fromCharCode(65+j)+". "+pick(spellingFrames)(variant);
+   return pick(spellingFrames)(variant)+"\n"+String.fromCharCode(65+j)+".";
   });
   const correctLabel=errorIndex<0?"N":String.fromCharCode(65+errorIndex);
   qs.push(mc("Spelling","Read sentences A–D. Which sentence contains a spelling mistake? Choose A, B, C or D. If all four sentences are spelt correctly, choose N.\n\n"+sentenceLines.join("\n"),correctLabel,["A","B","C","D","N"].filter(x=>x!==correctLabel),"Read all four sentences carefully. Select the letter of the sentence with the spelling error, or N if none contains an error."));
