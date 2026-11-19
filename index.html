@@ -3,286 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VictorianHelper — Writing, refined</title>
+<title>VictorianHelper — Victorian Knowledge Library</title>
 <style>
-:root{--ink:#17233b;--muted:#68748a;--line:#e5e9f0;--paper:#fff;--bg:#f6f8fc;--blue:#5369d8;--blue2:#4055c2;--pale:#eef1ff;--gold:#a66a24}
+:root{--ink:#17233b;--muted:#68748a;--line:#e5e9f0;--paper:#fff;--bg:#f6f8fc;--blue:#5369d8;--blue2:#4055c2;--pale:#eef1ff}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.6}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.65}
 header{background:#fff;border-bottom:1px solid var(--line)}
-.nav{max-width:1160px;margin:auto;padding:19px 26px;display:flex;align-items:center;justify-content:space-between}
+.nav{max-width:1100px;margin:auto;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{font-size:19px;font-weight:750;letter-spacing:-.5px}.brand span{color:var(--blue)}
-.nav-note{font-size:13px;color:var(--muted)}.nav-note a{color:var(--blue);font-weight:700;text-decoration:none;margin-right:5px}.nav-note a:hover{text-decoration:underline}
-.hero{max-width:1160px;margin:48px auto 28px;padding:0 26px}
+.nav a{color:var(--blue);font-size:13px;font-weight:700;text-decoration:none}
+.hero{max-width:1100px;margin:44px auto 24px;padding:0 26px}
 .eyebrow{font-size:12px;font-weight:750;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue)}
-h1{font-size:clamp(34px,5vw,50px);line-height:1.12;letter-spacing:-2px;margin:10px 0 13px}
-.hero p{color:var(--muted);font-size:16px;max-width:720px;margin:0}
-main{max-width:1160px;margin:0 auto 65px;padding:0 26px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(290px,.85fr);gap:22px;align-items:start}
-.panel{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:23px;box-shadow:0 8px 28px rgba(25,42,80,.045)}
-.panel h2{font-size:17px;letter-spacing:-.3px;margin:0 0 5px}
-.sub{font-size:13px;color:var(--muted);margin:0 0 17px}
-textarea{width:100%;min-height:350px;resize:vertical;border:1px solid #dce2ec;border-radius:10px;padding:16px;font:15px/1.7 Arial,sans-serif;color:var(--ink);background:#fcfdff;outline:none}
-textarea:focus{border-color:#8b98e8;box-shadow:0 0 0 3px #eef0ff}
-.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:9px 0 14px}
-.actions{display:flex;flex-wrap:wrap;gap:9px}
-button{border:0;border-radius:8px;padding:11px 15px;font-size:13px;font-weight:700;cursor:pointer}
-.primary{background:var(--blue);color:white}.primary:hover{background:var(--blue2)}
-.secondary{background:#f0f2f7;color:#34415a}.secondary:hover{background:#e6eaf2}
-.side{display:grid;gap:18px}
-.result{min-height:76px;color:#526078;font-size:13px;overflow-wrap:anywhere}
-.result ul{padding-left:19px;margin:8px 0}.result li{margin:9px 0}
-.result strong{color:var(--ink)}
-.suggestion{background:var(--pale);border:1px solid #e1e5ff;border-radius:10px;padding:14px;color:#394777;font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;max-height:430px;overflow:auto}
-.note{font-size:12px;color:var(--muted);margin:10px 0 0}
-.disclaimer{border-left:3px solid #d6a45d;padding:10px 12px;background:#fff9ef;border-radius:5px;color:#76552c;font-size:12px;margin-top:13px}
-footer{text-align:center;color:#8a94a6;font-size:12px;padding:25px}
-@media(max-width:780px){.hero{margin:36px auto 23px}main{grid-template-columns:1fr}.nav-note{display:none}textarea{min-height:260px}}
+h1{font-size:clamp(34px,5vw,48px);line-height:1.12;letter-spacing:-1.8px;margin:10px 0 13px}
+.hero p{color:var(--muted);font-size:16px;max-width:790px;margin:0}
+main{max-width:1100px;margin:0 auto 60px;padding:0 26px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:22px;box-shadow:0 8px 28px rgba(25,42,80,.04);margin-bottom:18px}
+.panel h2{font-size:19px;margin:0 0 8px;letter-spacing:-.3px}
+.panel p{margin:7px 0;color:#4f5d73}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.topic{background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px}
+.topic h3{font-size:15px;margin:0 0 6px;color:var(--ink)}
+.topic p{font-size:13px;line-height:1.65;margin:0;color:#56637a}
+.timeline{display:grid;gap:0;margin-top:10px}
+.event{display:grid;grid-template-columns:86px 1fr;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)}
+.event:last-child{border-bottom:0}
+.year{font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums}
+.event p{font-size:13px;margin:0;color:#536078}
+.sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.source{border:1px solid var(--line);border-radius:11px;padding:14px}
+.source strong{display:block;font-size:14px;margin-bottom:4px}
+.source p{font-size:12px;line-height:1.55;margin:0 0 8px;color:#5b667a}
+.source a{font-size:13px;color:var(--blue);font-weight:700;text-decoration:none}
+.source a:hover,.nav a:hover{text-decoration:underline}
+.callout{background:var(--pale);border:1px solid #e1e5ff;border-radius:11px;padding:15px;color:#394777;font-size:13px}
+footer{text-align:center;color:#8a94a6;font-size:12px;padding:24px}
+@media(max-width:700px){.grid,.sources{grid-template-columns:1fr}.event{grid-template-columns:72px 1fr}.hero{margin-top:32px}.nav{padding:16px 20px}}
 </style>
 </head>
 <body>
-<header><div class="nav"><div class="brand">Victorian<span>Helper</span></div><div class="nav-note"><a href="victorian-library.html">Victorian knowledge library</a> · A calmer way to shape your words</div></div></header>
-<section class="hero"><div class="eyebrow">Your writing workspace</div><h1>Make every word<br>work harder.</h1><p>Review grammar and punctuation, spot common spelling issues, and build richer writing from almost any topic, not just a fixed list of keywords.</p></section>
+<header><div class="nav"><div class="brand">Victorian<span>Helper</span></div><a href="writing-helper.html">Open writing helper ↗</a></div></header>
+<section class="hero">
+<div class="eyebrow">A student-friendly history guide</div>
+<h1>Explore the Victorian world.</h1>
+<p>The Victorian period is usually dated from 1837 to 1901, when Queen Victoria was monarch. It was a time of major industrial, scientific, political and cultural change — but people did not all experience it in the same way. Use this library to explore the topics, build writing ideas and find trustworthy places to check facts.</p>
+</section>
 <main>
 <section class="panel">
-<h2>Your draft</h2><p class="sub">Paste or type your writing below. Grammar checks run here; AI expansion sends your draft to the connected service when you click the button.</p>
-<textarea id="writing" placeholder="Start writing here…"></textarea>
-<div class="meta"><span id="count">0 words</span><span>Only sent for AI expansion when selected</span></div>
-<div class="actions"><button class="primary" id="check">Check grammar & punctuation</button><button class="primary" id="expand">Expand & enrich writing</button><button class="secondary" id="clear">Clear draft</button></div>
-<p class="note">The local preview works without an AI connection. When connected, the AI service receives your draft and can expand a wide range of topics. Do not enter sensitive personal information.</p>
+<h2>Start with the big picture</h2>
+<p>During Victoria's reign, Britain and Ireland changed through industrialisation, urban growth, new transport and communication, scientific discoveries, reform campaigns and the expansion of the British Empire. These changes brought opportunities and wealth for some, while many people faced low pay, insecure work, overcrowded homes, pollution and unequal rights.</p>
+<p><strong>A useful history question:</strong> Who benefited from a change, who paid the cost, and did everyone experience it in the same way?</p>
+<div class="callout"><strong>Remember:</strong> “Victorian” does not mean one single lifestyle. A wealthy family in a large town, a farm worker in rural Ireland, a domestic servant, a factory worker and a child in a mining community could have very different lives. Experiences also changed between 1837 and 1901.</div>
 </section>
-<div class="side">
-<section class="panel"><h2>Grammar & punctuation review</h2><p class="sub">Checks across spelling, sentence structure and punctuation.</p><div class="result" id="feedback" aria-live="polite">Your review will appear here. Select “Check grammar & punctuation” to begin.</div></section>
-<section class="panel"><h2>Expanded version</h2><p class="sub">AI-powered expansion for almost any topic once the secure service is connected.</p><div class="suggestion" id="better">Your expanded writing will appear here after you select “Expand & enrich writing”.</div><div class="actions" style="margin-top:14px"><button class="secondary" id="use" hidden>Replace draft with this version</button></div></section>
-<section class="panel"><h2>About this checker</h2><p class="note">This browser-based checker covers many common rules, but English has exceptions and context matters. It cannot reliably judge every grammar issue, detect every punctuation error or understand your intended meaning. It is not a full AI proofreader.</p></section>
-</div>
-</main>
-<footer>VictorianHelper · Thoughtful tools for better writing</footer>
-<script>
-const box=document.getElementById('writing'),count=document.getElementById('count'),feedback=document.getElementById('feedback'),better=document.getElementById('better'),use=document.getElementById('use');
-let expandedText='';
-const AI_EXPAND_ENDPOINT = ''; // Adult/teacher: add the deployed Worker URL here after setup.
 
-async function expandWithAI(text){
- const response = await fetch(AI_EXPAND_ENDPOINT,{
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({text})
- });
- let data={};
- try{data=await response.json();}catch(error){throw new Error('The AI service returned an unreadable response.');}
- if(!response.ok) throw new Error(data.error || 'The AI service could not expand this writing.');
- if(typeof data.expandedText!=='string' || !data.expandedText.trim()) throw new Error('The AI service returned an empty result.');
- return data.expandedText.trim();
-}
-function words(){const t=box.value.trim();count.textContent=(t?t.split(/\s+/).length:0)+' words';}
-box.addEventListener('input',words);
-function addFinding(list,category,message){list.push({category,message});}
-function renderFindings(findings){
- feedback.replaceChildren();
- if(!findings.length){feedback.textContent='No issues were found by these checks. This does not guarantee the writing is error-free — read it through carefully.';return;}
- const intro=document.createElement('p');intro.textContent=findings.length+' possible issue(s) to review:';feedback.appendChild(intro);
- const ul=document.createElement('ul');
- findings.forEach(f=>{const li=document.createElement('li');const strong=document.createElement('strong');strong.textContent=f.category+': ';li.append(strong,document.createTextNode(f.message));ul.appendChild(li);});
- feedback.appendChild(ul);
-}
-function review(text){
- const f=[];
- if(/^\s*[a-z]/.test(text))addFinding(f,'Capitalisation','The first word may need a capital letter.');
- if(/(^|[.!?]\s+)[a-z]/.test(text))addFinding(f,'Capitalisation','A sentence may begin with a lower-case letter.');
- if(/\bi\b/.test(text))addFinding(f,'Capitalisation','The pronoun “I” should be capitalised.');
- if(/\s{2,}/.test(text))addFinding(f,'Spacing','There are repeated spaces. Usually use one space between words.');
- if(/\s+[,.!?;:]/.test(text))addFinding(f,'Punctuation spacing','Remove the space before punctuation marks.');
- if(/[,.!?;:](?=[A-Za-z])/.test(text))addFinding(f,'Punctuation spacing','Add a space after punctuation where two words or sentences run together.');
- if(/[!?.,]{2,}/.test(text))addFinding(f,'Repeated punctuation','Check whether repeated punctuation is intentional.');
- if(/[,;:]$/.test(text.trim()))addFinding(f,'Ending punctuation','The text ends with a comma, semicolon or colon; check whether the sentence is complete.');
- if((text.match(/"/g)||[]).length%2!==0)addFinding(f,'Quotation marks','There may be an unmatched double quotation mark.');
- if((text.match(/'/g)||[]).length%2!==0 && !/\b(it's|that's|who's|what's|can't|don't|doesn't|didn't|won't|isn't|aren't|wasn't|weren't|I've|I'll|we're|they're|you're|I'm)\b/i.test(text))addFinding(f,'Apostrophes','Check that apostrophes are paired or used correctly. This check can be uncertain with contractions.');
- if(/\b(dont|doesnt|didnt|cant|wont|isnt|arent|wasnt|werent|couldnt|shouldnt|wouldnt)\b/i.test(text))addFinding(f,'Apostrophes','A contraction may need an apostrophe, for example “don’t” or “can’t”.');
- if(/\b(teh|recieve|freind|becuase|thier|seperate|definately|wich|untill|alot|occured|begining|enviroment| goverment)\b/i.test(text))addFinding(f,'Spelling','One or more words may be misspelled. Review common spellings such as “receive”, “friend” and “because”.');
- if(/\b(your)\s+(welcome|right|wrong|going|being|the one)\b/i.test(text))addFinding(f,'Commonly confused words','Check whether “you’re” (you are) is intended instead of “your”.');
- if(/\byou\s*’?re\s+(book|car|house|idea|name|friend)\b/i.test(text))addFinding(f,'Commonly confused words','Check whether “your” (belonging to you) is intended instead of “you’re”.');
- if(/\bits\s+(a|the|very|not|been|going|important|easy|hard)\b/i.test(text))addFinding(f,'Commonly confused words','Check “its” (belonging to it) versus “it’s” (it is or it has).');
- if(/\b(their|there|they're)\b/i.test(text))addFinding(f,'Commonly confused words','Double-check “their” (belonging to them), “there” (a place) and “they’re” (they are) in context.');
- if(/\b(to|too|two)\b/i.test(text))addFinding(f,'Commonly confused words','Check “to”, “too” and “two” carefully; they sound alike but have different meanings.');
- if(/\b(then|than)\b/i.test(text))addFinding(f,'Commonly confused words','Check “then” (time or order) versus “than” (comparison).');
- if(/\b(affect|effect)\b/i.test(text))addFinding(f,'Word choice','Check “affect” (usually a verb) versus “effect” (usually a noun).');
- if(/\b(a|an)\s+[aeiou][a-z]+\b/i.test(text))addFinding(f,'Articles','Check whether “an” is needed before a vowel sound; pronunciation, not just spelling, decides this.');
- if(/\b(an)\s+[bcdfghjklmnpqrstvwxyz][a-z]+\b/i.test(text))addFinding(f,'Articles','Check whether “a” is needed before a consonant sound.');
- if(/\b(he|she|it)\s+(are|were|have)\b/i.test(text))addFinding(f,'Subject–verb agreement','A singular subject such as “he”, “she” or “it” usually takes “is”, “was” or “has”. Check the sentence.');
- if(/\b(they|we|you)\s+(is|was|has)\b/i.test(text))addFinding(f,'Subject–verb agreement','A plural subject such as “they” or “we” usually takes “are”, “were” or “have”. Check the sentence.');
- if(/\b(he|she|it)\s+don't\b/i.test(text))addFinding(f,'Subject–verb agreement','With “he”, “she” or “it”, use “doesn’t” rather than “don’t”.');
- if(/\b(he|she|it)\s+(go|do|say|make|want|need|like|have)\b/i.test(text))addFinding(f,'Subject–verb agreement','Check whether the present-tense verb needs an -s ending after “he”, “she” or “it”.');
- if(/\b(I|we|they|you)\s+(is|has)\b/i.test(text))addFinding(f,'Subject–verb agreement','Check whether “am/are” or “have” is needed with this subject.');
- if(/\b(me and (him|her|them|my friend))\b/i.test(text))addFinding(f,'Pronouns','In formal writing, consider whether “[person] and I” is the correct subject form.');
- if(/\b(between you and I)\b/i.test(text))addFinding(f,'Pronouns','After a preposition such as “between”, the object form “me” is usually used.');
- if(/\b(very very|really really|so so)\b/i.test(text))addFinding(f,'Word choice','Repeated intensifiers can weaken a sentence. Consider one precise adjective instead.');
- const sentences=text.split(/[.!?]+/).map(s=>s.trim()).filter(Boolean);
- sentences.forEach(s=>{if(s.split(/\s+/).length===1 && !/^(yes|no|stop|help|wow|hello)$/i.test(s))addFinding(f,'Sentence completeness','“'+s+'” may be a fragment rather than a complete sentence. Check for a subject and a verb.');});
- if(/,\s*(and|but|so)\b/i.test(text))addFinding(f,'Comma use','A comma before “and”, “but” or “so” is needed when it joins two complete clauses, but not always. Check the clauses.');
- if(/\b(I|he|she|it|we|they|you)\s+\w+ed\b/i.test(text) && /\b(am|is|are)\s+\w+ing\b/i.test(text))addFinding(f,'Tense consistency','The draft may shift between past and present tense. This can be intentional, but check that the timeline is clear.');
- if(/\b(because|although|when|while|if)\s+[^.!?]+[.!?]/i.test(text) && /^\s*(because|although|when|while|if)\b/i.test(text))addFinding(f,'Sentence structure','A sentence beginning with “because”, “although”, “when”, “while” or “if” may be incomplete if its main clause is missing.');
- if(/\b(the the|a a|is is|to to|and and|of of)\b/i.test(text))addFinding(f,'Repeated words','A word may have been typed twice.');
- if(/\b(there is|there are)\b/i.test(text))addFinding(f,'Sentence style','Consider whether a more direct subject would make the sentence clearer.');
- if(/\b(very|nice|good|bad|big|small|went|got)\b/i.test(text))addFinding(f,'Vocabulary','Some general words could be replaced with more precise choices where they fit your meaning.');
- return f;
-}
-const spelling=[[/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],[/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],[/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],[/\bdoesnt\b/gi,"doesn't"],[/\bdont\b/gi,"don't"],[/\bcant\b/gi,"can't"],[/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']];
-function cleanDraft(text){
- let out=text.replace(/\r/g,'').trim();
- const fixes=[
-  [/\bteh\b/gi,'the'],[/\brecieve\b/gi,'receive'],[/\bfreind\b/gi,'friend'],
-  [/\bbecuase\b/gi,'because'],[/\bthier\b/gi,'their'],[/\bseperate\b/gi,'separate'],
-  [/\bdefinately\b/gi,'definitely'],[/\bwich\b/gi,'which'],[/\buntill\b/gi,'until'],
-  [/\bdont\b/gi,"don't"],[/\bdoesnt\b/gi,"doesn't"],[/\bcant\b/gi,"can't"],
-  [/\bdidnt\b/gi,"didn't"],[/\bwont\b/gi,"won't"],[/\bi\b/g,'I']
- ];
- fixes.forEach(([pattern,value])=>{out=out.replace(pattern,value);});
- out=out.split('\n').map(line=>line.replace(/[ \t]+/g,' ').replace(/\s+([,.!?;:])/g,'$1').trim())
-  .map(line=>line.replace(/(^|[.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase())).join('\n');
- return out;
-}
-function splitIntoSentences(paragraph){
- return paragraph.match(/[^.!?]+(?:[.!?]+|$)/g)?.map(s=>s.trim()).filter(Boolean)||[paragraph.trim()];
-}
-function explainSentence(sentence, paragraph){
- const s=sentence.replace(/[.!?]+$/,'').trim();
- const because=s.match(/^(.+?)\s+because\s+(.+)$/i);
- if(because && because[1].split(/\s+/).length>1 && because[2].split(/\s+/).length>1){
-  const main=because[1].replace(/[,;:]\s*$/,'').trim();
-  const reason=because[2].replace(/[.!?]+$/,'').trim();
-  const feeling=main.match(/\b(nervous|happy|sad|angry|afraid|scared|worried|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i);
-  const place=reason.match(/\b(room|house|street|forest|classroom|school|garden|beach|city|village|castle|field)\b/i);
-  if(feeling && place && /\b(dark|cold|empty|quiet|stormy|bright|noisy)\b/i.test(reason)) return {kind:'reason',text:'The description of the '+place[0]+' helps explain the character’s '+feeling[0]+' reaction. This links the surroundings to the character’s feelings and gives the moment a clearer atmosphere.'};
-  return {kind:'reason',text:'That connection makes the reason for the situation easier to understand. It shows how one detail leads to the response described in the first part of the sentence.'};
- }
- const result=s.match(/^(.+?),?\s+(?:so|therefore|as a result)\s+(.+)$/i);
- if(result && result[1].split(/\s+/).length>1 && result[2].split(/\s+/).length>1){
-  const cause=result[1].trim(),effect=result[2].replace(/[.!?]+$/,'').trim();
-  return {kind:'result',text:'This shows the connection between the two parts: '+cause.charAt(0).toLowerCase()+cause.slice(1)+' leads to '+effect.charAt(0).toLowerCase()+effect.slice(1)+'. Making that link clear helps the reader understand why the outcome follows.'};
- }
- const lower=s.toLowerCase();
- if(/\b(for example|for instance|such as|example|description|result|outcome|evidence|research|study|statistics|data)\b/i.test(s)){
-  const context=(paragraph||'').toLowerCase();
-  if(/school gardens?/.test(context) && /grow vegetables?/.test(context) && /learn about nature|natural world/.test(context))
-   return {kind:'example',text:'This example supports the claim about school gardens by showing how practical activity can be connected to learning about the natural world. Growing vegetables gives students something real to observe, while the link to nature explains why the activity has educational value.'};
-  if(/description/.test(s) && /result|outcome/.test(s))
-   return {kind:'example',text:'Each detail adds something different: the example makes the idea concrete, the description helps the reader picture it, and the result explains why it matters. Together, these parts make the point easier to follow and understand.'};
-  return {kind:'example',text:'This example turns the main idea into something specific that the reader can understand. Explaining what it demonstrates makes the connection between the detail and the paragraph’s main point clearer.'};
- }
- if(/\b(this moment|this idea|this point|this detail|this shows|this means|this suggests|matters|significant)\b/i.test(s))
-  return {kind:'significance',text:'Explaining why this moment matters helps the reader see how it contributes to the wider message, rather than treating it as an isolated detail.'};
- if((/\b(believe|argue|opinion|should|must|claim|viewpoint)\b/i.test(s) || (/\bthink\b/i.test(s) && !/\bthink about\b/i.test(s)))){
-  if(/\b(for example|for instance|such as|evidence|research|study|statistics|data)\b/i.test(paragraph||'')) return null;
-  return {kind:'argument',text:'Stating this viewpoint gives the paragraph a clear position. Explaining the reason behind it will help the reader understand what supports the claim and why it is worth considering.'};
- }
- if(/\b(happy|sad|angry|afraid|scared|worried|nervous|excited|proud|embarrassed|lonely|disappointed|relieved|frustrated|delighted|terrified)\b/i.test(s))
-  return {kind:'emotion',text:'This reaction gives the moment more meaning because it shows how the situation affects the person. It also helps the reader understand why the moment may influence what happens next.'};
- if(/\b(said|asked|replied|whispered|shouted|answered|argued|muttered|exclaimed)\b/i.test(s))
-  return {kind:'dialogue',text:'The words can reveal the speaker’s attitude as well as the information being shared. The other person’s response, where relevant, can show how the exchange changes the situation.'};
- if(/\b(ran|walked|rushed|turned|opened|closed|grabbed|reached|looked|stared|moved|entered|left|climbed|jumped)\b/i.test(s)){
-  const pace=s.match(/\b(slowly|quickly|suddenly|carefully|quietly|hesitantly)\b/i);
-  const direction=s.match(/\b(towards|into|out of|through|across|along|away from)\s+(?:the\s+)?[a-z]+/i);
-  if(pace && direction){
-   const adjectives={slowly:'slow',quickly:'quick',suddenly:'sudden',carefully:'careful',quietly:'quiet',hesitantly:'hesitant'};
-   return {kind:'action',text:'The '+adjectives[pace[0].toLowerCase()]+' movement '+direction[0]+' gives the reader a clearer sense of how the action unfolds and draws attention to the character’s approach.'};
-  }
-  return {kind:'action',text:'This action moves the moment forward. Explaining its immediate effect helps the reader understand why it matters, rather than seeing it as an isolated event.'};
- }
- if(/\b(rain|storm|wind|sunlight|snow|fog|weather|thunder|cold|heat|dark|bright|forest|street|room|house|school|classroom|garden|beach|city|village|castle|field)\b/i.test(s))
-  return {kind:'setting',text:'This detail helps establish the setting and shape the atmosphere. Connecting the surroundings to what the people notice, feel or do makes the description more meaningful.'};
- if(/\b(unlike|whereas|however|although|while|in contrast|compared with|different|similar)\b/i.test(s))
-  return {kind:'contrast',text:'The contrast helps the reader notice the difference between the two ideas. Explaining why that difference matters will make the comparison more purposeful.'};
- if(/\b(first|next|then|finally|afterwards|before|later|eventually|initially)\b/i.test(s))
-  return {kind:'sequence',text:'This stage contributes to the development of the events or explanation. Showing how it follows from the previous point helps the whole paragraph feel connected.'};
- if(/\b(result|consequence|effect|outcome|led to|caused|therefore)\b/i.test(s))
-  return {kind:'outcome',text:'The outcome is important because it shows what the earlier detail leads to. Explaining the effect helps the reader understand the wider significance of the point.'};
- return null;
-}
-function expand(text){
- const cleaned=cleanDraft(text);
- if(!cleaned) return {draft:'',html:document.createTextNode('')};
- const paragraphs=cleaned.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
- const totalSentences=paragraphs.reduce((n,p)=>n+splitIntoSentences(p).length,0);
- const maxAdds=Math.min(5,Math.max(1,totalSentences));
- let addCount=0;
- const usedKinds=new Set();
- const expandedParagraphs=[];
- const added=[];
- paragraphs.forEach(paragraph=>{
-  const sentences=splitIntoSentences(paragraph);
-  const rebuilt=[];
-  let paragraphAdds=0;
-  sentences.forEach(sentence=>{
-   rebuilt.push(sentence);
-   if(addCount>=maxAdds || paragraphAdds>=2) return;
-   const idea=explainSentence(sentence,paragraph);
-   if(!idea || usedKinds.has(idea.kind)) return;
-   if(/\b(consider explaining|add a specific example|give the reader more to think about)\b/i.test(sentence)) {
-    if(idea.kind!=='argument' && idea.kind!=='example' && idea.kind!=='significance') return;
-   }
-   rebuilt.push(idea.text);
-   added.push(idea.text);
-   usedKinds.add(idea.kind);
-   addCount++;
-   paragraphAdds++;
-  });
-  expandedParagraphs.push(rebuilt.join(' '));
- });
- if(!added.length){
-  const stop=new Set(('about after again also although always another around because before being between both could does each few from further have having however into itself just more most much must other over same should some such than that their them then there these they thing this those through very was were what when where which while will would your reader writing point idea moment make made give gives helps').split(' '));
-  const counts=new Map();
-  cleaned.toLowerCase().match(/[a-z]{4,}/g)?.forEach(word=>{if(!stop.has(word))counts.set(word,(counts.get(word)||0)+1);});
-  const keywords=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
-  const focus=keywords.length?keywords.join(', '):'the main idea';
-  const addition='This develops the paragraph’s focus on '+focus+'. Explaining how these details support the main point, and why that connection matters, gives the reader a clearer understanding of the message.';
-  expandedParagraphs[expandedParagraphs.length-1]+=' '+addition;
-  added.push(addition);
- }
- const draft=expandedParagraphs.join('\n\n');
- const wrap=document.createElement('div');
- const title=document.createElement('p');title.textContent='Expanded draft';wrap.appendChild(title);
- expandedParagraphs.forEach(p=>{const node=document.createElement('p');node.textContent=p;wrap.appendChild(node);});
- const note=document.createElement('p');note.className='note';note.textContent='Added '+added.length+' explanatory sentence(s) based on patterns in your writing. Read them carefully and remove anything that does not match what you mean.';wrap.appendChild(note);
- return {draft,html:wrap};
-}
-document.getElementById('check').onclick=()=>{
- const text=box.value.trim();
- if(!text){feedback.textContent='Add some writing to your draft first.';return;}
- renderFindings(review(text));
-};
-document.getElementById('expand').onclick=async()=>{
- const text=box.value.trim();
- if(!text){better.textContent='Add some writing to your draft first.';use.hidden=true;return;}
- const button=document.getElementById('expand');
- button.disabled=true;
- button.textContent='Expanding…';
- better.textContent='Working on a more developed version…';
- use.hidden=true;
- try{
-  if(AI_EXPAND_ENDPOINT){
-   expandedText=await expandWithAI(text);
-   const draft=document.createElement('p');
-   draft.textContent=expandedText;
-   better.replaceChildren(draft);
-  }else{
-   const result=expand(text);
-   expandedText=result.draft;
-   better.replaceChildren(result.html);
-   const note=document.createElement('p');
-   note.className='note';
-   note.textContent='This is the local preview, not the AI version. The secure AI service has not been connected yet.';
-   better.appendChild(note);
-  }
-  use.hidden=false;
- }catch(error){
-  better.textContent=error.message || 'Something went wrong. Please try again.';
- }finally{
-  button.disabled=false;
-  button.textContent='Expand & enrich writing';
- }
-};
-use.onclick=()=>{if(expandedText){box.value=expandedText;words();box.focus();}};
-document.getElementById('clear').onclick=()=>{box.value='';words();feedback.textContent='Your review will appear here. Select “Check grammar & punctuation” to begin.';better.textContent='Your expanded writing will appear here after you select “Expand & enrich writing”.';expandedText='';use.hidden=true;};
-words();
-</script>
+<section class="panel">
+<h2>Topics to explore</h2>
+<div class="grid">
+<article class="topic"><h3>1. Queen Victoria and the monarchy</h3><p>Victoria became queen in 1837 and reigned until 1901. Explore her family, Prince Albert, royal public image, jubilees and the way the monarchy changed during a period of political reform.</p></article>
+<article class="topic"><h3>2. Social classes and inequality</h3><p>Study the upper, middle and working classes, wealth, housing, education and social mobility. Avoid assuming that every person in a class lived in exactly the same way.</p></article>
+<article class="topic"><h3>3. Homes and daily life</h3><p>Compare large town houses, rented rooms, cottages and overcrowded urban housing. Explore heating, lighting, water, furniture, cleaning, servants and the division of household work.</p></article>
+<article class="topic"><h3>4. Children and family life</h3><p>Look at childhood, family expectations, toys, clothing, work and the gradual spread of schooling. A child's experience depended strongly on family income, location and the period.</p></article>
+<article class="topic"><h3>5. Schools and education</h3><p>Explore lessons, attendance, school buildings, teachers, discipline and the growth of state-supported elementary education. The 1870 Education Act helped create board schools in England and Wales; compulsory attendance followed in 1880.</p></article>
+<article class="topic"><h3>6. Jobs, factories and mines</h3><p>Investigate mills, mines, workshops, docks, shops, offices, farms and domestic service. Industrial growth created new jobs but often involved long hours, dangerous conditions and low pay.</p></article>
+<article class="topic"><h3>7. Child labour and reform</h3><p>Some children worked in factories, mines, farms and as street sellers or domestic workers. Campaigns and laws gradually restricted some forms of child labour, although enforcement and conditions varied.</p></article>
+<article class="topic"><h3>8. Cities, housing and pollution</h3><p>Rapid urban growth placed pressure on housing, clean water and waste removal. Study crowded streets, smoke, rivers, public parks, sewers and the campaigns that improved public health.</p></article>
+<article class="topic"><h3>9. Food, shopping and clothing</h3><p>Explore what people ate, food preservation, markets, shops, imported goods and changing fashions. Clothes depended on income, occupation, age, gender and the decade; there was no single Victorian outfit.</p></article>
+<article class="topic"><h3>10. Transport and communication</h3><p>Railways transformed travel and the movement of goods. Canals, horse-drawn vehicles and ships remained important. The telegraph and later telephone changed how quickly messages could travel.</p></article>
+<article class="topic"><h3>11. Inventions, science and technology</h3><p>Explore steam power, photography, sewing machines, electric lighting, telegraphy, engineering and scientific debate. Some technologies began before Victoria's reign but spread or developed rapidly during it.</p></article>
+<article class="topic"><h3>12. Medicine and public health</h3><p>Learn about cholera, tuberculosis, sanitation, clean water, hospitals, anaesthesia, antiseptic surgery and changing ideas about germs. Medical knowledge developed unevenly and many diseases remained dangerous.</p></article>
+<article class="topic"><h3>13. Women, rights and reform</h3><p>Explore women's work, property rights, education, campaigning and changing expectations. The Married Women's Property Acts of 1870 and 1882 changed aspects of married women's legal and financial rights in England and Wales.</p></article>
+<article class="topic"><h3>14. The British Empire and the wider world</h3><p>Britain's empire connected people, trade and territories across the world. Study how imperial power created wealth for some and involved conquest, exploitation, racism and resistance. Include the viewpoints of people in colonised societies, not only British officials.</p></article>
+<article class="topic"><h3>15. Ireland in the Victorian period</h3><p>Ireland was part of the United Kingdom during Victoria's reign. Explore the Great Famine of the 1840s and early 1850s, emigration, land, poverty, political movements and the different experiences of rural and urban communities.</p></article>
+<article class="topic"><h3>16. Religion and beliefs</h3><p>Religion shaped family life, education, charity, politics and debates about science. Britain and Ireland included many Christian traditions and other faith communities, with different beliefs and experiences.</p></article>
+<article class="topic"><h3>17. Entertainment, sport and leisure</h3><p>Explore music halls, theatres, fairs, seaside holidays, parks, public gardens, football, cricket, cycling, reading and popular newspapers. Leisure opportunities depended on time, money and where people lived.</p></article>
+<article class="topic"><h3>18. Books, art and architecture</h3><p>Study writers such as Charles Dickens, the Brontë sisters, George Eliot, Lewis Carroll, Thomas Hardy and Oscar Wilde, alongside art, photography, Gothic Revival buildings and changing ideas about design.</p></article>
+<article class="topic"><h3>19. Politics, protest and social change</h3><p>Explore voting reforms, trade unions, campaigns for better working conditions, public health laws, education reform and movements for women's rights. Change was debated and often took years of campaigning.</p></article>
+<article class="topic"><h3>20. Crime, policing and prisons</h3><p>Look at the development of professional policing, courts, prisons, public debate about poverty and crime, and how newspapers shaped popular fears. Be careful to distinguish documented evidence from sensational stories.</p></article>
+</div>
+</section>
+
+<section class="panel">
+<h2>A quick timeline</h2>
+<div class="timeline">
+<div class="event"><div class="year">1837</div><p>Victoria becomes queen. The Victorian period begins.</p></div>
+<div class="event"><div class="year">1840</div><p>The Uniform Penny Post begins in Great Britain, making prepaid letter postage much more affordable.</p></div>
+<div class="event"><div class="year">1845–52</div><p>The Great Famine in Ireland causes mass death and emigration. Potato blight was central, while political and economic conditions made the disaster worse.</p></div>
+<div class="event"><div class="year">1851</div><p>The Great Exhibition opens in the Crystal Palace in London, displaying products, inventions and design from Britain and around the world.</p></div>
+<div class="event"><div class="year">1854</div><p>During a cholera outbreak in Soho, London, John Snow's investigation helps demonstrate the importance of contaminated water in disease transmission.</p></div>
+<div class="event"><div class="year">1858</div><p>The hot summer and polluted River Thames contribute to the event known as the Great Stink, increasing pressure for major sewer improvements in London.</p></div>
+<div class="event"><div class="year">1863</div><p>The Metropolitan Railway opens in London, often described as the world's first underground passenger railway.</p></div>
+<div class="event"><div class="year">1870</div><p>The Education Act establishes a framework for board schools in England and Wales where existing schooling is insufficient.</p></div>
+<div class="event"><div class="year">1880</div><p>Elementary school attendance becomes compulsory for children in England and Wales, with exemptions and enforcement changing over time.</p></div>
+<div class="event"><div class="year">1897</div><p>Victoria's Diamond Jubilee marks 60 years on the throne.</p></div>
+<div class="event"><div class="year">1901</div><p>Queen Victoria dies. Her reign ends and the Victorian period closes.</p></div>
+</div>
+<p class="note">This is a short guide, not a complete timeline. Some laws applied differently across England, Wales, Scotland and Ireland, so check the location and date when writing about a particular event.</p>
+</section>
+
+<section class="panel">
+<h2>Trusted websites and archives</h2>
+<p>These institutions provide useful introductions, historical documents, museum objects and teaching resources. Open the original source when you need to check a detail or find evidence for an assignment.</p>
+<div class="sources">
+<div class="source"><strong>English Heritage — Victorian England</strong><p>An overview of the era, with pages on daily life, food and health, architecture, politics, religion and commerce.</p><a href="https://www.english-heritage.org.uk/learn/story-of-england/victorian/" target="_blank" rel="noopener">Explore Victorian England ↗</a></div>
+<div class="source"><strong>English Heritage — Teaching the Victorians</strong><p>Learning guidance and activities, including the importance of studying different social experiences and the British Empire.</p><a href="https://www.english-heritage.org.uk/learn/teaching-resources/teaching-history/teaching-victorians/" target="_blank" rel="noopener">Open teaching resources ↗</a></div>
+<div class="source"><strong>The National Archives — Victorian Lives</strong><p>Primary-source documents, photographs, transcripts and activities about people who lived in Victorian times.</p><a href="https://www.nationalarchives.gov.uk/education/resources/victorian-lives/" target="_blank" rel="noopener">Explore original records ↗</a></div>
+<div class="source"><strong>Historical Association — Victorian Britain</strong><p>A broad reference guide covering industrialisation, social reform, the Empire and the changing population.</p><a href="https://www.history.org.uk/primary/resource/3871/victorian-britain-a-brief-history" target="_blank" rel="noopener">Read the history guide ↗</a></div>
+<div class="source"><strong>London Museum — Life in Victorian London</strong><p>Explore city life, infrastructure, healthcare, politics, entertainment and the experiences of Londoners.</p><a href="https://www.londonmuseum.org.uk/collections/london-stories/life-in-victorian-london/" target="_blank" rel="noopener">Discover Victorian London ↗</a></div>
+<div class="source"><strong>Victoria and Albert Museum — Victorian fashion</strong><p>Explore surviving clothing and how styles changed, including corsets, crinolines and bustles.</p><a href="https://www.vam.ac.uk/articles/corsets-crinolines-and-bustles-fashionable-victorian-underwear" target="_blank" rel="noopener">Explore clothing history ↗</a></div>
+<div class="source"><strong>English Heritage — Victorian inventions</strong><p>Find out about important developments in science, technology, industry and social reform.</p><a href="https://www.english-heritage.org.uk/visit/inspire-me/victorian-inventions/" target="_blank" rel="noopener">Explore inventions ↗</a></div>
+<div class="source"><strong>British Library — Discovering Literature</strong><p>Literary resources and expert interpretation, including writers such as Dickens and the Brontës. The Library notes that some resources remain limited.</p><a href="https://www.bl.uk/about/learn/learning-resources/about-discovering-literature" target="_blank" rel="noopener">Explore literature resources ↗</a></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>How to use this with Viccy</h2>
+<p>Try a focused prompt such as “Write a paragraph about a Victorian school day”, “Explain why railways changed Victorian Britain”, or “Compare the life of a rich child and a poor child”. For stronger history writing, include a date, place, person or piece of evidence, then explain why it matters.</p>
+<div class="callout"><strong>Accuracy reminder:</strong> Viccy's AI connection is prepared in the project but is not live until an adult-managed server is deployed and connected. The links above are research sources for you to open. The current website does not automatically read those pages or verify facts in real time. Always check important details against the original source.</div>
+</section>
+</main>
+<footer>VictorianHelper · A guide to the Victorian world</footer>
 </body>
 </html>
