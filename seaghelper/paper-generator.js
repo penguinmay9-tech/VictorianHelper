@@ -19,21 +19,21 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
   const key=value=>{
    const v=String(value).trim().toLowerCase();
-   const f=v.match(/^(-?\\d+)\\s*\\/\\s*(\\d+)$/);
+   const f=v.match(/^(-?\d+)\s*\/\s*(\d+)$/);
    if(f){const n=Number(f[1]),d=Number(f[2]);if(d!==0){const g=gcd(n,d);return "fraction:"+n/g+"/"+d/g;}}
-   return v.replace(/\\s+/g," ");
+   return v.replace(/\s+/g," ");
   };
   const options=[],keys=new Set();
-  const add=value=>{const v=String(value).trim(),k=key(v);if(v&& !keys.has(k)&&options.length<5){options.push(v);keys.add(k);}};
+  const add=value=>{const v=String(value).trim(),k=key(v);if(v&&!keys.has(k)&&options.length<5){options.push(v);keys.add(k);}};
   add(answer);
   for(const value of distractors)add(value);
   if(options.length<5){
-   const fraction=answer.match(/^(-?\\d+)\\/(\\d+)$/);
+   const fraction=answer.match(/^(-?\d+)\/(\d+)$/);
    if(fraction){
     const n=Number(fraction[1]),d=Number(fraction[2]);
     for(const [nn,dd] of [[n+1,d],[Math.max(0,n-1),d],[n,d+1],[n+1,d+1],[Math.max(0,n-1),d+1],[n,d+2],[n+2,d],[n+2,d+1]])if(dd>0)add(nn+"/"+dd);
    }else{
-    const numeric=answer.match(/^([£$]?)(-?\\d+(?:\\.\\d+)?)(.*)$/);
+    const numeric=answer.match(/^([£$]?)(-?\d+(?:\.\d+)?)(.*)$/);
     if(numeric){
      const prefix=numeric[1],value=Number(numeric[2]),suffix=numeric[3];
      const decimals=(numeric[2].split(".")[1]||"").length;
