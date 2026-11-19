@@ -191,7 +191,28 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   ()=>{const name=pick(names),object=pick(["the old compass","the brass key","the folded map","the glass bottle"]);return mc("Punctuation","Which sentence correctly uses a singular possessive apostrophe?",[name+"'s "+object+" was placed in the cabinet.",name+"s' "+object+" was placed in the cabinet.",name+"' "+object+" was placed in the cabinet.",name+"s "+object+"' was placed in the cabinet.",name+"'s' "+object+" was placed in the cabinet."][0],[name+"s' "+object+" was placed in the cabinet.",name+"' "+object+" was placed in the cabinet.",name+"s "+object+"' was placed in the cabinet.",name+"'s' "+object+" was placed in the cabinet."],"Add apostrophe-s to a singular name to show possession.");},
   ()=>{const quote=pick(["The guide said","The notice explained","The letter stated","The witness replied"]);const words=pick(["“The path is closed.”","“The parcel has arrived.”","“The meeting begins at noon.”","“The lights are still on.”"]);return mc("Punctuation","Which sentence correctly punctuates a quotation after a reporting clause?",quote+" "+words,quote+" "+words.replace(".”","”.").replace("“",""),quote+" "+words.replace("”","")+" .",quote+": "+words,quote+"; "+words,quote+" "+words.replace("“","").replace("”","")+".","A direct quotation follows the reporting clause and its punctuation remains inside the speech marks.");}
  ];
- appendProgressive(punctuationBank,5);
+ // On Target-style punctuation exercise: four labelled parts, with N for no error.
+ // These are original practice sentences, not copied from any publisher's papers.
+ const punctuationExerciseBank=[
+  ()=>{const parts=["After the meeting,","the pupils returned","their books to the","library before going home."];const bad=["After the meeting","the pupils returned","their books to the","library before going home."];return labelledPunctuation(parts,bad,0,"A comma should follow the introductory phrase.");},
+  ()=>{const parts=["On Wednesday,","the visitors arrived","at the museum","before it opened."];const bad=["on Wednesday,","the visitors arrived","at the museum","before it opened."];return labelledPunctuation(parts,bad,0,"A sentence begins with a capital letter.");},
+  ()=>{const item=pick(["notebook","coat","lunchbox","bicycle","camera"]);const owner=pick(["Maya","Callum","Niamh","Rory","Sofia"]);const parts=[owner+"'s "+item,"was left beside","the entrance to","the exhibition."];const bad=[owner+"s "+item,"was left beside","the entrance to","the exhibition."];return labelledPunctuation(parts,bad,0,"A singular owner takes apostrophe-s.");},
+  ()=>{const parts=["“Please close the gate,”","said the caretaker","before the visitors","entered the garden."];const bad=["“Please close the gate”","said the caretaker","before the visitors","entered the garden."];return labelledPunctuation(parts,bad,0,"The comma belongs inside the closing speech mark when the reporting clause follows.");},
+  ()=>{const parts=["The rain had stopped,","so the match","continued on the","school field."];const bad=["The rain had stopped","so the match","continued on the","school field."];return labelledPunctuation(parts,bad,0,"A comma separates the two clauses joined by “so”.");},
+  ()=>{const parts=["Where did the class","leave the equipment","after the lesson?","Everyone waited quietly."];const bad=["Where did the class","leave the equipment","after the lesson.","Everyone waited quietly."];return labelledPunctuation(parts,bad,2,"A direct question ends with a question mark.");},
+  ()=>{const parts=["The bag contained a ruler,","a pencil,","an eraser and","a small notebook."];const bad=["The bag contained a ruler","a pencil,","an eraser and","a small notebook."];return labelledPunctuation(parts,bad,0,"Commas separate items in a list.");},
+  ()=>{const parts=["The children’s coats","were hanging beside","the door of","the assembly hall."];const bad=["The childrens coats","were hanging beside","the door of","the assembly hall."];return labelledPunctuation(parts,bad,0,"The apostrophe is needed in the plural possessive “children’s”.");},
+  ()=>{const parts=["Before the bell rang,","the teacher collected","the completed worksheets","from every desk."];const bad=["Before the bell rang","the teacher collected","the completed worksheets","from every desk."];return labelledPunctuation(parts,bad,0,"A comma follows the introductory clause.");},
+  ()=>{const parts=["The guide explained,","“The path is closed","until further notice.”","Everyone returned to the hall."];const bad=["The guide explained","“The path is closed","until further notice.”","Everyone returned to the hall."];return labelledPunctuation(parts,bad,0,"A comma separates the reporting clause from the direct speech.");}
+ ];
+ function labelledPunctuation(correctParts,badParts,errorIndex,explanation){
+  const hasError=rand()<0.8;
+  const shown=hasError?badParts:correctParts;
+  const label=hasError?String.fromCharCode(65+errorIndex):"N";
+  const sentence=shown.map((part,i)=>"("+String.fromCharCode(65+i)+") "+part).join(" ");
+  return mc("Punctuation","Read the sentence. Which labelled part has the punctuation mistake? Choose N if all four parts are correct."+String.fromCharCode(10,10)+sentence,label,["A","B","C","D","N"].filter(x=>x!==label),hasError?explanation:"All four labelled parts are correctly punctuated.");
+ }
+ appendProgressive(punctuationExerciseBank,5);
  const compMCBank=[
   ()=>mc("Comprehension","What was the main task the group had been asked to complete at "+place+"?",task,["repair a damaged vehicle","organise a sports tournament","build a new classroom","deliver letters to nearby houses"],"The opening paragraph explains the group's original task."),
   ()=>mc("Comprehension","Which object first caught "+name+"'s attention?",thing,["a torn flag","a broken watch","a wooden flute","a painted sign"],"The passage identifies the object that started the investigation."),
