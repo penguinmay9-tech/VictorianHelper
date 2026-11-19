@@ -490,7 +490,7 @@ function finish(timeUp){
  $("correctCount").textContent=score.toFixed(score%1?1:0);
  $("reviewCount").textContent=questions.length-marked;
  $("timeUsed").textContent=Math.floor(elapsed/60)+"m "+(elapsed%60)+"s";
- $("resultMessage").textContent=timeUp?"Time is up. You completed the questions you reached.": (mode==="full"?"You completed Set "+selectedSet+", Level "+selectedLevel+", Paper 5. ":"You completed ")+questions.length+" original practice questions. Every attempt helps you learn.;
+ $("resultMessage").textContent=timeUp?"Time is up. You completed the questions you reached.": (mode==="full"?"You completed Set "+selectedSet+", Level "+selectedLevel+", Paper 5. ":"You completed ")+questions.length+" original practice questions. Every attempt helps you learn.";
  const list=$("reviewList");list.replaceChildren();
  questions.forEach((q,i)=>{
   const item=document.createElement("article");item.className="review-item";
