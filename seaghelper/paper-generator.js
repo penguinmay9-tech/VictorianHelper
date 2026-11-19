@@ -45,7 +45,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   const layout=spellingLayouts[hasError?errorIndex:int(0,3)];
   const sentence=layout.map((part,j)=>String.fromCharCode(65+j)+": "+part.replace("WORD",word)).join(" ");
   const correctLabel=errorIndex<0?"N":String.fromCharCode(65+errorIndex);
-  qs.push(mc("Spelling","Read the one sentence, which is split into four parts. Which part (A, B, C or D) contains a spelling mistake? Choose N if the whole sentence is correct.\\n\\n"+sentence,correctLabel,["A","B","C","D","N"].filter(x=>x!==correctLabel),"Read the whole sentence. Choose the letter of the section containing the spelling error, or N if every word is spelt correctly."));
+  qs.push(mc("Spelling","Read the one sentence, which is split into four parts. Which part (A, B, C or D) contains a spelling mistake? Choose N if the whole sentence is correct.\n\n"+sentence,correctLabel,["A","B","C","D","N"].filter(x=>x!==correctLabel),"Read the whole sentence. Choose the letter of the section containing the spelling error, or N if every word is spelt correctly."));
  }
  const grammar=[
  ()=>mc("Grammar","Choose the verb that completes the sentence: “"+pick(["Each visitor","Neither runner","Every member","The collection of maps"])+" ___ ready to begin.”","is",["are","have","were","be"],"The subject is singular, so the singular verb is required."),
