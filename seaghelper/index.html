@@ -20,11 +20,11 @@ a:hover{text-decoration:underline}
 button,input{font:inherit}
 button{cursor:pointer}
 header{background:var(--navy);color:white}
-.nav{max-width:1160px;margin:auto;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.nav{max-width:1160px;margin:auto;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:11px;font-size:20px;font-weight:850;letter-spacing:-.6px}
 .brand-mark{width:37px;height:37px;border-radius:12px;background:linear-gradient(135deg,#7988ef,#4e61d2);display:grid;place-items:center;font-size:18px;box-shadow:0 5px 14px #101b40}
 .brand span{color:#aebaff}
-.nav-note{font-size:12px;color:#d4daf0}
+.nav-note{font-size:12px;color:#d4daf0;display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;text-align:right}.patterns-link{display:inline-block;background:#fff;color:#26345f!important;padding:9px 13px;border-radius:9px;font-size:12px;font-weight:900;text-decoration:none!important;box-shadow:0 3px 10px #101b4033;white-space:nowrap}.patterns-link:hover{background:#e9edff}
 main{max-width:1160px;margin:0 auto;padding:0 25px 65px}
 .hero{padding:46px 0 25px}
 .eyebrow{color:var(--blue);font-size:11px;letter-spacing:1.6px;font-weight:850;text-transform:uppercase}
@@ -145,7 +145,7 @@ main{max-width:1040px}.hero{padding:36px 0 22px}.eyebrow{letter-spacing:1.1px;co
 <header>
  <div class="nav">
   <div class="brand"><div class="brand-mark">S</div><div>Seag<span>Helper</span></div></div>
-  <div class="nav-note">Your friendly SEAG practice space · Primary 7 <span style="color:#8290b5;padding:0 7px">|</span><a href="./patterns.html" style="color:#fff;font-weight:800;text-decoration:underline;text-underline-offset:3px">2023–2025 question patterns ↗</a></div>
+  <div class="nav-note">Your friendly SEAG practice space · Primary 7 <span style="color:#8290b5;padding:0 7px">|</span><a class="patterns-link" href="./patterns.html">2023–2025 QUESTION PATTERNS ↗</a></div>
  </div>
 </header>
 <main>
