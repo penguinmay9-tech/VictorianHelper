@@ -58,6 +58,60 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   return C(section,text,opts,opts.indexOf(answer),explanation);
  };
  const WQ=(section,text,model,notes)=>W(section,text,model,notes);
+
+ // The very first practice paper is a gentle starter: short reading, basic English and small-number Maths.
+ if(setNo===1&&levelNo===1&&paperNo===1){
+  const easyPassage={title:"A Day in the Park",text:"On Saturday, Mia went to the park with her dad. She took a red ball and a small picnic. The sun was shining, and lots of children were playing. Mia saw her friend Ben near the swings. They played catch for a while.\n\nLater, Mia and Ben sat under a tree to eat their sandwiches. Mia shared an apple with Ben. Before going home, they put their rubbish in the bin. Mia had a happy day at the park."};
+  const easyQs=[];
+  const addEasy=(section,prompt,answer,wrong,why)=>easyQs.push(mc(section,prompt,answer,wrong,why));
+  const easyWords=[["because","becaus"],["friend","freind"],["school","scool"],["little","littel"],["people","peaple"]];
+  easyWords.forEach((pair,i)=>addEasy("Spelling","Which word is spelt correctly?",pair[0],[pair[1],"frend","peple","litle"],"The correct spelling is "+pair[0]+"."));
+  addEasy("Grammar","Choose the correct word: “I ___ happy.”","am",["is","are","be","were"],"Use “am” with “I”.");
+  addEasy("Grammar","Choose the correct plural of “dog”.","dogs",["doges","dog's","dogies","dog"],"Add -s to make most nouns plural.");
+  addEasy("Grammar","Which word is the verb in this sentence: “Sam runs fast.”?","runs",["Sam","fast","the","quick"],"“Runs” tells us what Sam does.");
+  addEasy("Grammar","Choose the correct word: “She ___ a red ball.”","has",["have","having","are","were"],"Use “has” with “she”.");
+  addEasy("Grammar","Which word describes the apple in “the red apple”?","red",["the","apple","and","is"],"An adjective describes a noun.");
+  addEasy("Punctuation","Which sentence starts with a capital letter?","Mia went to the park.",["mia went to the park.","mia Went to the park.","Mia went to the park","mia went to the Park."],"A sentence begins with a capital letter.");
+  addEasy("Punctuation","Which sentence ends correctly?","Ben has a ball.",["Ben has a ball","Ben has a ball,","Ben has a ball?","Ben has a ball,"],"A statement usually ends with a full stop.");
+  addEasy("Punctuation","Which sentence uses a question mark correctly?","Where is my bag?",["Where is my bag.","Where is my bag,","Where is my bag!","Where is my bag"],"A direct question ends with a question mark.");
+  addEasy("Punctuation","Choose the correctly punctuated sentence.","I like apples, pears and bananas.",["I like apples pears and bananas.","I like apples, pears, and bananas","i like apples, pears and bananas.","I like apples pears, and bananas"],"Commas separate items in a list.");
+  addEasy("Punctuation","Which sentence uses an apostrophe correctly?","Tom's hat is blue.",["Toms' hat is blue.","Toms hat is blue.","Tom,s hat is blue.","Toms hat's is blue."],"An apostrophe shows that the hat belongs to Tom.");
+  const passageMC=[
+   ["Where did Mia go on Saturday?","the park",["the beach","the shop","the library","the farm"]],
+   ["Who went with Mia?","her dad",["her mum","her teacher","Ben's dad","her sister"]],
+   ["What colour was the ball?","red",["blue","green","yellow","black"]],
+   ["Who did Mia see near the swings?","Ben",["Sam","her teacher","her brother","the coach"]],
+   ["What did Mia share with Ben?","an apple",["a cake","a drink","a banana","a biscuit"]],
+   ["Where did they sit to eat?","under a tree",["on the swings","by the gate","in the car","inside a shop"]],
+   ["What did they do with their rubbish?","put it in the bin",["left it on the grass","took it home","hid it under a tree","gave it to a friend"]]
+  ];
+  passageMC.forEach(x=>addEasy("Comprehension",x[0],x[1],x[2],"Look back at the passage to find the answer."));
+  const passageWritten=[
+   ["What did Mia take to the park?","Mia took a red ball and a small picnic."],
+   ["Name one thing the children did together.","They played catch together."],
+   ["What did Mia and Ben eat?","They ate their sandwiches."],
+   ["What was the weather like?","The sun was shining."],
+   ["How did Mia help Ben?","She shared an apple with him."],
+   ["Give one reason why Mia had a happy day.","She played with her friend and enjoyed the picnic."]
+  ];
+  passageWritten.forEach(x=>easyQs.push(WQ("Comprehension",x[0],x[1],"Use a detail from the passage.")));
+  const easyMath=[
+   ["What is 3 + 4?",7,[2,5,9,12]],["What is 9 - 5?",4,[1,2,7,10]],["What is 2 × 3?",6,[3,5,8,12]],["What is 8 ÷ 2?",4,[1,2,6,8]],
+   ["What is 10 + 5?",15,[5,10,12,20]],["What is 14 - 6?",8,[4,6,10,12]],["What is 5 × 2?",10,[2,5,8,15]],["What is 12 ÷ 3?",4,[2,3,6,9]],
+   ["What is half of 10?",5,[2,4,8,10]],["What is a quarter of 8?",2,[1,3,4,6]],["How many centimetres are in 1 metre?",100,[10,20,50,1000]],
+   ["How many sides does a triangle have?",3,[2,4,5,6]],["How many minutes are in half an hour?",30,[10,15,20,60]],["What is £1 + 50p?", "£1.50",["£1.05","£1.10","£1.25","£2.00"]],
+   ["What number comes after 39?",40,[30,38,41,49]],["Which is the largest number?", "9",["3","5","7","8"]],
+   ["What is 6 + 6?",12,[6,10,14,18]],["What is 15 - 5?",10,[5,8,12,20]],["What is 4 × 2?",8,[4,6,10,12]],
+   ["How many days are in one week?",7,[5,6,8,10]],["What is 20 ÷ 5?",4,[2,3,5,10]],["What is double 6?",12,[3,6,10,18]]
+  ];
+  easyMath.forEach(x=>addEasy("Number",x[0],x[1],x[2],"Work it out carefully using a simple number fact."));
+  const easyWritten=[
+   ["Work out 6 + 3.","9"],["Work out 10 - 4.","6"],["Work out 3 × 2.","6"],["Work out 12 ÷ 3.","4"],["Find half of 8.","4"],["A pencil costs 20p. How much do 2 pencils cost?","40p"]
+  ];
+  easyWritten.forEach(x=>easyQs.push(WQ("Number",x[0],x[1],"Show a simple calculation.")));
+  if(easyQs.length!==56)throw new Error("Easy starter paper has "+easyQs.length+" questions, not 56.");
+  return {passage:easyPassage,questions:easyQs};
+ }
  const spellings=[
  ["accommodate","accomodate","accommadate","acommodate","accommmodate"],["conscience","concience","consciense","conshience","conscince"],["rhythm","rythm","rhythym","rithm","rythem"],["embarrass","embarass","embarras","embarrase","embarras"],["definitely","definately","definitly","definatly","definetely"],["occasion","ocassion","ocasion","occassion","occaission"],["recommend","recomend","reccommend","recommened","recomend"],["opportunity","oportunity","oppurtunity","oppertunity","opportunety"],["familiar","familliar","familier","familar","fammiliar"],["persuade","perswade","persuede","persuad","perswaid"],["ancient","auncient","anciante","ancent","aincient"],["knowledge","knowlege","knowlidge","knowladge","knowledg"],["temperature","temprature","tempereture","temparature","temprerature"],["cemetery","cemetary","cemetry","cemeterey","cemetary"],["immediately","immediatly","imediately","immedietely","immediatley"],["excellent","exellent","excellant","excelent","excelllent"],["disappear","dissapear","disapear","dissappear","disappeer"],["particular","particuler","particullar","particualr","particuler"],["restaurant","restaraunt","resturant","resteraunt","restaurent"],["language","langauge","languge","langwage","langauge"],["separate","seperate","seperete","separrate","seperrate"],["business","buisness","bussiness","busines","buisines"],["necessary","neccessary","necesary","necessery","nessesary"],["environment","enviroment","environmant","envirronment","enviroment"],["privilege","privilage","priviledge","privlege","privillage"],["exaggerate","exagerate","exaggerrate","exagerrate","exaggerete"],["convenient","conveinient","convinient","conveniant","convenent"],["sincerely","sincerly","sincerley","sincirly","sincereley"],["maintenance","maintainance","maintenence","maintanance","maintenanse"],["independent","independant","independet","independant","independant"]
  ];
