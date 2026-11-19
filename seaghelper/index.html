@@ -526,8 +526,8 @@ function finish(timeUp){
   if(q.kind==="mc")your.textContent="Your answer: "+(answers[i]===undefined?"Not answered":q.options[answers[i]])+".";
   else your.textContent="Your answer: "+(answers[i]||"Not answered")+".";
   const correct=document.createElement("p");correct.className="answer";
-  if(q.kind==="mc")correct.textContent="Correct answer: "+q.options[q.correct]+". "+q.explanation;
-  else if(q.kind==="number")correct.textContent="Model answer: "+q.model+". "+q.explanation;
+  if(q.kind==="mc")correct.textContent="Correct answer: "+q.options[q.correct]+".";
+  else if(q.kind==="number")correct.textContent="Correct answer: "+q.model+".";
   else correct.textContent="Example answer: "+q.model;
   item.append(title,your,correct);list.appendChild(item);
  });
