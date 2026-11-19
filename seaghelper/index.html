@@ -275,11 +275,11 @@ const english = [
  C("Grammar","Choose the correct tense: “By the time we arrived, the film ___.”",["starts","has started","had started","will start","starting"],2,"The film started before the later past event, so the past perfect “had started” fits."),
  C("Grammar","Which sentence is grammatically correct?",["Me and Sam were early.","Sam and I were early.","Sam and me was early.","I and Sam was early.","Me and Sam was early."],1,"“Sam and I” is the correct subject form."),
  C("Grammar","Choose the best conjunction: “You may borrow the book ___ you return it on Friday.”",["unless","although","provided that","despite","whereas"],2,"“Provided that” means on the condition that."),
- C("Spelling","Choose the correctly spelt word.",["neccessary","necessary","necesary","necessery","neccesary"],1,"The correct spelling is necessary: one c and two s letters."),
- C("Spelling","Choose the correctly spelt word.",["seperate","separrate","separate","seperete","seperrate"],2,"The correct spelling is separate."),
- C("Spelling","Choose the correctly spelt word.",["accomodation","acommodation","accommodation","accommadation","accomadation"],2,"Accommodation has double c and double m."),
- C("Spelling","Choose the correctly spelt word.",["privilege","privilage","priviledge","privlege","privillage"],0,"The correct spelling is privilege."),
- C("Spelling","Choose the correctly spelt word.",["environment","enviroment","environmant","envirronment","environement"],0,"The correct spelling is environment.")
+ Object.assign(C("Spelling","Read the sentence. Which labelled word is spelt incorrectly? Choose N if all four are correct.",["A","B","C","D","N"],1,"“Necessary” is the correct spelling."),{context:"The teacher said it was (A) necesary to (B) organise the (C) equipment before the (D) lesson."}),
+ Object.assign(C("Spelling","Read the sentence. Which labelled word is spelt incorrectly? Choose N if all four are correct.",["A","B","C","D","N"],2,"“Separate” is the correct spelling."),{context:"Please keep the (A) library books (B) seperate from the (C) sports equipment (D) today."}),
+ Object.assign(C("Spelling","Read the sentence. Which labelled word is spelt incorrectly? Choose N if all four are correct.",["A","B","C","D","N"],0,"“Accommodation” has double c and double m."),{context:"Our (A) acommodation was close to the (B) station, so the (C) journey was (D) shorter."}),
+ Object.assign(C("Spelling","Read the sentence. Which labelled word is spelt incorrectly? Choose N if all four are correct.",["A","B","C","D","N"],3,"“Privilege” is the correct spelling."),{context:"It was a (A) privilege to (B) represent the (C) school at the (D) ceremoney."}),
+ Object.assign(C("Spelling","Read the sentence. Which labelled word is spelt incorrectly? Choose N if all four are correct.",["A","B","C","D","N"],4,"All four labelled words are spelt correctly."),{context:"The (A) environment can (B) change when people (C) protect local (D) wildlife."})
 ];
 const maths = [
  C("Number","What is 480 + 275?",["745","755","765","775","785"],1,"480 + 200 = 680, then 75 more makes 755."),
@@ -414,11 +414,7 @@ function renderQuestion(){
  }else{passageBox.classList.add("hidden");passageBox.replaceChildren();}
  const area=$("answerArea");area.replaceChildren();
  if(q.kind==="mc"){
-  if(q.section==="Spelling"){
-   const correctOption=q.options[q.correct];
-   q.options=["A","B","C","D","N"];
-   q.correct=q.options.indexOf(correctOption);
-  }
+
   const list=document.createElement("div");list.className="options"+(q.section==="Spelling"?" spelling-options":"");
   q.options.forEach((option,index)=>{
    const b=document.createElement("button");b.type="button";b.className="option"+(q.section==="Spelling"?" spelling-option":"");
