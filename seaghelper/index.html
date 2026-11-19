@@ -351,7 +351,9 @@ function begin(which){
  }else{
   const mc=shuffledQuestions(comprehension.filter(q=>q.kind==="mc"));
   const written=shuffledQuestions(comprehension.filter(q=>q.kind==="written"));
-  questions=orderedEnglish().concat(mc,written,shuffledQuestions(maths));
+  const mockEnglishOrder=["Spelling","Grammar","Punctuation"];
+  const orderedSkills=mockEnglishOrder.flatMap(section=>shuffledQuestions(english.filter(q=>q.section===section)));
+  questions=orderedSkills.concat(mc,written,shuffledQuestions(maths));
  }
  startedAt=Date.now();secondsLeft=3600;
  homeView.style.display="none";resultView.style.display="none";quizView.style.display="block";
@@ -382,7 +384,9 @@ function renderQuestion(){
  if(isComp){
   passageBox.classList.remove("hidden");
   passageBox.innerHTML="<h3>Read the passage carefully</h3>";
-  const p=document.createElement("div");p.textContent=currentPassage.text;passageBox.appendChild(p);
+  const p=document.createElement("div");
+  p.textContent=currentPassage.text.replace(/\\n/g,"\n");
+  passageBox.appendChild(p);
   if(current===0){const t=document.createElement("div");t.style.fontWeight="800";t.style.marginTop="10px";t.textContent=currentPassage.title;passageBox.insertBefore(t,passageBox.children[1]);}
  }else{passageBox.classList.add("hidden");passageBox.replaceChildren();}
  const area=$("answerArea");area.replaceChildren();
