@@ -19,8 +19,27 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  const spellings=[
  ["accommodate","accomodate","accommadate","acommodate","accommmodate"],["conscience","concience","consciense","conshience","conscince"],["rhythm","rythm","rhythym","rithm","rythem"],["embarrass","embarass","embarras","embarrase","embarras"],["definitely","definately","definitly","definatly","definetely"],["occasion","ocassion","ocasion","occassion","occaission"],["recommend","recomend","reccommend","recommened","recomend"],["opportunity","oportunity","oppurtunity","oppertunity","opportunety"],["familiar","familliar","familier","familar","fammiliar"],["persuade","perswade","persuede","persuad","perswaid"],["ancient","auncient","anciante","ancent","aincient"],["knowledge","knowlege","knowlidge","knowladge","knowledg"],["temperature","temprature","tempereture","temparature","temprerature"],["cemetery","cemetary","cemetry","cemeterey","cemetary"],["immediately","immediatly","imediately","immedietely","immediatley"],["excellent","exellent","excellant","excelent","excelllent"],["disappear","dissapear","disapear","dissappear","disappeer"],["particular","particuler","particullar","particualr","particuler"],["restaurant","restaraunt","resturant","resteraunt","restaurent"],["language","langauge","languge","langwage","langauge"],["separate","seperate","seperete","separrate","seperrate"],["business","buisness","bussiness","busines","buisines"],["necessary","neccessary","necesary","necessery","nessesary"],["environment","enviroment","environmant","envirronment","enviroment"],["privilege","privilage","priviledge","privlege","privillage"],["exaggerate","exagerate","exaggerrate","exagerrate","exaggerete"],["convenient","conveinient","convinient","conveniant","convenent"],["sincerely","sincerly","sincerley","sincirly","sincereley"],["maintenance","maintainance","maintenence","maintanance","maintenanse"],["independent","independant","independet","independant","independant"]
  ];
- const spellFrames=["The report described the discovery as ________.","The teacher asked everyone to spell ________ correctly.","The notice explained that ________ was required.","The team checked the spelling of ________.","The final paragraph included the word ________."];
- for(let i=0;i<5;i++){const row=pick(spellings);qs.push(mc("Spelling",pick(spellFrames)+" Choose the correctly spelt word.",row[0],row.slice(1),"The correct spelling is "+row[0]+". Check the order and number of letters carefully."));}
+ const spellingFrames=[
+  word=>"The writer checked the spelling of '"+word+"' before handing in the report.",
+  word=>"The word '"+word+"' appeared in the final paragraph of the article.",
+  word=>"The teacher asked the class to use the word '"+word+"' in a sentence.",
+  word=>"A note in the visitor's notebook contained the word '"+word+"'.",
+  word=>"The editor noticed that the word '"+word+"' had been included in the document.",
+  word=>"During the lesson, the pupils discussed the meaning of '"+word+"'.",
+  word=>"The word '"+word+"' was copied carefully onto the display board.",
+  word=>"The report used the word '"+word+"' when describing the discovery."
+ ];
+ for(let i=0;i<5;i++){
+  const chosen=mix(spellings).slice(0,4);
+  const hasError=rand()<0.8;
+  const errorIndex=hasError?int(0,3):-1;
+  const sentenceLines=chosen.map((row,j)=>{
+   const variant=errorIndex===j?pick(row.slice(1)):row[0];
+   return String.fromCharCode(65+j)+". "+pick(spellingFrames)(variant);
+  });
+  const correctLabel=errorIndex<0?"N":String.fromCharCode(65+errorIndex);
+  qs.push(mc("Spelling","Read sentences A–D. Which sentence contains a spelling mistake? Choose A, B, C or D. If all four sentences are spelt correctly, choose N.\n\n"+sentenceLines.join("\n"),correctLabel,["A","B","C","D","N"].filter(x=>x!==correctLabel),"Read all four sentences carefully. Select the letter of the sentence with the spelling error, or N if none contains an error."));
+ }
  const grammar=[
  ()=>mc("Grammar","Choose the verb that completes the sentence: “"+pick(["Each visitor","Neither runner","Every member","The collection of maps"])+" ___ ready to begin.”","is",["are","have","were","be"],"The subject is singular, so the singular verb is required."),
  ()=>mc("Grammar","Choose the correct pronoun: “"+name+" and ___ completed the task together.”","I",["me","my","mine","myself"],"The pronoun is part of the subject, so “I” is correct."),
