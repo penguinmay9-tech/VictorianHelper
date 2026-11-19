@@ -341,7 +341,11 @@ function saveHistory(record){
 }
 function begin(which, paperSet=selectedSet, paperLevel=selectedLevel, paperNumber=selectedPaper){
  mode=which;selectedSet=paperSet;selectedLevel=paperLevel;selectedPaper=paperNumber;current=0;answers={};checked={};finished=false;
- freshPassage();
+ if(which==="full"){
+  const generatedPaper=buildSeagPaper(selectedSet,selectedLevel,selectedPaper);
+  currentPassage=generatedPaper.passage;
+  questions=generatedPaper.questions;
+ }else freshPassage();
  if(which==="comp"){
   const mc=shuffledQuestions(comprehension.filter(q=>q.kind==="mc"));
   const written=shuffledQuestions(comprehension.filter(q=>q.kind==="written"));
@@ -350,12 +354,8 @@ function begin(which, paperSet=selectedSet, paperLevel=selectedLevel, paperNumbe
   questions=orderedEnglish();
  }else if(which==="maths"){
   questions=shuffledQuestions(maths);
- }else{
-  const mc=shuffledQuestions(comprehension.filter(q=>q.kind==="mc"));
-  const written=shuffledQuestions(comprehension.filter(q=>q.kind==="written"));
-  const mockEnglishOrder=["Spelling","Grammar","Punctuation"];
-  const orderedSkills=mockEnglishOrder.flatMap(section=>shuffledQuestions(english.filter(q=>q.section===section)));
-  questions=orderedSkills.concat(mc,written,shuffledQuestions(maths));
+ }else if(which!=="full"){
+  questions=[];
  }
  startedAt=Date.now();secondsLeft=3600;
  homeView.style.display="none";resultView.style.display="none";quizView.style.display="block";
@@ -506,7 +506,7 @@ function finish(timeUp){
  });
  updateHomeStats();window.scrollTo({top:0,behavior:"smooth"});
 }
-$("againBtn").addEventListener("click",()=>begin(mode));
+$("againBtn").addEventListener("click",()=>begin(mode,selectedSet,selectedLevel,selectedPaper));
 $("homeBtn").addEventListener("click",()=>{resultView.style.display="none";homeView.style.display="block";updateHomeStats();window.scrollTo({top:0,behavior:"smooth"});});
 document.querySelectorAll("[data-mode]").forEach(button=>button.addEventListener("click",()=>begin(button.dataset.mode)));
 const paperSet=$("paperSet"),paperLevel=$("paperLevel"),paperNumber=$("paperNumber"),startPaper=$("startPaper");
@@ -516,5 +516,6 @@ startPaper.addEventListener("click",()=>begin("full",Number(paperSet.value),Numb
 updatePaperLabel();
 updateHomeStats();
 </script>
+<script src="paper-generator.js"></script>
 </body>
 </html>
