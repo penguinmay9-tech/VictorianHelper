@@ -134,6 +134,7 @@ footer{padding:24px;text-align:center;color:#8992a6;font-size:11px}
   <h1>Ready to build<br>your confidence?</h1>
   <p>Original SEAG-style practice. Questions are shuffled each session, and comprehension passages rotate. Work through explanations and see what to practise next.</p>
   <div class="hero-actions"><button class="btn btn-primary" data-mode="full">Start a 60-minute mock</button><button class="btn btn-light" data-mode="comp">Try comprehension</button></div>
+  <div class="card" style="margin-top:18px;max-width:620px"><h2>Choose your Paper 5</h2><p>Select a set and level. Higher sets and levels are intended to be more challenging.</p><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px"><label style="font-size:13px;font-weight:750">Set<select id="paperSet" class="answer-input" style="display:block;margin-top:5px"><option value="1">Set 1</option><option value="2">Set 2</option><option value="3">Set 3</option><option value="4">Set 4</option><option value="5">Set 5</option></select></label><label style="font-size:13px;font-weight:750">Level<select id="paperLevel" class="answer-input" style="display:block;margin-top:5px"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option></select></label></div><button class="btn btn-primary" id="startPaper5" style="margin-top:14px">Start Set 1 · Level 1 · Paper 5</button><p id="paperDifficultyNote" style="margin-top:9px">Paper 5 · 56 questions · 60 minutes</p></div>
  </div>
  <div class="grid">
   <article class="card mode-card">
@@ -318,6 +319,7 @@ function freshPassage(){
 const allEnglish = comprehension.concat(english);
 const fullSet = allEnglish.concat(maths);
 let mode="", questions=[], current=0, answers={}, checked={}, startedAt=0, secondsLeft=3600, timerId=null, finished=false;
+let selectedSet=1, selectedLevel=1;
 let mockStartSeconds=3600;
 const $ = id => document.getElementById(id);
 const homeView=$("homeView"), quizView=$("quizView"), resultView=$("resultView");
@@ -337,8 +339,8 @@ function saveHistory(record){
  const history=getHistory();history.push(record);
  try{localStorage.setItem("seaghelper_progress",JSON.stringify(history.slice(-30)));}catch(e){}
 }
-function begin(which){
- mode=which;current=0;answers={};checked={};finished=false;
+function begin(which, paperSet=selectedSet, paperLevel=selectedLevel){
+ mode=which;selectedSet=paperSet;selectedLevel=paperLevel;current=0;answers={};checked={};finished=false;
  freshPassage();
  if(which==="comp"){
   const mc=shuffledQuestions(comprehension.filter(q=>q.kind==="mc"));
@@ -357,8 +359,8 @@ function begin(which){
  }
  startedAt=Date.now();secondsLeft=3600;
  homeView.style.display="none";resultView.style.display="none";quizView.style.display="block";
- $("quizTitle").textContent=which==="comp"?"Comprehension practice":which==="english"?"English skills practice":which==="maths"?"Maths practice":"Full SEAG-style mock";
- $("quizSubtitle").textContent=which==="full"?"56 questions · 15 English skills, 13 comprehension and 28 Maths · 60 minutes":"Untimed practice · Check each answer as you go";
+ $("quizTitle").textContent=which==="comp"?"Comprehension practice":which==="english"?"English skills practice":which==="maths"?"Maths practice":"Set "+selectedSet+" · Level "+selectedLevel+" · Paper 5";
+ $("quizSubtitle").textContent=which==="full"?"56 questions · Spelling, grammar, punctuation, comprehension and Maths · 60 minutes · Level "+selectedLevel+" / 5":"Untimed practice · Check each answer as you go";
  $("timer").hidden=which!=="full";$("timer").classList.remove("warning");
  if(timerId){clearInterval(timerId);timerId=null;}
  if(which==="full"){
@@ -488,7 +490,7 @@ function finish(timeUp){
  $("correctCount").textContent=score.toFixed(score%1?1:0);
  $("reviewCount").textContent=questions.length-marked;
  $("timeUsed").textContent=Math.floor(elapsed/60)+"m "+(elapsed%60)+"s";
- $("resultMessage").textContent=timeUp?"Time is up. You completed the questions you reached.": "You completed "+questions.length+" original practice questions. Every attempt helps you learn.";
+ $("resultMessage").textContent=timeUp?"Time is up. You completed the questions you reached.": (mode==="full"?"You completed Set "+selectedSet+", Level "+selectedLevel+", Paper 5. ":"You completed ")+questions.length+" original practice questions. Every attempt helps you learn.;
  const list=$("reviewList");list.replaceChildren();
  questions.forEach((q,i)=>{
   const item=document.createElement("article");item.className="review-item";
@@ -507,6 +509,11 @@ function finish(timeUp){
 $("againBtn").addEventListener("click",()=>begin(mode));
 $("homeBtn").addEventListener("click",()=>{resultView.style.display="none";homeView.style.display="block";updateHomeStats();window.scrollTo({top:0,behavior:"smooth"});});
 document.querySelectorAll("[data-mode]").forEach(button=>button.addEventListener("click",()=>begin(button.dataset.mode)));
+const paperSet=$("paperSet"),paperLevel=$("paperLevel"),startPaper5=$("startPaper5");
+function updatePaperLabel(){selectedSet=Number(paperSet.value);selectedLevel=Number(paperLevel.value);startPaper5.textContent="Start Set "+selectedSet+" · Level "+selectedLevel+" · Paper 5";$("paperDifficultyNote").textContent="Paper 5 · 56 questions · 60 minutes · Challenge tier "+(selectedSet+selectedLevel-1)+" of 9";}
+paperSet.addEventListener("change",updatePaperLabel);paperLevel.addEventListener("change",updatePaperLabel);
+startPaper5.addEventListener("click",()=>begin("full",Number(paperSet.value),Number(paperLevel.value)));
+updatePaperLabel();
 updateHomeStats();
 </script>
 </body>
