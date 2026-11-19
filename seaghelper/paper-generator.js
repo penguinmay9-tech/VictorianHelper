@@ -30,10 +30,10 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   word=>"The report used the word '"+word+"' when describing the discovery."
  ];
  const spellingLayouts=[
-  ["The word \"WORD\" appeared","in the writer's report,","which the editor checked","before publication."],
-  ["The writer checked the spelling of","the word \"WORD\" before including it","in the report and","sending the final copy."],
-  ["The writer prepared the report,","then checked the word","\"WORD\" before sending","the final copy to the editor."],
-  ["The writer checked the report","before sending it to the editor","for a final review of","the word \"WORD\"."]
+  ["The word WORD appeared","in the writer's report,","which the editor checked","before publication."],
+  ["The writer checked the spelling of","the word WORD before including it","in the report and","sending the final copy."],
+  ["The writer prepared the report,","then checked the word","WORD before sending","the final copy to the editor."],
+  ["The writer checked the report","before sending it to the editor","for a final review of","the word WORD."]
  ];
  for(let i=0;i<5;i++){
   const row=pick(spellings);
