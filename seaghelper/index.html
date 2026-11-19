@@ -145,19 +145,19 @@ main{max-width:1040px}.hero{padding:36px 0 22px}.eyebrow{letter-spacing:1.1px;co
  <div class="hero">
   <div class="eyebrow">Practise little · improve lots</div>
   <h1>Ready to build<br>your confidence?</h1>
-  <p>Original SEAG-style practice. Questions are shuffled each session, and comprehension passages rotate. Work through explanations and see what to practise next.</p>
+  <p>Practise SEAG-style questions, get explanations and improve.</p>
   <div class="hero-actions"><button class="btn btn-primary" data-mode="full">Start a 60-minute mock</button><button class="btn btn-light" data-mode="comp">Try comprehension</button></div>
-  <div class="card" style="margin-top:18px;max-width:620px"><h2>Choose your practice paper</h2><p>Select a set, level and paper. Higher sets and levels are intended to be more challenging.</p><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px"><label style="font-size:13px;font-weight:750">Set<select id="paperSet" class="answer-input" style="display:block;margin-top:5px"><option value="1">Set 1</option><option value="2">Set 2</option><option value="3">Set 3</option><option value="4">Set 4</option><option value="5">Set 5</option></select></label><label style="font-size:13px;font-weight:750">Level<select id="paperLevel" class="answer-input" style="display:block;margin-top:5px"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option></select></label><label style="font-size:13px;font-weight:750">Paper<select id="paperNumber" class="answer-input" style="display:block;margin-top:5px"><option value="1">Paper 1</option><option value="2">Paper 2</option><option value="3">Paper 3</option><option value="4">Paper 4</option><option value="5">Paper 5</option></select></label></div><button class="btn btn-primary" id="startPaper" style="margin-top:14px">Start Set 1 · Level 1 · Paper 1</button><p id="paperDifficultyNote" style="margin-top:9px">Paper 1 · 56 questions · 60 minutes</p></div>
+  <div class="card" style="margin-top:18px;max-width:620px"><h2>Choose your practice paper</h2><p>Choose a set, level and paper. Higher levels are harder.</p><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px"><label style="font-size:13px;font-weight:750">Set<select id="paperSet" class="answer-input" style="display:block;margin-top:5px"><option value="1">Set 1</option><option value="2">Set 2</option><option value="3">Set 3</option><option value="4">Set 4</option><option value="5">Set 5</option></select></label><label style="font-size:13px;font-weight:750">Level<select id="paperLevel" class="answer-input" style="display:block;margin-top:5px"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option></select></label><label style="font-size:13px;font-weight:750">Paper<select id="paperNumber" class="answer-input" style="display:block;margin-top:5px"><option value="1">Paper 1</option><option value="2">Paper 2</option><option value="3">Paper 3</option><option value="4">Paper 4</option><option value="5">Paper 5</option></select></label></div><button class="btn btn-primary" id="startPaper" style="margin-top:14px">Start Set 1 · Level 1 · Paper 1</button><p id="paperDifficultyNote" style="margin-top:9px">Paper 1 · 56 questions · 60 minutes</p></div>
  </div>
  <div class="grid">
   <article class="card mode-card">
-   <div class="mode-icon blue-bg">📖</div><h2>Comprehension</h2><p>Read a short passage that changes between sessions, then answer multiple-choice and written questions.</p><div class="mode-meta">13 questions · 7 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="comp">Start comprehension</button>
+   <div class="mode-icon blue-bg">📖</div><h2>Comprehension</h2><p>Read a passage and answer questions.</p><div class="mode-meta">13 questions · 7 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="comp">Start comprehension</button>
   </article>
   <article class="card mode-card">
-   <div class="mode-icon teal-bg">✏️</div><h2>English skills</h2><p>Practise punctuation, grammar and spelling with explanations for every question.</p><div class="mode-meta">15 questions · 5 in each skill</div><button class="btn btn-primary" data-mode="english">Practise English</button>
+   <div class="mode-icon teal-bg">✏️</div><h2>English skills</h2><p>Practise punctuation, grammar and spelling.</p><div class="mode-meta">15 questions · 5 in each skill</div><button class="btn btn-primary" data-mode="english">Practise English</button>
   </article>
   <article class="card mode-card">
-   <div class="mode-icon gold-bg">🔢</div><h2>Maths</h2><p>Build confidence with number, fractions, measures, shape, money, probability and data.</p><div class="mode-meta">28 questions · 22 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="maths">Practise Maths</button>
+   <div class="mode-icon gold-bg">🔢</div><h2>Maths</h2><p>Practise number, fractions, shape, measures and more.</p><div class="mode-meta">28 questions · 22 multiple choice + 6 written</div><button class="btn btn-primary" data-mode="maths">Practise Maths</button>
   </article>
  </div>
  <div class="section-heading"><h2>Your practice progress</h2><p>Saved on this device only</p></div>
@@ -181,7 +181,7 @@ main{max-width:1040px}.hero{padding:36px 0 22px}.eyebrow{letter-spacing:1.1px;co
 
 <section id="quizView">
  <div class="quiz-top">
-  <div><div class="quiz-title" id="quizTitle">Practice</div><div class="quiz-sub" id="quizSubtitle">Take your time and think carefully.</div></div>
+  <div><div class="quiz-title" id="quizTitle">Practice</div><div class="quiz-sub" id="quizSubtitle">Read each question carefully.</div></div>
   <div class="timer" id="timer" hidden>60:00</div>
  </div>
  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
@@ -200,15 +200,15 @@ main{max-width:1040px}.hero{padding:36px 0 22px}.eyebrow{letter-spacing:1.1px;co
    <div class="question-nav" id="questionNav" aria-label="Question navigation"></div>
   </section>
   <aside class="card side-card">
-   <h3>Helpful reminders</h3>
+   <h3>Quick tips</h3>
    <ul>
-    <li>Read the whole question before choosing.</li>
-    <li>For comprehension, look back at the passage for clues.</li>
-    <li>For inference, use evidence and explain what it suggests.</li>
-    <li>For Maths, write down the steps you use.</li>
-    <li>Check units and read your answer again.</li>
+    <li>Read carefully.</li>
+    <li>Use clues from the passage.</li>
+    <li>Use evidence to explain your ideas.</li>
+    <li>Show your working.</li>
+    <li>Check your answer and units.</li>
    </ul>
-   <p>There is no rush in untimed practice. In a mock, keep moving and return to harder questions later.</p>
+   <p>In a mock, keep moving. Return to hard questions later.</p>
   </aside>
  </div>
 </section>
@@ -423,7 +423,7 @@ function renderQuestion(){
   const input=document.createElement("input");input.className="answer-input";input.id="writtenAnswer";
   input.type="text";input.placeholder=q.kind==="number"?"Type your answer (include units if asked)":"Write a short answer in your own words";
   input.value=answers[current]||"";input.disabled=!!checked[current];area.appendChild(input);
-  const hint=document.createElement("div");hint.className="answer-hint";hint.textContent=q.kind==="written"?"Aim to answer the question directly and use evidence from the passage.":"Show your working on paper before entering your final answer.";
+  const hint=document.createElement("div");hint.className="answer-hint";hint.textContent=q.kind==="written"?"Answer clearly. Use evidence from the passage.":"Show your working, then enter your answer.";
   area.appendChild(hint);
  }
  const feedback=$("feedback");feedback.className="feedback";feedback.replaceChildren();
