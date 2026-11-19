@@ -461,18 +461,18 @@ function showFeedback(q){
  const f=$("feedback");f.replaceChildren();f.className="feedback";
  if(q.kind==="mc"){
   const correct=answers[current]===q.correct;f.classList.add(correct?"good":"bad");
-  const strong=document.createElement("strong");strong.textContent=correct?"Correct — well done!":"Not quite — let's learn from it.";
-  const p=document.createElement("div");p.textContent=q.explanation+" Correct answer: "+q.options[q.correct]+".";
+  const strong=document.createElement("strong");strong.textContent=correct?"Correct":"Incorrect — correct answer:";
+  const p=document.createElement("div");p.textContent=correct?"":q.options[q.correct];
   f.append(strong,p);
  }else if(q.kind==="number"){
   const got=normalise(answers[current]);const ok=q.accepted.some(x=>normalise(x)===got);
   checked[current].score=ok?1:0;f.classList.add(ok?"good":"bad");
-  const strong=document.createElement("strong");strong.textContent=ok?"Correct — well done!":"Not quite. Check the method.";
-  const p=document.createElement("div");p.textContent=q.explanation+" Model answer: "+q.model+".";
+  const strong=document.createElement("strong");strong.textContent=ok?"Correct":"Incorrect — correct answer:";
+  const p=document.createElement("div");p.textContent=ok?"":q.model;
   f.append(strong,p);
  }else{
   f.classList.add("neutral");
-  const strong=document.createElement("strong");strong.textContent="Compare your answer with this example.";
+  const strong=document.createElement("strong");strong.textContent="Example correct answer:";
   const p=document.createElement("div");p.textContent=q.model;
   f.append(strong,p);
  }
