@@ -414,11 +414,16 @@ function renderQuestion(){
  }else{passageBox.classList.add("hidden");passageBox.replaceChildren();}
  const area=$("answerArea");area.replaceChildren();
  if(q.kind==="mc"){
+  if(q.section==="Spelling"){
+   const correctOption=q.options[q.correct];
+   q.options=["A","B","C","D","N"];
+   q.correct=q.options.indexOf(correctOption);
+  }
   const list=document.createElement("div");list.className="options"+(q.section==="Spelling"?" spelling-options":"");
   q.options.forEach((option,index)=>{
    const b=document.createElement("button");b.type="button";b.className="option"+(q.section==="Spelling"?" spelling-option":"");
    if(answers[current]===index)b.classList.add("selected");
-   const letter=document.createElement("span");letter.className="option-letter";letter.textContent=String.fromCharCode(65+index);
+   const letter=document.createElement("span");letter.className="option-letter";letter.textContent=q.section==="Spelling"?option:String.fromCharCode(65+index);
    if(q.section==="Spelling"){
     const mark=document.createElement("span");mark.className="spelling-choice-mark";mark.setAttribute("aria-hidden","true");
     b.append(letter,mark);
