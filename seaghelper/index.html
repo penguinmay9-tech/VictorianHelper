@@ -396,7 +396,16 @@ function updateTimer(){
  if(secondsLeft<=300)$("timer").classList.add("warning");
 }
 function renderQuestion(){
- const q=questions[current];const isComp=q.section==="Comprehension"||q.section==="Vocabulary"||q.section==="Inference"||q.section==="Writer’s purpose"||q.section==="Writer’s methods"||q.section==="Summary";
+ const q=questions[current];
+ // Normalise escaped line-break markers for every paper and question type.
+ const cleanText=value=>typeof value==="string"?value.replace(/\\n/g,"\n"):value;
+ q.text=cleanText(q.text);
+ if(q.context)q.context=cleanText(q.context);
+ if(q.explanation)q.explanation=cleanText(q.explanation);
+ if(q.model)q.model=cleanText(q.model);
+ if(q.notes)q.notes=cleanText(q.notes);
+ if(q.options)q.options=q.options.map(cleanText);
+ const isComp=q.section==="Comprehension"||q.section==="Vocabulary"||q.section==="Inference"||q.section==="Writer’s purpose"||q.section==="Writer’s methods"||q.section==="Summary";
  $("questionTag").textContent=q.section;
  $("questionNumber").textContent="Question "+(current+1)+" of "+questions.length;
  $("progressFill").style.width=((current+1)/questions.length*100)+"%";
