@@ -4,6 +4,8 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  const rand=()=>{seed=(seed+0x6D2B79F5)>>>0;let t=seed;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};
  const int=(a,b)=>a+Math.floor(rand()*(b-a+1)), pick=a=>a[Math.floor(rand()*a.length)];
  const mix=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+ // Pick varied question templates, then present them in the bank's intended easy-to-challenging order.
+ const appendProgressive=(bank,count)=>mix(bank).map(make=>({make,rank:bank.indexOf(make)})).slice(0,count).sort((a,b)=>a.rank-b.rank).forEach(item=>qs.push(item.make()));
  const tier=(setNo-1)*5+levelNo, names=["Amira","Callum","Niamh","Rory","Sofia","Ethan","Maya","Finn","Leah","Oscar","Zara","Noah","Grace","Aidan","Ivy","Lucas"];
  const places=["the harbour","a woodland trail","the town library","a hilltop farm","the railway station","the village hall","the old mill","a nature reserve","the school garden","the market square"];
  const things=["a brass compass","a faded photograph","a small leather notebook","a sealed wooden box","an unusual stone","a hand-drawn plan","a silver key","a glass bottle"];
@@ -82,7 +84,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   "One part of the sentence may contain a spelling mistake. Select A, B, C or D, or choose N if the spelling is all correct.",
   "Read the complete sentence. Which labelled section, if any, contains an incorrect spelling? Choose N if none does."
  ];
- const spellingRows=mix(spellings).slice(0,5);
+ const spellingRows=mix(spellings).slice(0,5).sort((a,b)=>a[0].length-b[0].length||spellings.indexOf(a)-spellings.indexOf(b));
  for(let i=0;i<5;i++){
   const row=spellingRows[i];
   const hasError=rand()<0.8;
@@ -117,7 +119,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   ()=>{const action=pick(["review the plan","check the figures","visit the archive","repair the sign","repeat the experiment"]);return mc("Grammar","Choose the correct modal verb: “The team ___ check the figures again before publishing the results.”","should",["should to","ought","must to","could to"],"“Should” is followed directly by the base form of the verb.");},
   ()=>{const phrase=pick(["the older bridge","the narrow passage","the northern route","the second design","the wooden staircase"]);return mc("Grammar","Which sentence uses a comparative adjective correctly?", "The "+phrase+" was safer than the alternative.",["The "+phrase+" was safest than the alternative.","The "+phrase+" was more safer than the alternative.","The "+phrase+" was most safe than the alternative.","The "+phrase+" was safe than the alternative."],"Use the comparative form “safer” when comparing two things.");}
  ];
- for(const make of mix(grammarBank).slice(0,5))qs.push(make());
+ appendProgressive(grammarBank,5);
 
  const punctuationBank=[
   ()=>{const place=pick(places),person=pick(names);return mc("Punctuation","Which sentence correctly separates an introductory phrase from its main clause?",["Before the doors opened, "+person+" checked the list at "+place+".","Before the doors opened "+person+", checked the list at "+place+".","Before, the doors opened "+person+" checked the list at "+place+".","Before the doors opened; "+person+" checked, the list at "+place+".","Before the doors opened "+person+" checked the list, at "+place+"." ][0],["Before the doors opened "+person+", checked the list at "+place+".","Before, the doors opened "+person+" checked the list at "+place+".","Before the doors opened; "+person+" checked, the list at "+place+".","Before the doors opened "+person+" checked the list, at "+place+"."],"A comma follows the introductory clause.");},
@@ -135,7 +137,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   ()=>{const name=pick(names),object=pick(["the old compass","the brass key","the folded map","the glass bottle"]);return mc("Punctuation","Which sentence correctly uses a singular possessive apostrophe?",[name+"'s "+object+" was placed in the cabinet.",name+"s' "+object+" was placed in the cabinet.",name+"' "+object+" was placed in the cabinet.",name+"s "+object+"' was placed in the cabinet.",name+"'s' "+object+" was placed in the cabinet."][0],[name+"s' "+object+" was placed in the cabinet.",name+"' "+object+" was placed in the cabinet.",name+"s "+object+"' was placed in the cabinet.",name+"'s' "+object+" was placed in the cabinet."],"Add apostrophe-s to a singular name to show possession.");},
   ()=>{const quote=pick(["The guide said","The notice explained","The letter stated","The witness replied"]);const words=pick(["“The path is closed.”","“The parcel has arrived.”","“The meeting begins at noon.”","“The lights are still on.”"]);return mc("Punctuation","Which sentence correctly punctuates a quotation after a reporting clause?",quote+" "+words,quote+" "+words.replace(".”","”.").replace("“",""),quote+" "+words.replace("”","")+" .",quote+": "+words,quote+"; "+words,quote+" "+words.replace("“","").replace("”","")+".","A direct quotation follows the reporting clause and its punctuation remains inside the speech marks.");}
  ];
- for(const make of mix(punctuationBank).slice(0,5))qs.push(make());
+ appendProgressive(punctuationBank,5);
  const compMCBank=[
   ()=>mc("Comprehension","What was the main task the group had been asked to complete at "+place+"?",task,["repair a damaged vehicle","organise a sports tournament","build a new classroom","deliver letters to nearby houses"],"The opening paragraph explains the group's original task."),
   ()=>mc("Comprehension","Which object first caught "+name+"'s attention?",thing,["a torn flag","a broken watch","a wooden flute","a painted sign"],"The passage identifies the object that started the investigation."),
@@ -158,7 +160,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   ()=>mc("Comprehension","Which word best describes the method the group used after the setback?","Systematic",["Random","Careless","Rushed","Unplanned"],"They checked notes and evidence before choosing another route."),
   ()=>mc("Writer’s purpose","What is the main message conveyed by the ending?", "Careful investigation can reveal why local evidence is worth preserving.",["Every mystery can be solved immediately.","Written records are less useful than guesses.","A difficult task should always be abandoned.","Discoveries matter only when they are expensive."],"The final lines emphasise learning from evidence and protecting records.")
  ];
- for(const make of mix(compMCBank).slice(0,7))qs.push(make());
+ appendProgressive(compMCBank,7);
 
  const compWrittenBank=[
   ()=>WQ("Comprehension","Explain how the group changed its approach after the setback.","The group compared its notes, checked the details again and agreed to take a different route.","Describe the setback and give two actions the group took afterwards."),
@@ -178,7 +180,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   ()=>WQ("Inference","What might have happened if the group had ignored the first clue?","They might not have followed the information towards "+discovery+", so they could have missed evidence about the area's past.","Use the cause-and-effect information in the second paragraph."),
   ()=>WQ("Summary","Write a short account of the investigation for someone who has not read the passage.","At "+place+", the group was working to "+task+". "+name+" noticed "+thing+", and after overcoming a setback the group found "+discovery+". They recorded the events so others could learn from them.","Keep the account factual and include the key stages.")
  ];
- for(const make of mix(compWrittenBank).slice(0,6))qs.push(make());
+ appendProgressive(compWrittenBank,6);
  // Keep the requested order: spelling, grammar, punctuation, comprehension, then maths.
  const max=12+tier*8, types=["add","subtract","multiply","divide","fraction","percent","decimal","ratio","perimeter","area","angle","measure","time","mean","money","scale","volume","range","fractionAdd","percentageChange","speed","probability"];
  function mathQ(type,written){
@@ -209,7 +211,8 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   let correct=String(ans)+(unit||"");let opts=d.map(x=>String(x)+(unit||""));return mc(section,text,correct,opts,explain);
  }
  for(let i=0;i<22;i++)qs.push(mathQ(types[i],false));
- for(let i=0;i<6;i++)qs.push(mathQ(types[(i*3+7)%types.length],true));
+ const writtenMathTypes=[0,4,7,9,15,21]; // Build from straightforward number work to multi-step reasoning.
+ for(const typeIndex of writtenMathTypes)qs.push(mathQ(types[typeIndex],true));
 
  if(qs.length!==56)throw new Error("Generated paper has "+qs.length+" questions, not 56.");
  return {passage:passage,questions:qs};
