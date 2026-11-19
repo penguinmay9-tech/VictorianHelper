@@ -84,7 +84,7 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   const punctuationInstruction="Read the sentence. Which labelled part has the punctuation mistake? Choose N if all four parts are correct.";
   addLabelledError("Punctuation",punctuationInstruction,["After lunch,","Mia went","to the park","with Ben."],["After lunch","Mia went","to the park","with Ben."],0,"A comma follows the introductory phrase.");
   addLabelledError("Punctuation",punctuationInstruction,["On Saturday,","the children played","outside until","the sun went down."],["on Saturday,","the children played","outside until","the sun went down."],0,"A sentence begins with a capital letter.");
-  addLabelledError("Punctuation",punctuationInstruction,["Where is my","red school bag","I left it","by the front door?"],["Where is my","red school bag","I left it","by the front door."],3,"A direct question ends with a question mark.");
+  addLabelledError("Punctuation",punctuationInstruction,["Where did you leave","the red school bag","after the lesson","today?"],["Where did you leave","the red school bag","after the lesson","today."],3,"A direct question ends with a question mark.");
   addLabelledError("Punctuation",punctuationInstruction,["Tom's coat","was hanging","beside the door","in the hallway."],["Toms coat","was hanging","beside the door","in the hallway."],0,"An apostrophe is needed to show that the coat belongs to Tom.");
   addLabelledError("Punctuation",punctuationInstruction,["Mia packed a sandwich,","an apple and","a bottle of water","for the school trip."],["Mia packed a sandwich,","an apple and","a bottle of water","for the school trip."],0,"",false);
   const passageMC=[
