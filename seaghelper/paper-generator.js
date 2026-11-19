@@ -128,6 +128,17 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  }
  for(let i=0;i<22;i++)qs.push(mathQ(types[i],false));
  for(let i=0;i<6;i++)qs.push(mathQ(types[(i*3+7)%types.length],true));
+
+ // Add varied, natural instruction wording to each item across all 125 papers.
+ // The wording frame is selected deterministically from Set/Level/Paper and question number.
+ const leadA=["Read the question carefully.","Study the information before answering.","Consider the details given.","Use the evidence in the question.","Think about the wording and context.","Examine the information closely.","Pay attention to the key details.","Use the clues provided."];
+ const leadB=["Choose the most accurate response:","Select the answer that best fits:","Identify the strongest answer to this question:","Which option is correct?","Decide which response is best:","Find the answer that is supported:","Select the most suitable option:","Which response completes the task correctly?"];
+ const leadC=["Check each option before deciding.","Use your understanding to make the best choice.","Base your answer on the details provided.","Look for the answer that fits the context.","Make sure your choice matches the question.","Consider why the other options do not fit."];
+ const paperIndex=(setNo-1)*25+(levelNo-1)*5+(paperNo-1);
+ for(let i=0;i<qs.length;i++){
+  const q=qs[i], variant=paperIndex+i*125;
+  q.text=leadA[variant%8]+" "+leadB[Math.floor(variant/8)%8]+" "+q.text+" "+leadC[Math.floor(variant/64)%6];
+ }
  if(qs.length!==56)throw new Error("Generated paper has "+qs.length+" questions, not 56.");
  return {passage:passage,questions:qs};
 }
