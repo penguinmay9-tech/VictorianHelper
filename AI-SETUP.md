@@ -47,3 +47,18 @@ Try different inputs after the adult has connected the Worker:
 - A paragraph from a story or an explanation written for school.
 
 Check whether the returned writing is specific, relevant, age-appropriate and factually sensible. AI can still make mistakes; it is a writing assistant, not a guarantee of correctness.
+
+
+## Victorian knowledge library
+
+The repository now includes a student-facing page at `victorian-library.html`, linked from the homepage. It introduces 20 key themes, gives a short timeline, and links to museum and archive sources:
+- English Heritage — Victorian England and teaching resources
+- The National Archives — Victorian Lives primary sources
+- Historical Association — Victorian Britain overview
+- London Museum — life in Victorian London
+- Victoria and Albert Museum — Victorian clothing
+- British Library — literature resources
+
+The Worker instructions now give Viccy a Victorian-history specialist focus, including reminders to compare different people's experiences, include Ireland and the wider Empire carefully, distinguish the period's dates, and avoid inventing historical evidence.
+
+**Important limitation:** the knowledge-library links are research links for the student. The Worker does not automatically read or browse those websites. The AI can use its existing model knowledge and the Victorian guidance in its instructions, but important historical details should still be checked against the linked sources. The AI feature also remains inactive until an adult deploys the Worker and adds the secret `VICCY_API_KEY`.
