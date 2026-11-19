@@ -64,18 +64,29 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
   const easyPassage={title:"A Day in the Park",text:"On Saturday, Mia went to the park with her dad. She took a red ball and a small picnic. The sun was shining, and lots of children were playing. Mia saw her friend Ben near the swings. They played catch for a while.\n\nLater, Mia and Ben sat under a tree to eat their sandwiches. Mia shared an apple with Ben. Before going home, they put their rubbish in the bin. Mia had a happy day at the park."};
   const easyQs=[];
   const addEasy=(section,prompt,answer,wrong,why)=>easyQs.push(mc(section,prompt,answer,wrong,why));
-  const easyWords=[["because","becaus"],["friend","freind"],["school","scool"],["little","littel"],["people","peaple"]];
-  easyWords.forEach((pair,i)=>addEasy("Spelling","Which word is spelt correctly?",pair[0],[pair[1],"frend","peple","litle"],"The correct spelling is "+pair[0]+"."));
+  const addLabelledError=(section,instruction,correctParts,incorrectParts,errorIndex,explanation,hasError=true)=>{
+   const label=hasError?String.fromCharCode(65+errorIndex):"N";
+   const parts=hasError?incorrectParts:correctParts;
+   const sentence=parts.map((part,i)=>"("+String.fromCharCode(65+i)+") "+part).join(" ");
+   easyQs.push(mc(section,instruction+"\\n\\n"+sentence,label,["A","B","C","D","N"].filter(x=>x!==label),hasError?explanation:"All four labelled parts are correct."));
+  };
+  const spellingInstruction="Read the sentence. Which labelled part contains a spelling mistake? Choose N if all four parts are correct.";
+  addLabelledError("Spelling",spellingInstruction,["We stayed inside","because the rain","was very heavy","that afternoon."],["We stayed inside","becaus the rain","was very heavy","that afternoon."],1,"The correct spelling is “because”.");
+  addLabelledError("Spelling",spellingInstruction,["My best friend","lives near the","school and walks","home with me."],["My best freind","lives near the","school and walks","home with me."],0,"The correct spelling is “friend”.");
+  addLabelledError("Spelling",spellingInstruction,["The children","walked to school","with their teacher","after lunch."],["The children","walked to scool","with their teacher","after lunch."],1,"The correct spelling is “school”.");
+  addLabelledError("Spelling",spellingInstruction,["A little bird","sat on the","garden fence","for a while."],["A littel bird","sat on the","garden fence","for a while."],0,"The correct spelling is “little”.");
+  addLabelledError("Spelling",spellingInstruction,["Many people","visited the library","on Saturday","with their families."],["Many people","visited the library","on Saturday","with their families."],0,"",false);
   addEasy("Grammar","Choose the correct word: “I ___ happy.”","am",["is","are","be","were"],"Use “am” with “I”.");
   addEasy("Grammar","Choose the correct plural of “dog”.","dogs",["doges","dog's","dogies","dog"],"Add -s to make most nouns plural.");
   addEasy("Grammar","Which word is the verb in this sentence: “Sam runs fast.”?","runs",["Sam","fast","the","quick"],"“Runs” tells us what Sam does.");
   addEasy("Grammar","Choose the correct word: “She ___ a red ball.”","has",["have","having","are","were"],"Use “has” with “she”.");
   addEasy("Grammar","Which word describes the apple in “the red apple”?","red",["the","apple","and","is"],"An adjective describes a noun.");
-  addEasy("Punctuation","Which sentence starts with a capital letter?","Mia went to the park.",["mia went to the park.","mia Went to the park.","Mia went to the park","mia went to the Park."],"A sentence begins with a capital letter.");
-  addEasy("Punctuation","Which sentence ends correctly?","Ben has a ball.",["Ben has a ball","Ben has a ball,","Ben has a ball?","Ben has a ball,"],"A statement usually ends with a full stop.");
-  addEasy("Punctuation","Which sentence uses a question mark correctly?","Where is my bag?",["Where is my bag.","Where is my bag,","Where is my bag!","Where is my bag"],"A direct question ends with a question mark.");
-  addEasy("Punctuation","Choose the correctly punctuated sentence.","I like apples, pears and bananas.",["I like apples pears and bananas.","I like apples, pears, and bananas","i like apples, pears and bananas.","I like apples pears, and bananas"],"Commas separate items in a list.");
-  addEasy("Punctuation","Which sentence uses an apostrophe correctly?","Tom's hat is blue.",["Toms' hat is blue.","Toms hat is blue.","Tom,s hat is blue.","Toms hat's is blue."],"An apostrophe shows that the hat belongs to Tom.");
+  const punctuationInstruction="Read the sentence. Which labelled part has the punctuation mistake? Choose N if all four parts are correct.";
+  addLabelledError("Punctuation",punctuationInstruction,["After lunch,","Mia went","to the park","with Ben."],["After lunch","Mia went","to the park","with Ben."],0,"A comma follows the introductory phrase.");
+  addLabelledError("Punctuation",punctuationInstruction,["On Saturday,","the children played","outside until","the sun went down."],["on Saturday,","the children played","outside until","the sun went down."],0,"A sentence begins with a capital letter.");
+  addLabelledError("Punctuation",punctuationInstruction,["Where is my","red school bag","I left it","by the front door?"],["Where is my","red school bag","I left it","by the front door."],3,"A direct question ends with a question mark.");
+  addLabelledError("Punctuation",punctuationInstruction,["Tom's coat","was hanging","beside the door","in the hallway."],["Toms coat","was hanging","beside the door","in the hallway."],0,"An apostrophe is needed to show that the coat belongs to Tom.");
+  addLabelledError("Punctuation",punctuationInstruction,["Mia packed a sandwich,","an apple and","a bottle of water","for the school trip."],["Mia packed a sandwich,","an apple and","a bottle of water","for the school trip."],0,"",false);
   const passageMC=[
    ["Where did Mia go on Saturday?","the park",["the beach","the shop","the library","the farm"]],
    ["Who went with Mia?","her dad",["her mum","her teacher","Ben's dad","her sister"]],
