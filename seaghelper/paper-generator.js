@@ -70,6 +70,12 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
  qs.push(WQ("Writer’s methods","How does the writer create a sense of uncertainty in the second paragraph?","The obstacle interrupts the group's progress, and the possibility of giving up makes the reader unsure whether they will succeed.","Refer to the setback and the group's reaction."));
  qs.push(WQ("Comprehension","Why did "+name+" write an account of what had happened?","So that other people could learn from the discovery and understand why local evidence should be protected.","Use the final paragraph."));
  qs.push(WQ("Summary","Summarise the main events of the passage in two or three sentences.","The group visits "+place+" to "+task+". After finding "+thing+" and overcoming a difficulty, they discover "+discovery+". They record what happened so others can understand the area's history.","Include the purpose, challenge and outcome."));
+ // Match the official SEAG English exercise order: punctuation, grammar, spelling, comprehension.
+ const punctuationQuestions=qs.slice(10,15);
+ const grammarQuestions=qs.slice(5,10);
+ const spellingQuestions=qs.slice(0,5);
+ const comprehensionQuestions=qs.slice(15,28);
+ qs.splice(0,qs.length,...punctuationQuestions,...grammarQuestions,...spellingQuestions,...comprehensionQuestions);
  const max=12+tier*8, types=["add","subtract","multiply","divide","fraction","percent","decimal","ratio","perimeter","area","angle","measure","time","mean","money","scale","volume","range","fractionAdd","percentageChange","speed","probability"];
  function mathQ(type,written){
   let a,b,c,ans,section,text,explain,unit="",d;
