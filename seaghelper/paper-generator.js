@@ -31,7 +31,8 @@ function buildSeagPaper(setNo, levelNo, paperNo) {
    const v=String(value).trim(),k=v.toLowerCase().replace(/\s+/g," ");
    if(!v||keys.has(k)||options.length>=5)return;
    const num=valueOf(v);
-   if(num!==null&&answerValue!==null&&Math.abs(num-answerValue)<gap)return;
+   const isCorrect=k===answer.toLowerCase().replace(/\s+/g," ");
+   if(!isCorrect&&num!==null&&answerValue!==null&&Math.abs(num-answerValue)<gap)return;
    for(const existing of options){
     const old=valueOf(existing);
     if(num!==null&&old!==null&&Math.abs(num-old)<gap)return;
