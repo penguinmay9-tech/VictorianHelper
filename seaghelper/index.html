@@ -474,15 +474,7 @@ function showFeedback(q){
   f.classList.add("neutral");
   const strong=document.createElement("strong");strong.textContent="Compare your answer with this example.";
   const p=document.createElement("div");p.textContent=q.model;
-  const n=document.createElement("div");n.style.marginTop="7px";n.textContent="Tip: "+q.notes;
-  const label=document.createElement("div");label.style.marginTop="10px";label.style.fontWeight="800";label.textContent="How did you do?";
-  const marks=document.createElement("div");marks.className="self-mark";
-  [["I included the key points",1],["I got some of it",0.5],["I need to practise this",0]].forEach(([txt,val])=>{
-   const b=document.createElement("button");b.type="button";b.textContent=txt;b.disabled=checked[current].selfMarked!==undefined;
-   if(checked[current].selfMarked===val)b.style.borderColor="var(--blue)";
-   b.addEventListener("click",()=>{checked[current].selfMarked=val;checked[current].score=val;renderQuestion();});marks.appendChild(b);
-  });
-  f.append(strong,p,n,label,marks);
+  f.append(strong,p);
  }
 }
 function renderDots(){
