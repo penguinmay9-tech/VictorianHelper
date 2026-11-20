@@ -422,15 +422,16 @@ function renderQuestion(){
   if(current===0){const t=document.createElement("div");t.style.fontWeight="800";t.style.marginTop="10px";t.textContent=currentPassage.title;passageBox.insertBefore(t,passageBox.children[1]);}
  }else{passageBox.classList.add("hidden");passageBox.replaceChildren();}
  const area=$("answerArea");area.replaceChildren();
- // Sort spelling labels at render time and preserve the correct/selected answer.
- if(q.kind==="mc"&&q.section==="Spelling"&&Array.isArray(q.options)){
+ // If the choices are the five label tokens, always show them A, B, C, D, N.
+ // Preserve the answer by matching its original label, not its old position.
+ if(q.kind==="mc"&&Array.isArray(q.options)){
   const order=["A","B","C","D","N"];
-  const indices=order.map(label=>q.options.indexOf(label));
-  if(indices.every(index=>index>=0)&&indices.some((index,position)=>index!==position)){
-   const oldCorrect=q.correct,oldSelected=answers[current];
-   q.options=indices.map(index=>q.options[index]);
-   q.correct=indices.indexOf(oldCorrect);
-   if(oldSelected!==undefined)answers[current]=indices.indexOf(oldSelected);
+  if(q.options.length===5&&order.every(label=>q.options.includes(label))){
+   const correctLabel=q.options[q.correct];
+   const selectedLabel=answers[current]===undefined?undefined:q.options[answers[current]];
+   q.options=order.slice();
+   q.correct=order.indexOf(correctLabel);
+   if(selectedLabel!==undefined)answers[current]=order.indexOf(selectedLabel);
   }
  }
  if(q.kind==="mc"){
